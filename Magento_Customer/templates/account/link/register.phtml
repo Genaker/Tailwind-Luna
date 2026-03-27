@@ -1,0 +1,43 @@
+<?php
+/**
+ * Header “Create an Account” — icon + accessible label (RegisterLink).
+ *
+ * @var \Magento\Customer\Block\Account\RegisterLink $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+$label = (string) $block->getLabel();
+$title = (string) ($block->getTitle() ?: $label);
+$linkClass = 'action header-account-link inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-white text-neutral-700 shadow-sm touch-manipulation transition-colors duration-150 hover:border-neutral-300 hover:bg-neutral-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/25 focus-visible:ring-offset-1';
+?>
+<li class="link register-link">
+    <a id="<?= $escaper->escapeHtmlAttr($block->getData('id') ?: 'register-link') ?>"
+       href="<?= $escaper->escapeUrl($block->getHref()) ?>"
+       class="<?= $escaper->escapeHtmlAttr($linkClass) ?>"
+       title="<?= $escaper->escapeHtmlAttr($title) ?>"
+       aria-label="<?= $escaper->escapeHtmlAttr($label) ?>">
+        <span class="sr-only"><?= $escaper->escapeHtml($label) ?></span>
+        <svg class="pointer-events-none h-5 w-5 shrink-0"
+             width="20"
+             height="20"
+             viewBox="0 0 24 24"
+             fill="none"
+             xmlns="http://www.w3.org/2000/svg"
+             aria-hidden="true">
+            <path stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M15.75 7.5a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"/>
+            <path stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M4.5 19.5a7.5 7.5 0 0111.17-3.49"/>
+            <path stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M19 11v4m2-2h-4"/>
+        </svg>
+    </a>
+</li>

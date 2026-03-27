@@ -1,0 +1,122 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// phpcs:disable Magento2.Files.LineLength
+
+?>
+<?php
+/**
+ * Multishipping checkout shipping template
+ *
+ * @var $block \Magento\Multishipping\Block\Checkout\Shipping
+ */
+?>
+<form action="<?= $block->escapeUrl($block->getPostActionUrl()) ?>" method="post" id="shipping_method_form" class="form shipping space-y-8">
+    <?php foreach ($block->getAddresses() as $_index => $_address) : ?>
+    <div class="space-y-6">
+        <div class="border-b border-neutral-200 pb-2 text-lg font-semibold text-neutral-900"><strong><?= $block->escapeHtml(__('Address %1 <span>of %2</span>', ($_index+1), $block->getAddressCount()), ['span']) ?></strong></div>
+        <div class="text-sm text-neutral-700">
+            <div class="mb-6 rounded-lg border border-neutral-200 bg-white box-shipping-address">
+                <strong class="flex flex-wrap items-center justify-between gap-2 border-b border-neutral-200 bg-neutral-50 px-4 py-3 text-base font-semibold text-neutral-900">
+                    <span><?= $block->escapeHtml(__('Shipping To')) ?></span>
+                    <a href="<?= $block->escapeUrl($block->getAddressEditUrl($_address)) ?>" class="edit inline-flex items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-sm font-semibold text-neutral-900 transition-colors hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600">
+                        <span><?= $block->escapeHtml(__('Change')) ?></span>
+                    </a>
+                </strong>
+                <div class="p-4">
+                    <address><?= /* @noEscape */ $_address->format('html') ?></address>
+                </div>
+            </div>
+            <div class="mb-6 rounded-lg border border-neutral-200 bg-white box-shipping-method">
+                <strong class="block border-b border-neutral-200 bg-neutral-50 px-4 py-3 text-base font-semibold text-neutral-900">
+                    <span><?= $block->escapeHtml(__('Shipping Method')) ?></span>
+                </strong>
+                <div class="p-4">
+                    <?php if (!($_shippingRateGroups = $block->getShippingRates($_address))) : ?>
+                        <p><?= $block->escapeHtml(__('Sorry, no quotes are available for this order right now.')) ?></p>
+                    <?php else : ?>
+                    <dl class="list-none p-0 m-0 methods-shipping">
+                        <?php $_sole = count($_shippingRateGroups) == 1; foreach ($_shippingRateGroups as $code => $_rates) : ?>
+                            <dt class="item-title"><?= $block->escapeHtml($block->getCarrierName($code)) ?></dt>
+                            <dd class="item-content">
+                                <fieldset class="m-0 min-w-0 border-0 p-0">
+                                    <legend class="sr-only">
+                                        <span><?= $block->escapeHtml($block->getCarrierName($code)) ?></span>
+                                    </legend>
+                                    <?php $_sole = $_sole && count($_rates) == 1; foreach ($_rates as $_rate) : ?>
+                                    <div class="mb-3 flex items-start gap-2">
+                                        <?php if ($_rate->getErrorMessage()) : ?>
+                                        <strong class="text-sm text-red-800"><?= $block->escapeHtml($_rate->getCarrierTitle()) ?>: <?= $block->escapeHtml($_rate->getErrorMessage()) ?></strong>
+                                        <?php else : ?>
+                                            <?php if ($_sole) : ?>
+                                                <input type="radio" name="shipping_method[<?= (int) $_address->getId() ?>]" value="<?= $block->escapeHtmlAttr($_rate->getCode()) ?>" id="s_method_<?= (int) $_address->getId() ?>_<?= $block->escapeHtmlAttr($_rate->getCode()) ?>" class="method solo mt-0.5 h-4 w-4 shrink-0 rounded-full border-neutral-300 text-blue-600 accent-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-0" checked="checked"/>
+                                            <?php else : ?>
+                                                <input type="radio" name="shipping_method[<?= (int) $_address->getId() ?>]" value="<?= $block->escapeHtmlAttr($_rate->getCode()) ?>" id="s_method_<?= (int) $_address->getId() ?>_<?= $block->escapeHtmlAttr($_rate->getCode()) ?>" <?= ($_rate->getCode()===$block->getAddressShippingMethod($_address)) ? ' checked="checked"' : '' ?> class="mt-0.5 h-4 w-4 shrink-0 rounded-full border-neutral-300 text-blue-600 accent-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-0" />
+                                            <?php endif; ?>
+                                        <label class="min-w-0 flex-1 text-sm text-neutral-800" for="s_method_<?= (int) $_address->getId() ?>_<?= $block->escapeHtmlAttr($_rate->getCode()) ?>">
+                                            <?= $block->escapeHtml($_rate->getMethodTitle()) ?>
+                                            <?php $_excl = $block->getShippingPrice($_address, $_rate->getPrice(), $this->helper(Magento\Tax\Helper\Data::class)->displayShippingPriceIncludingTax()); ?>
+                                            <?php $_incl = $block->getShippingPrice($_address, $_rate->getPrice(), true); ?>
+                                            <?php if ($this->helper(Magento\Tax\Helper\Data::class)->displayShippingBothPrices() && $_incl != $_excl) : ?>
+                                            <span class="price-including-tax" data-label="<?= $block->escapeHtml(__('Incl. Tax')) ?>">
+                                            <?php endif; ?>
+                                                <?= $block->escapeHtml($_incl, ['span']) ?>
+                                            <?php if ($this->helper(Magento\Tax\Helper\Data::class)->displayShippingBothPrices() && $_incl != $_excl) : ?>
+                                            </span>
+                                            <?php endif; ?>
+                                            <?php if ($this->helper(Magento\Tax\Helper\Data::class)->displayShippingBothPrices() && $_incl != $_excl) : ?>
+                                            <span class="price-excluding-tax" data-label="<?= $block->escapeHtml(__('Excl. Tax')) ?>">
+                                                <?= $block->escapeHtml($_excl, ['span']) ?>
+                                            </span>
+                                            <?php endif; ?>
+                                        </label>
+                                        <?php endif ?>
+                                    </div>
+                                    <?php endforeach; ?>
+                                </fieldset>
+                            </dd>
+                        <?php endforeach; ?>
+                    </dl>
+                    <?php endif; ?>
+                    <?= /* @noEscape */ $block->getItemsBoxTextAfter($_address) ?>
+                </div>
+            </div>
+            <div class="mb-6 rounded-lg border border-neutral-200 bg-white box-items">
+                <strong class="flex flex-wrap items-center justify-between gap-2 border-b border-neutral-200 bg-neutral-50 px-4 py-3 text-base font-semibold text-neutral-900">
+                    <span><?= $block->escapeHtml(__('Items')) ?></span>
+                    <a href="<?= $block->escapeUrl($block->getItemsEditUrl($_address)) ?>" class="edit inline-flex items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-sm font-semibold text-neutral-900 transition-colors hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"><span><?= $block->escapeHtml(__('Edit Items')) ?></span></a>
+                </strong>
+                <div class="p-4">
+                    <div class="overflow-x-auto">
+                        <table class="table data w-full border-collapse text-sm text-neutral-800" id="shipping-table-<?= (int) $_address->getId() ?>">
+                            <caption class="sr-only"><?= $block->escapeHtml(__('Items')) ?></caption>
+                            <thead>
+                            <tr>
+                                <th class="border border-neutral-200 bg-neutral-50 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-neutral-700" scope="col"><?= $block->escapeHtml(__('Product Name')) ?></th>
+                                <th class="w-24 border border-neutral-200 bg-neutral-50 px-3 py-2 text-center text-xs font-semibold uppercase tracking-wide text-neutral-700" scope="col"><?= $block->escapeHtml(__('Qty')) ?></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php foreach ($block->getAddressItems($_address) as $_item) : ?>
+                                <tr>
+                                    <td class="border border-neutral-200 px-3 py-3 align-top" data-th="<?= $block->escapeHtmlAttr(__('Product Name')) ?>"><?= $block->getItemHtml($_item->getQuoteItem()) ?></td>
+                                    <td class="border border-neutral-200 px-3 py-3 text-center text-sm tabular-nums text-neutral-800" data-th="<?= $block->escapeHtmlAttr(__('Qty')) ?>"><?= $block->escapeHtml($_item->getQty()) ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php endforeach; ?>
+    <?= $block->getChildHtml('checkout_billing_items') ?>
+    <div class="flex flex-col gap-4 border-t border-neutral-200 pt-6 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+        <button class="continue inline-flex items-center justify-center gap-2 rounded-md border border-blue-600 bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600" type="submit"><span><?= $block->escapeHtml(__('Continue to Billing Information')) ?></span></button>
+        <a href="<?= $block->escapeUrl($block->getBackUrl()) ?>" class="back inline-flex items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-semibold text-neutral-900 transition-colors hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"><span><?= $block->escapeHtml(__('Back to Select Addresses')) ?></span></a>
+    </div>
+</form>

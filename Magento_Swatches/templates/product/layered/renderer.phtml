@@ -1,0 +1,121 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// phpcs:disable PSR2.ControlStructures.SwitchDeclaration
+// phpcs:disable Generic.WhiteSpace.ScopeIndent
+
+/** @var $block \Magento\Swatches\Block\LayeredNavigation\RenderLayered */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/** @var \Magento\Framework\Escaper $escaper */
+?>
+<?php $swatchData = $block->getSwatchData(); ?>
+<div class="swatch-attribute swatch-layered mb-3 <?= $block->escapeHtmlAttr($swatchData['attribute_code']) ?>"
+     data-attribute-code="<?= $block->escapeHtmlAttr($swatchData['attribute_code']) ?>"
+     data-attribute-id="<?= $block->escapeHtmlAttr($swatchData['attribute_id']) ?>">
+    <div class="swatch-attribute-options flex flex-wrap items-center gap-2 max-md:gap-4 lg:gap-1.5">
+        <?php foreach ($swatchData['options'] as $option => $label): ?>
+            <a href="<?= $block->escapeUrl($label['link']) ?>" rel="nofollow"
+               aria-label="<?= $block->escapeHtmlAttr($label['label']) ?>"
+               class="swatch-option-link-layered">
+                <?php if (isset($swatchData['swatches'][$option]['type'])): ?>
+                    <?php switch ($swatchData['swatches'][$option]['type']) {
+                        case '3':
+                            ?>
+                            <div class="swatch-option m-0 box-border inline-block h-9 w-9 min-h-9 min-w-9 shrink-0 cursor-pointer touch-manipulation rounded-md border-2 border-solid border-neutral-300 transition-colors duration-150 hover:border-neutral-500 max-md:h-12 max-md:w-12 max-md:min-h-[48px] max-md:min-w-[48px] lg:h-7 lg:w-7 lg:min-h-7 lg:min-w-7 <?= $block->escapeHtmlAttr($label['custom_style']) ?>"
+                                 tabindex="-1"
+                                 data-option-type="3"
+                                 data-option-id="<?= $block->escapeHtmlAttr($option) ?>"
+                                 data-option-label="<?= $block->escapeHtmlAttr($label['label']) ?>"
+                                 data-option-tooltip-thumb=""
+                                 data-option-tooltip-value=""
+                                ></div>
+                            <?php break;
+                        case '2':
+                            ?>
+                            <?php $swatchThumbPath = $block->getSwatchPath(
+                                'swatch_thumb',
+                                $swatchData['swatches'][$option]['value']
+                            ); ?>
+                            <?php $swatchImagePath = $block->getSwatchPath(
+                                'swatch_image',
+                                $swatchData['swatches'][$option]['value']
+                            );
+                            $escapedUrl = $block->escapeUrl($swatchImagePath);
+                            ?>
+                            <div class="swatch-option image m-0 box-border h-9 w-9 min-h-9 min-w-9 shrink-0 cursor-pointer touch-manipulation rounded-md border-2 border-solid border-neutral-300 transition-colors duration-150 hover:border-neutral-500 max-md:h-12 max-md:w-12 max-md:min-h-[48px] max-md:min-w-[48px] lg:h-7 lg:w-7 lg:min-h-7 lg:min-w-7 <?= $block->escapeHtmlAttr($label['custom_style']) ?>"
+                                 tabindex="-1"
+                                 data-option-type="2"
+                                 data-option-id="<?= $block->escapeHtmlAttr($option) ?>"
+                                 data-option-label="<?= $block->escapeHtmlAttr($label['label']) ?>"
+                                 data-option-tooltip-thumb="<?= $block->escapeUrl($swatchThumbPath) ?>"
+                                 data-option-tooltip-value="">
+                            </div>
+                            <?php
+                            $element = 'swatchImageOption' . $escaper->escapeJs($option);
+                            $script = 'var ' . $element
+                                . ' = document.querySelector(\'div[data-option-id="' . $escaper->escapeJs($option)
+                                . '"]\');' . PHP_EOL;
+                            $script .= $element . '.style.background = "url(\''
+                                . $escapedUrl . '\') no-repeat center";' . PHP_EOL;
+                            $script .= $element . '.style.backgroundSize = "initial";';
+                            ?>
+                            <?= /* @noEscape*/ $secureRenderer->renderTag('script', [], $script, false); ?>
+                            <?php break;
+                        case '1':
+                            ?>
+                            <div class="swatch-option color m-0 box-border h-9 w-9 min-h-9 min-w-9 shrink-0 cursor-pointer touch-manipulation rounded-md border-2 border-solid border-neutral-300 transition-colors duration-150 hover:border-neutral-500 max-md:h-12 max-md:w-12 max-md:min-h-[48px] max-md:min-w-[48px] lg:h-7 lg:w-7 lg:min-h-7 lg:min-w-7 <?= $block->escapeHtmlAttr($label['custom_style']) ?>"
+                                 tabindex="-1"
+                                 data-option-type="1"
+                                 data-option-id="<?= $block->escapeHtmlAttr($option) ?>"
+                                 data-option-label="<?= $block->escapeHtmlAttr($label['label']) ?>"
+                                 data-option-tooltip-thumb=""
+                                 data-option-tooltip-value="<?= $block->escapeHtmlAttr(
+                                     $swatchData['swatches'][$option]['value']
+                                 ) ?>">
+                            </div>
+                            <?php
+                            $element = 'swatchImageOption' . $escaper->escapeJs($option);
+                            $backgroundValue = isset($swatchData['swatches'][$option]['value']) ? $escaper->escapeJs(
+                                str_replace('\'', '\\\'', $swatchData['swatches'][$option]['value'])
+                            ) : '';
+                            $script = 'var ' . $element
+                                . ' = document.querySelector(\'div[data-option-id="' . $escaper->escapeJs($option)
+                                . '"]\');' . PHP_EOL;
+                            $script .= $element . '.style.background = "' . $backgroundValue
+                                . ' no-repeat center";' . PHP_EOL;
+                            $script .= $element . '.style.backgroundSize = "initial";';
+                            ?>
+                            <?= /* @noEscape*/ $secureRenderer->renderTag('script', [], $script, false); ?>
+                            <?php break;
+                        case '0':
+                        default:
+                            ?>
+                            <div class="swatch-option text m-0 inline-flex h-9 w-9 min-h-9 min-w-9 shrink-0 items-center justify-center rounded-md border-2 border-solid border-neutral-300 bg-white px-2 py-1 text-sm font-bold leading-none text-neutral-700 cursor-pointer touch-manipulation transition-colors duration-150 hover:border-neutral-500 hover:text-neutral-900 max-md:min-h-[48px] max-md:min-w-[48px] max-md:h-auto max-md:w-auto max-md:px-3 max-md:py-2 max-md:text-base max-md:leading-tight lg:h-7 lg:w-7 lg:min-h-7 lg:min-w-7 lg:px-1.5 lg:py-0.5 lg:text-[11px] <?= $block->escapeHtmlAttr($label['custom_style']) ?>"
+                                 tabindex="-1"
+                                 data-option-type="0"
+                                 data-option-id="<?= $block->escapeHtmlAttr($option) ?>"
+                                 data-option-label="<?= $block->escapeHtmlAttr($label['label']) ?>"
+                                 data-option-tooltip-thumb=""
+                                 data-option-tooltip-value=""
+                                ><?= $block->escapeHtml($swatchData['swatches'][$option]['value']) ?></div>
+                        <?php break;
+                    } ?>
+                <?php endif; ?>
+            </a>
+        <?php endforeach; ?>
+    </div>
+</div>
+<?php $scriptString = <<<script
+
+    require(["jquery", "Magento_Swatches/js/swatch-renderer"], function ($) {
+        $('.swatch-layered.{$block->escapeJs($swatchData['attribute_code'])}')
+            .find('[data-option-type="1"], [data-option-type="2"], [data-option-type="0"], [data-option-type="3"]')
+            .SwatchRendererTooltip();
+    });
+
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

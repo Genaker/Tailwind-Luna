@@ -1,0 +1,52 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+/** @var \Magento\Framework\Locale\LocaleFormatter $localeFormatter */
+/** @var \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer $block */
+?>
+<?php $_item = $block->getItem() ?>
+<?php $_order = $block->getItem()->getOrderItem()->getOrder() ?>
+<tr id="order-item-row-<?= (int) $_item->getId() ?>">
+    <td class="w-full sm:w-auto name" data-th="<?= $block->escapeHtmlAttr(__('Product Name')) ?>">
+        <strong class="text-base font-semibold leading-snug product name"><?= $block->escapeHtml($_item->getName()) ?></strong>
+        <?php if ($_options = $block->getItemOptions()): ?>
+            <dl class="flex flex-col border border-neutral-200 rounded-lg bg-white overflow-hidden options">
+            <?php foreach ($_options as $_option): ?>
+                <dt><?= $block->escapeHtml($_option['label']) ?></dt>
+                <?php if (!$block->getPrintStatus()): ?>
+                    <?php $_formatedOptionValue = $block->getFormatedOptionValue($_option) ?>
+                    <dd<?= (isset($_formatedOptionValue['full_view']) ? ' class="inline-block w-full"' : '') ?>>
+                        <?= $block->escapeHtml($_formatedOptionValue['value'], ['a']) ?>
+                        <?php if (isset($_formatedOptionValue['full_view'])): ?>
+                        <div class="inline-block content">
+                            <dl class="flex flex-col border border-neutral-200 rounded-lg bg-white overflow-hidden options">
+                                <dt><?= $block->escapeHtml($_option['label']) ?></dt>
+                                <dd><?= $block->escapeHtml($_formatedOptionValue['full_view']) ?></dd>
+                            </dl>
+                        </div>
+                        <?php endif; ?>
+                    </dd>
+                <?php else: ?>
+                    <?php $optionValue = isset($_option['print_value']) ? $_option['print_value'] : $_option['value'] ?>
+                    <dd><?= $block->escapeHtml($optionValue) ?></dd>
+                <?php endif; ?>
+            <?php endforeach; ?>
+            </dl>
+        <?php endif; ?>
+        <?php $addInfoBlock = $block->getProductAdditionalInformationBlock(); ?>
+        <?php if ($addInfoBlock): ?>
+            <?= $addInfoBlock->setItem($_item->getOrderItem())->toHtml() ?>
+        <?php endif; ?>
+        <?= $block->escapeHtml($_item->getDescription()) ?>
+    </td>
+    <td class="w-full sm:w-auto sku" data-th="<?= $block->escapeHtmlAttr(__('SKU')) ?>">
+        <?= /* @noEscape */ $block->prepareSku($block->getSku()) ?>
+    </td>
+    <td class="w-full sm:w-auto w-16 rounded border border-neutral-300 px-2 py-1 text-center text-sm" data-th="<?= $block->escapeHtmlAttr(__('Qty Shipped')) ?>">
+        <?= /* @noEscape */ $localeFormatter->formatNumber((float) $_item->getQty()) ?>
+    </td>
+</tr>

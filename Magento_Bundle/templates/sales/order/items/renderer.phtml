@@ -1,0 +1,169 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+/**
+ * @var \Magento\Bundle\Block\Sales\Order\Items\Renderer $block
+ * @var \Magento\Framework\Locale\LocaleFormatter $localeFormatter
+ * @var \Magento\Bundle\ViewModel\Sales\Order\Items\Renderer $viewModel
+ */
+$parentItem = $block->getItem();
+$viewModel = $block->getViewModel();
+$items = $viewModel->getOrderItems((int)$parentItem->getOrderId(), (int)$parentItem->getId());
+$index = 0;
+$prevOptionId = '';
+?>
+
+<?php foreach ($items as $item): ?>
+
+    <?php if ($block->getItemOptions()
+        || $parentItem->getDescription()
+        || $this->helper(Magento\GiftMessage\Helper\Message::class)->isMessagesAllowed('order_item', $parentItem)
+        && $parentItem->getGiftMessageId()): ?>
+        <?php $showLastRow = true; ?>
+    <?php else: ?>
+        <?php $showLastRow = false; ?>
+    <?php endif; ?>
+
+    <?php if ($item->getParentItem()): ?>
+        <?php $attributes = $block->getSelectionAttributes($item) ?>
+
+        <?php if (isset($attributes['option_id']) && $prevOptionId != $attributes['option_id']): ?>
+            <tr class="options-label">
+                <td class="border-b border-neutral-200 bg-neutral-50 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-neutral-700" colspan="5"><?= $block->escapeHtml($attributes['option_label']); ?></td>
+            </tr>
+            <?php $prevOptionId = $attributes['option_id'] ?>
+        <?php endif; ?>
+    <?php endif; ?>
+<tr id="order-item-row-<?= /* @noEscape */ $item->getId() ?>"
+    class="<?php if ($item->getParentItem()): ?>
+        item-options-container
+    <?php else: ?>
+        item-parent
+    <?php endif; ?>"
+    <?php if ($item->getParentItem()): ?>
+        data-th="<?= $block->escapeHtmlAttr($attributes['option_label'] ?? ''); ?>"
+    <?php endif; ?>>
+    <?php if (!$item->getParentItem()): ?>
+        <td class="name px-4 py-3 align-top text-neutral-800" data-th="<?= $block->escapeHtmlAttr(__('Product Name')); ?>">
+            <strong class="product name text-base font-semibold leading-snug text-neutral-900"><?= $block->escapeHtml($item->getName()); ?></strong>
+        </td>
+    <?php else: ?>
+        <td class="value px-4 py-3 align-top text-sm text-neutral-800" data-th="<?= $block->escapeHtmlAttr(__('Product Name')); ?>">
+            <?= $block->getValueHtml($item); ?>
+        </td>
+    <?php endif; ?>
+    <td class="sku px-4 py-3 align-top text-sm text-neutral-700" data-th="<?= $block->escapeHtmlAttr(__('SKU')); ?>">
+        <?= /* @noEscape */ $block->prepareSku($item->getSku()); ?>
+    </td>
+    <td class="px-4 py-3 align-top text-sm font-medium text-neutral-900" data-th="<?= $block->escapeHtmlAttr(__('Price')); ?>">
+        <?php if (!$item->getParentItem()): ?>
+            <?= /* @noEscape */ $block->getItemPriceHtml(); ?>
+        <?php else: ?>
+            &nbsp;
+        <?php endif; ?>
+    </td>
+    <td class="px-4 py-3 align-top text-center text-sm text-neutral-800" data-th="<?= $block->escapeHtmlAttr(__('Quantity')); ?>">
+        <?php if (($item->getParentItem() && $block->isChildCalculated()) ||
+        (!$item->getParentItem() && !$block->isChildCalculated()) ||
+        ($item->getQtyShipped() > 0 && $item->getParentItem() && $block->isShipmentSeparately())): ?>
+            <ul class="items-qty space-y-2 text-left">
+        <?php endif; ?>
+        <?php if (($item->getParentItem() && $block->isChildCalculated()) ||
+            (!$item->getParentItem() && !$block->isChildCalculated())): ?>
+            <?php if ($item->getQtyOrdered() > 0): ?>
+                <li>
+                    <span class="block text-xs font-medium text-neutral-600"><?= $block->escapeHtml(__('Ordered')); ?></span>
+                    <span class="content tabular-nums">
+                        <?= /* @noEscape */ $localeFormatter->formatNumber($item->getQtyOrdered() * 1); ?>
+                    </span>
+                </li>
+            <?php endif; ?>
+            <?php if ($item->getQtyShipped() > 0 && !$block->isShipmentSeparately()): ?>
+                <li>
+                    <span class="block text-xs font-medium text-neutral-600"><?= $block->escapeHtml(__('Shipped')); ?></span>
+                    <span class="content tabular-nums">
+                        <?= /* @noEscape */ $localeFormatter->formatNumber($item->getQtyShipped() * 1); ?>
+                    </span>
+                </li>
+            <?php endif; ?>
+            <?php if ($item->getQtyCanceled() > 0): ?>
+                <li>
+                    <span class="block text-xs font-medium text-neutral-600"><?= $block->escapeHtml(__('Canceled')); ?></span>
+                    <span class="content tabular-nums">
+                        <?= /* @noEscape */ $localeFormatter->formatNumber($item->getQtyCanceled() * 1); ?>
+                    </span>
+                </li>
+            <?php endif; ?>
+            <?php if ($item->getQtyRefunded() > 0): ?>
+                <li>
+                    <span class="block text-xs font-medium text-neutral-600"><?= $block->escapeHtml(__('Refunded')); ?></span>
+                    <span class="content tabular-nums">
+                        <?= /* @noEscape */ $localeFormatter->formatNumber($item->getQtyRefunded() * 1); ?>
+                    </span>
+                </li>
+            <?php endif; ?>
+        <?php elseif ($item->getQtyShipped() > 0 && $item->getParentItem() && $block->isShipmentSeparately()): ?>
+            <li>
+                <span class="block text-xs font-medium text-neutral-600"><?= $block->escapeHtml(__('Shipped')); ?></span>
+                <span class="content tabular-nums">
+                    <?= /* @noEscape */ $localeFormatter->formatNumber($item->getQtyShipped() * 1); ?>
+                </span>
+            </li>
+        <?php else: ?>
+            <span class="content tabular-nums">
+                <?= /* @noEscape */ $localeFormatter->formatNumber($parentItem->getQtyOrdered() * 1); ?>
+            </span>
+        <?php endif; ?>
+        <?php if (($item->getParentItem() && $block->isChildCalculated()) ||
+        (!$item->getParentItem() && !$block->isChildCalculated()) ||
+        ($item->getQtyShipped() > 0 && $item->getParentItem() && $block->isShipmentSeparately())):?>
+            </ul>
+        <?php endif; ?>
+    </td>
+    <td class="subtotal px-4 py-3 align-top text-sm font-medium text-neutral-900" data-th="<?= $block->escapeHtmlAttr(__('Subtotal')) ?>">
+        <?php if (!$item->getParentItem()): ?>
+            <?= /* @noEscape */ $block->getItemRowTotalHtml(); ?>
+        <?php else: ?>
+            &nbsp;
+        <?php endif; ?>
+    </td>
+</tr>
+<?php endforeach; ?>
+
+<?php if ($showLastRow && (($options = $block->getItemOptions()) || $block->escapeHtml($item->getDescription()))): ?>
+<tr>
+    <td class="options border-b border-neutral-200 px-4 py-3 align-top text-sm" colspan="5">
+        <?php if ($options = $block->getItemOptions()): ?>
+            <dl class="item-options space-y-1 text-xs text-neutral-600">
+                <?php foreach ($options as $option): ?>
+                    <dt class="font-medium text-neutral-800"><?= $block->escapeHtml($option['label']) ?></dt>
+                    <?php if (!$block->getPrintStatus()): ?>
+                        <?php $formattedOptionValue = $block->getFormatedOptionValue($option) ?>
+                        <dd<?php if (isset($formattedOptionValue['full_view'])): ?>
+                            class="inline-block w-full"
+                        <?php endif; ?>>
+                            <?= /* @noEscape */ $formattedOptionValue['value'] ?>
+                            <?php if (isset($formattedOptionValue['full_view'])): ?>
+                                <div class="content inline-block">
+                                    <dl class="options mt-2 rounded-lg border border-neutral-200 bg-white p-3">
+                                        <dt class="font-medium text-neutral-800"><?= $block->escapeHtml($option['label']); ?></dt>
+                                        <dd class="mt-1"><?= /* @noEscape */ $formattedOptionValue['full_view']; ?></dd>
+                                    </dl>
+                                </div>
+                            <?php endif; ?>
+                        </dd>
+                    <?php else: ?>
+                        <dd><?= $block->escapeHtml((isset($option['print_value']) ?
+                                $option['print_value'] :
+                                $option['value'])); ?>
+                        </dd>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </dl>
+        <?php endif; ?>
+        <?= $block->escapeHtml($item->getDescription()); ?>
+    </td>
+</tr>
+<?php endif; ?>

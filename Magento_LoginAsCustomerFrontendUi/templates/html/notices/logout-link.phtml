@@ -1,0 +1,21 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * @var \Magento\Customer\Block\Account\AuthorizationLink $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+$dataPostParam = '';
+if ($block->isLoggedIn()) {
+    $dataPostParam = sprintf(" data-post='%s'", $block->getPostParams());
+}
+?>
+
+<a class="lac-notification-close-link shrink-0 text-sm font-medium text-amber-900 underline decoration-amber-400 underline-offset-2 hover:text-amber-950" <?= /* @noEscape */ $block->getLinkAttributes()
+?><?= /* @noEscape */ $dataPostParam ?>>
+    <?= $escaper->escapeHtml(__('Close Session')) ?>
+</a>
+

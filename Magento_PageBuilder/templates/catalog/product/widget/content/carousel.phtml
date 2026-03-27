@@ -1,0 +1,119 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+use Magento\Framework\App\Action\Action;
+
+// phpcs:disable Generic.Files.LineLength.TooLong
+
+/** @var \Magento\CatalogWidget\Block\Product\ProductsList $block */
+?>
+<?php
+/**
+ * Product carousel widget template
+ *
+ * @var \Magento\Framework\Escaper $escaper
+ */
+?>
+<?php if ($exist = ($block->getProductCollection() && $block->getProductCollection()->count())): ?>
+    <?php
+    $type = 'widget-product-carousel';
+
+    $image = 'category_page_grid';
+    $items = $block->getProductCollection()->getItems();
+
+    $showWishlist = true;
+    $showCompare = true;
+    $showCart = true;
+    $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
+    ?>
+    <ol class="product-items <?= /* @noEscape */ $type ?>">
+        <?php $iterator = 1; ?>
+        <?php foreach ($items as $_item): ?>
+            <?= /* @noEscape */ ($iterator++ == 1) ? '<li class="flex flex-col border border-neutral-200 rounded-lg bg-white overflow-hidden">' : '</li><li class="flex flex-col border border-neutral-200 rounded-lg bg-white overflow-hidden">' ?>
+            <div class="flex flex-col gap-3 p-4">
+                <a href="<?= $escaper->escapeUrl($block->getProductUrl($_item)) ?>" class="block overflow-hidden bg-neutral-100">
+                    <?= $block->getImage($_item, $image)->toHtml() ?>
+                </a>
+                <div class="flex flex-col gap-2">
+                    <strong class="text-base font-semibold leading-snug">
+                        <a title="<?= $escaper->escapeHtmlAttr($_item->getName()) ?>"
+                           href="<?= $escaper->escapeUrl($block->getProductUrl($_item)) ?>"
+                           class="text-blue-600 hover:text-blue-800 hover:underline">
+                            <?= $escaper->escapeHtml($_item->getName()) ?>
+                        </a>
+                    </strong>
+                    <?php if ($templateType): ?>
+                        <?= $block->getReviewsSummaryHtml($_item, $templateType) ?>
+                    <?php endif; ?>
+
+                    <?= $block->getProductPriceHtml($_item, $type) ?>
+
+                    <?= $block->getProductDetailsHtml($_item) ?>
+
+                    <?php if ($showWishlist || $showCompare || $showCart): ?>
+                        <div class="mt-auto pt-2 flex flex-col gap-2">
+                            <div class="flex flex-wrap items-center gap-2">
+                                <?php if ($showCart): ?>
+                                    <div class="flex flex-wrap gap-2">
+                                        <?php if ($_item->isSaleable()): ?>
+                                            <?php $postParams = $block->getAddToCartPostParams($_item); ?>
+                                            <form data-role="tocart-form" data-product-sku="<?= $escaper->escapeHtmlAttr($_item->getSku()) ?>" action="<?= $escaper->escapeUrl($postParams['action']) ?>" method="post">
+                                                <?php foreach ($postParams['data']['options'] as $optionItem): ?>
+                                                    <input type="hidden"
+                                                           name="<?= $escaper->escapeHtmlAttr($optionItem['name']) ?>"
+                                                           value="<?= $escaper->escapeHtmlAttr($optionItem['value']) ?>">
+                                                <?php endforeach; ?>
+                                                <input type="hidden" name="product" value="<?= $escaper->escapeHtmlAttr($postParams['data']['product']) ?>">
+                                                <input type="hidden" name="<?= /* @noEscape */ Action::PARAM_NAME_URL_ENCODED ?>" value="<?= /* @noEscape */ $postParams['data'][Action::PARAM_NAME_URL_ENCODED] ?>">
+                                                <?= $block->getBlockHtml('formkey') ?>
+                                                <button type="submit"
+                                                        title="<?= $escaper->escapeHtml(__('Add to Cart')) ?>"
+                                                        class="inline-flex items-center justify-center gap-2 rounded-md text-sm font-semibold border px-4 py-2 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600 disabled:opacity-50 disabled:pointer-events-none bg-blue-600 text-white border-blue-600 hover:bg-blue-700 tocart">
+                                                    <span><?= $escaper->escapeHtml(__('Add to Cart')) ?></span>
+                                                </button>
+                                            </form>
+                                            <script type="text/x-magento-init">
+                                            {
+                                                "[data-role=tocart-form], .form.map.checkout": {
+                                                    "catalogAddToCart": {
+                                                        "product_sku": "<?= $escaper->escapeJs($_item->getSku()); ?>"
+                                                    }
+                                                }
+                                            }
+                                            </script>
+                                        <?php else: ?>
+                                            <?php if ($_item->getIsSalable()): ?>
+                                                <div class="text-sm text-green-700"><span><?= $escaper->escapeHtml(__('In stock')) ?></span></div>
+                                            <?php else: ?>
+                                                <div class="text-sm text-red-700"><span><?= $escaper->escapeHtml(__('Out of stock')) ?></span></div>
+                                            <?php endif; ?>
+                                        <?php endif; ?>
+                                    </div>
+                                <?php endif; ?>
+                                <?php if ($showWishlist || $showCompare): ?>
+                                    <div class="flex flex-wrap gap-2 text-sm text-neutral-600" data-role="add-to-links">
+                                        <?php if ($this->helper(\Magento\Wishlist\Helper\Data::class)->isAllow() && $showWishlist): ?>
+                                            <a href="#"
+                                               data-post='<?= /* @noEscape */ $block->getAddToWishlistParams($_item) ?>' class="inline-flex items-center justify-center gap-2 rounded-md text-sm font-semibold border px-4 py-2 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600 disabled:opacity-50 disabled:pointer-events-none towishlist" data-action="add-to-wishlist" title="<?= $escaper->escapeHtmlAttr(__('Add to Wish List')) ?>">
+                                                <span><?= $escaper->escapeHtml(__('Add to Wish List')) ?></span>
+                                            </a>
+                                        <?php endif; ?>
+                                        <?php if ($block->getAddToCompareUrl() && $showCompare): ?>
+                                            <?php $compareHelper = $this->helper(\Magento\Catalog\Helper\Product\Compare::class);?>
+                                            <a href="#" class="inline-flex items-center justify-center gap-2 rounded-md text-sm font-semibold border px-4 py-2 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600 disabled:opacity-50 disabled:pointer-events-none tocompare" data-post='<?= /* @noEscape */ $compareHelper->getPostDataParams($_item) ?>' title="<?= $escaper->escapeHtmlAttr(__('Add to Compare')) ?>">
+                                                <span><?= $escaper->escapeHtml(__('Add to Compare')) ?></span>
+                                            </a>
+                                        <?php endif; ?>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <?= ($iterator == count($items) + 1) ? '</li>' : '' ?>
+        <?php endforeach ?>
+    </ol>
+<?php endif;?>

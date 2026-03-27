@@ -1,0 +1,234 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\Multishipping\Block\Checkout\Overview $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+?>
+
+<?php
+/** @var \Magento\Tax\Helper\Data $taxHelper */
+$taxHelper = $block->getData('taxHelper');
+/** @var \Magento\Checkout\Helper\Data $checkoutHelper */
+$checkoutHelper = $block->getData('checkoutHelper');
+?>
+<?php $errors = $block->getCheckoutData()->getAddressErrors(); ?>
+<?php foreach ($errors as $addressId => $error): ?>
+    <div class="mb-4 rounded-md border text-sm border-red-200 bg-red-50 text-red-900 message-error">
+        <?= $block->escapeHtml($error); ?>
+        <?= $block->escapeHtml(__('Please see')); ?>
+        <a href="#<?= $block->escapeHtml($block->getCheckoutData()->getAddressAnchorName($addressId)); ?>">
+            <?= $block->escapeHtml(__('details below')); ?></a>.
+    </div>
+<?php endforeach;?>
+<form action="<?= $block->escapeUrl($block->getPostActionUrl()); ?>"
+      method="post"
+      id="review-order-form"
+      data-mage-init='{"orderOverview": {}, "validation":{}}'
+      class="space-y-4 form order-review">
+    <?= /* @noEscape */ $block->getBlockHtml('formkey'); ?>
+    <div class="mb-8 space-y-6">
+        <div class="border-b border-neutral-200 pb-2 text-lg font-semibold text-neutral-900"><strong><?= $block->escapeHtml(__('Billing Information')); ?></strong></div>
+        <div class="text-sm text-neutral-700">
+            <div class="mb-6 rounded-lg border border-neutral-200 bg-white box-billing-address">
+                <?php $address = $block->getBillingAddress() ?>
+                <strong class="flex flex-wrap items-center justify-between gap-2 border-b border-neutral-200 bg-neutral-50 px-4 py-3 text-base font-semibold text-neutral-900">
+                    <span><?= $block->escapeHtml(__('Billing Address')); ?></span>
+                    <a href="<?= $block->escapeUrl($block->getEditBillingAddressUrl($address)); ?>"
+                       class="edit inline-flex items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-sm font-semibold text-neutral-900 transition-colors hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"><span><?= $block->escapeHtml(__('Change')); ?></span></a>
+                </strong>
+                <div class="p-4">
+                    <address>
+                        <?= /* @noEscape */ $address->format('html') ?>
+                    </address>
+                </div>
+            </div>
+            <div class="mb-6 rounded-lg border border-neutral-200 bg-white box-billing-method">
+                <strong class="flex flex-wrap items-center justify-between gap-2 border-b border-neutral-200 bg-neutral-50 px-4 py-3 text-base font-semibold text-neutral-900">
+                    <span><?= $block->escapeHtml(__('Payment Method')); ?></span>
+                    <a href="<?= $block->escapeUrl($block->getEditBillingUrl()); ?>"
+                       class="edit inline-flex items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-sm font-semibold text-neutral-900 transition-colors hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"><span><?= $block->escapeHtml(__('Change')); ?></span></a>
+                </strong>
+                <div class="p-4">
+                    <input type="hidden"
+                           name="payment[cc_number]"
+                           value="<?= $block->escapeHtml($block->getPayment()->getCcNumber()) ?>" />
+                    <input type="hidden"
+                           name="payment[cc_cid]"
+                           value="<?= $block->escapeHtml($block->getPayment()->getCcCid()) ?>" />
+                    <?= /* @noEscape */ $block->getPaymentHtml() ?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mb-8 space-y-6">
+        <div class="border-b border-neutral-200 pb-2 text-lg font-semibold text-neutral-900"><strong><?= $block->escapeHtml(__('Shipping Information')); ?></strong></div>
+        <?php $mergedCells = ($taxHelper->displayCartBothPrices() ? 2 : 1); ?>
+        <?php foreach ($block->getShippingAddresses() as $index => $address): ?>
+            <div class="text-sm text-neutral-700">
+                <a name="<?= $block->escapeHtml($block->getCheckoutData()
+                    ->getAddressAnchorName($address->getId())); ?>"></a>
+                <div class="text-base font-semibold">
+                    <strong><?= $block->escapeHtml(__('Address')); ?> <?= $block->escapeHtml($index + 1); ?>
+                        <span>
+                            <?= $block->escapeHtml(__('of')); ?>
+                            <?= $block->escapeHtml($block->getShippingAddressCount())?>
+                        </span>
+                    </strong>
+                </div>
+                <?php if ($error = $block->getCheckoutData()->getAddressError($address)): ?>
+                    <div class="error-description mt-2 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-900"><?= $block->escapeHtml($error); ?></div>
+                <?php endif;?>
+                <div class="mb-6 rounded-lg border border-neutral-200 bg-white box-shipping-address">
+                    <strong class="flex flex-wrap items-center justify-between gap-2 border-b border-neutral-200 bg-neutral-50 px-4 py-3 text-base font-semibold text-neutral-900">
+                        <span><?= $block->escapeHtml(__('Shipping To')); ?></span>
+                        <a href="<?= $block->escapeUrl($block->getEditShippingAddressUrl($address)); ?>"
+                           class="edit inline-flex items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-sm font-semibold text-neutral-900 transition-colors hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"><span><?= $block->escapeHtml(__('Change')); ?></span></a>
+                    </strong>
+                    <div class="p-4">
+                        <address>
+                            <?= /* @noEscape */ $address->format('html') ?>
+                        </address>
+                    </div>
+                </div>
+                <div class="mb-6 rounded-lg border border-neutral-200 bg-white box-shipping-method">
+                    <strong class="flex flex-wrap items-center justify-between gap-2 border-b border-neutral-200 bg-neutral-50 px-4 py-3 text-base font-semibold text-neutral-900">
+                        <span><?= $block->escapeHtml(__('Shipping Method')); ?></span>
+                        <a href="<?= $block->escapeUrl($block->getEditShippingUrl()); ?>"
+                           class="edit inline-flex items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-sm font-semibold text-neutral-900 transition-colors hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"><span><?= $block->escapeHtml(__('Change')); ?></span></a>
+                    </strong>
+                    <?php if ($_rate = $block->getShippingAddressRate($address)): ?>
+                        <div class="p-4">
+                            <?= $block->escapeHtml($_rate->getCarrierTitle()) ?>
+                            (<?= $block->escapeHtml($_rate->getMethodTitle()) ?>)
+                            <?php
+                            $exclTax = $block->getShippingPriceExclTax($address);
+                            $inclTax = $block->getShippingPriceInclTax($address);
+                            $displayBothPrices = $taxHelper->displayShippingBothPrices() && $inclTax !== $exclTax;
+                            ?>
+                            <?php if ($displayBothPrices): ?>
+                                <span class="price-including-tax"
+                                      data-label="<?= $block->escapeHtml(__('Incl. Tax')); ?>">
+                                    <?= /* @noEscape */ $inclTax ?>
+                                </span>
+                                <span class="price-excluding-tax"
+                                      data-label="<?= $block->escapeHtml(__('Excl. Tax')); ?>">
+                                    <?= /* @noEscape */ $exclTax; ?>
+                                </span>
+                            <?php else: ?>
+                                <?= /* @noEscape */ $inclTax ?>
+                            <?php  endif; ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
+                <div class="mb-6 rounded-lg border border-neutral-200 bg-white box-items">
+                    <div class="p-4">
+                        <div class="w-full overflow-x-auto">
+                            <table class="table data table-order-review w-full border-collapse text-sm text-neutral-800"
+                                   id="overview-table-<?= $block->escapeHtml($address->getId()); ?>">
+                                <caption class="sr-only"><?= $block->escapeHtml(__('Order Review')); ?></caption>
+                                <thead>
+                                <tr>
+                                    <th class="border border-neutral-200 bg-neutral-50 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-neutral-700" scope="col">
+                                        <div class="flex flex-wrap items-center justify-between gap-2">
+                                            <span><?= $block->escapeHtml(__('Item')); ?></span>
+                                            <a href="<?= $block->escapeUrl($block->getAddressesEditUrl()); ?>"
+                                               class="edit inline-flex items-center justify-center rounded-md border border-neutral-300 bg-white px-2 py-1 text-xs font-semibold normal-case text-neutral-900 transition-colors hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600">
+                                                <span><?= $block->escapeHtml(__('Edit')); ?></span>
+                                            </a>
+                                        </div>
+                                    </th>
+                                    <th class="border border-neutral-200 bg-neutral-50 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-neutral-700" scope="col"><?= $block->escapeHtml(__('Price')); ?></th>
+                                    <th class="w-24 border border-neutral-200 bg-neutral-50 px-3 py-2 text-center text-xs font-semibold uppercase tracking-wide text-neutral-700" scope="col"><?= $block->escapeHtml(__('Qty')); ?></th>
+                                    <th class="border border-neutral-200 bg-neutral-50 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-neutral-700" scope="col"><?= $block->escapeHtml(__('Subtotal')); ?></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <?php foreach ($block->getShippingAddressItems($address) as $item): ?>
+                                    <?= /* @noEscape */ $block->getRowItemHtml($item) ?>
+                                <?php endforeach; ?>
+                                </tbody>
+                                <tfoot>
+                                    <?= /* @noEscape */ $block->renderTotals(
+                                        $block->getShippingAddressTotals($address)
+                                    ); ?>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+
+    <?php if ($block->getQuote()->hasVirtualItems()): ?>
+    <div class="mb-8 space-y-4">
+        <?php $billingAddress = $block->getQuote()->getBillingAddress(); ?>
+        <a name="<?= $block->escapeHtml($block->getCheckoutData()
+            ->getAddressAnchorName($billingAddress->getId())); ?>"></a>
+        <div class="border-b border-neutral-200 pb-2 text-lg font-semibold text-neutral-900"><strong><?= $block->escapeHtml(__('Other items in your order')); ?></strong></div>
+        <?php if ($error = $block->getCheckoutData()->getAddressError($billingAddress)): ?>
+                <div class="error-description rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-900"><?= $block->escapeHtml($error); ?></div>
+        <?php endif;?>
+        <div class="text-sm text-neutral-700">
+            <strong class="flex flex-wrap items-center justify-between gap-2 text-sm font-semibold text-neutral-900">
+                <span><?= $block->escapeHtml(__('Items')); ?></span>
+                <a href="<?= $block->escapeUrl($block->getVirtualProductEditUrl()); ?>"
+                   class="edit inline-flex items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-sm font-semibold text-neutral-900 transition-colors hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"><span><?= $block->escapeHtml(__('Edit Items')); ?></span></a>
+            </strong>
+            <?php $mergedCells = ($taxHelper->displayCartBothPrices() ? 2 : 1); ?>
+            <div class="w-full overflow-x-auto">
+                <table class="table data table-order-review mt-4 w-full border-collapse text-sm text-neutral-800" id="virtual-overview-table">
+                    <caption class="sr-only"><?= $block->escapeHtml(__('Items')); ?></caption>
+                    <thead>
+                        <tr>
+                            <th class="border border-neutral-200 bg-neutral-50 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-neutral-700" scope="col"><?= $block->escapeHtml(__('Product Name')); ?></th>
+                            <th class="border border-neutral-200 bg-neutral-50 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-neutral-700" scope="col"><?= $block->escapeHtml(__('Price')); ?></th>
+                            <th class="w-24 border border-neutral-200 bg-neutral-50 px-3 py-2 text-center text-xs font-semibold uppercase tracking-wide text-neutral-700" scope="col"><?= $block->escapeHtml(__('Qty')); ?></th>
+                            <th class="border border-neutral-200 bg-neutral-50 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-neutral-700" scope="col"><?= $block->escapeHtml(__('Subtotal')); ?></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($block->getVirtualItems() as $_item): ?>
+                            <?= /* @noEscape */ $block->getRowItemHtml($_item) ?>
+                        <?php endforeach; ?>
+                    </tbody>
+                    <tfoot>
+                    <?= /* @noEscape */ $block->renderTotals($block->getBillingAddressTotals()); ?>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+    <?php endif; ?>
+
+    <?= /* @noEscape */ $block->getChildHtml('items_after') ?>
+
+    <div id="checkout-review-submit" class="checkout-review">
+        <?= /* @noEscape */ $block->getChildHtml('agreements') ?>
+        <div class="grand totals mt-6 flex flex-wrap items-baseline justify-end gap-3 border-t border-neutral-200 pt-4 text-lg font-semibold text-neutral-900">
+            <strong class="mark"><?= $block->escapeHtml(__('Grand Total:')); ?></strong>
+            <strong class="amount tabular-nums">
+                <?= /* @noEscape */ $checkoutHelper->formatPrice($block->getTotal()); ?>
+            </strong>
+        </div>
+        <div class="flex flex-col gap-4 border-t border-neutral-200 pt-6 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between" id="review-buttons-container">
+                <?= $block->getChildHtml('captcha') ?>
+                <button type="submit"
+                        class="submit inline-flex items-center justify-center gap-2 rounded-md border border-blue-600 bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600 disabled:pointer-events-none disabled:opacity-50"
+                        id="review-button"><span><?= $block->escapeHtml(__('Place Order')); ?></span>
+                </button>
+                <a href="<?= $block->escapeUrl($block->getBackUrl()); ?>" class="back inline-flex items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-semibold text-neutral-900 transition-colors hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600">
+                    <span><?= $block->escapeHtml(__('Back to Billing Information')); ?></span>
+                </a>
+            <span id="review-please-wait"
+                  class="please-wait load indicator"
+                  data-text="<?= $block->escapeHtml(__('Submitting order information...')); ?>">
+                <span><?= $block->escapeHtml(__('Submitting order information...')); ?></span>
+            </span>
+            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag('display: none;', 'span#review-please-wait') ?>
+        </div>
+    </div>
+</form>

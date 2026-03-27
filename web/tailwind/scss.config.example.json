@@ -1,0 +1,14 @@
+{
+  "pubStaticPaths": [
+    "pub/static/frontend/Genaker/tailwind_luna/en_US",
+    "pub/static/frontend/Genaker/win_luna/en_US"
+  ],
+  "mergeRoots": [
+    "../../packages/YourVendor_YourModule/web/tailwind"
+  ],
+  "exclude": [],
+  "contentFiles": [
+    "../../vendor/paypal/module-*/view/frontend/templates/**/*.phtml"
+  ],
+  "tier": 2
+}

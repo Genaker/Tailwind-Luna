@@ -1,0 +1,129 @@
+<?php
+/**
+ * Gallery stage snippet — responsive main image + thumbnail strip.
+ *
+ * Renders in two ways:
+ *   1. Child block `product.gallery.stage` (layout + gallery.phtml setData) — preferred on PDP.
+ *   2. Legacy include from Magento_Swatches renderer.phtml — sets $_stageItems / $_wMobile / … in parent scope.
+ *
+ * Required:
+ *   array  $_stageItems     Items: [{medium, full, thumb, mobile, label}, …]
+ *   int    $_stageMainIdx   Index of the initially active item
+ *
+ * Optional:
+ *   int    $_wMobile … $_height, bool $_gphpSimpleStage (see below; or block data keys with same names)
+ */
+
+/** @var \Magento\Framework\View\Element\AbstractBlock $block */
+if (($block->getNameInLayout() ?? '') === 'product.gallery.stage') {
+    $_stageItems    = $block->getData('stage_items') ?? [];
+    $_stageMainIdx  = (int) ($block->getData('stage_main_idx') ?? 0);
+    $_wMobile       = (int) ($block->getData('w_mobile') ?? 400);
+    $_wMedium       = (int) ($block->getData('w_medium') ?? 540);
+    $_wFull         = (int) ($block->getData('w_full') ?? 540);
+    $_width         = (int) ($block->getData('width') ?? 540);
+    $_height        = (int) ($block->getData('height') ?? 540);
+    $_gphpSimpleStage = (bool) ($block->getData('gphp_simple_stage') ?? false);
+} elseif (!isset($_stageItems)) {
+    return;
+}
+
+$isSimpleStage  = (bool) ($_gphpSimpleStage ?? false);
+$mobileWidth    = (int) ($_wMobile ?? 400);
+$mediumWidth    = (int) ($_wMedium ?? 540);
+$fullWidth      = (int) ($_wFull   ?? 540);
+$imgWidth       = (int) ($_width   ?? 540);
+$imgHeight      = (int) ($_height  ?? 540);
+
+$activeItem = $_stageItems[$_stageMainIdx] ?? ($_stageItems[0] ?? null);
+if (!$activeItem) { return; }
+
+$esc = static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+
+$mediumUrl    = $activeItem['medium'] !== '' ? $activeItem['medium'] : ($activeItem['full'] ?? '');
+$fullUrl      = ($activeItem['full'] ?? '') !== '' ? $activeItem['full'] : $mediumUrl;
+/* ≤600px: use medium_mobile (365px resized) when available, otherwise fall back to medium (540px).
+   Never use small_image / json thumb — those are 88px listing icons. */
+$mobileSource = ($activeItem['mobile'] ?? '') !== '' ? $activeItem['mobile'] : $mediumUrl;
+$altText      = $activeItem['label'] ?? '';
+
+/* srcset for the simple-stage <img> (swatch variant, no <picture>). */
+$desktopSrcset = [];
+if ($mediumUrl !== '') { $desktopSrcset[] = $mediumUrl . ' ' . $mediumWidth . 'w'; }
+if ($fullUrl !== '' && $fullUrl !== $mediumUrl) { $desktopSrcset[] = $fullUrl . ' ' . $fullWidth . 'w'; }
+$desktopSrcsetAttr = implode(', ', $desktopSrcset);
+$desktopSizesAttr  = sprintf('(min-width: 768px) min(%dpx, 55vw), 100vw', $mediumWidth);
+
+/* Stage/thumb CSS only — do not use $css here; gallery.phtml owns $css for root/popup. */
+$stageCss = [
+    'mainWrap' => 'relative w-full max-h-[min(85vh,40rem)] overflow-hidden rounded-xl bg-neutral-100 ring-1 ring-neutral-200/80',
+    'mainImg'  => 'block h-auto max-h-[min(85vh,40rem)] w-full cursor-zoom-in object-contain object-center',
+    'thumbs'   => 'mt-3 flex flex-wrap items-center justify-center gap-2 sm:mt-4',
+    'thumb'    => 'gphp-thumb h-16 w-16 shrink-0 cursor-pointer overflow-hidden rounded-lg border border-neutral-200 bg-white object-cover p-0 ring-2 ring-transparent transition hover:ring-primary/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:h-[4.5rem] sm:w-[4.5rem] [.is-active]:border-primary [.is-active]:ring-primary',
+];
+?>
+<div class="<?= $esc($stageCss['mainWrap']) ?>">
+    <?php if ($isSimpleStage): ?>
+    <img src="<?= $esc($mediumUrl) ?>"
+         <?php if ($desktopSrcsetAttr !== ''): ?>
+         srcset="<?= $esc($desktopSrcsetAttr) ?>"
+         sizes="<?= $esc($desktopSizesAttr) ?>"
+         <?php endif; ?>
+         data-gphp-full="<?= $esc($fullUrl) ?>"
+         alt="<?= $esc($altText) ?>"
+         class="<?= $esc($stageCss['mainImg']) ?>"
+         data-gphp-main="1"
+         loading="eager"
+         fetchpriority="high"
+         width="<?= $imgWidth ?>"
+         height="<?= $imgHeight ?>"/>
+    <?php else: ?>
+    <?php 
+    /* Main PDP <picture>: mobile ≤600px → narrow 365px resized; tablet ≤1024px → medium 540px; desktop → <img> src.
+    * Pattern from https://github.com/Genaker/reactmagento2/blob/react-17/…/gallery.phtml */ ?>
+    <picture class="gphp-mob-pict block w-full">
+        <source media="(max-width: 500px)"
+                srcset="<?= $esc($mobileSource) ?>"
+                data-gphp-mobile-source="1"/>
+        <source media="(max-width: 1024px)"
+                srcset="<?= $esc($mediumUrl) ?>"
+                data-gphp-tablet-source="1"/>
+        <img src="<?= $esc($mediumUrl) ?>"
+             data-gphp-full="<?= $esc($fullUrl) ?>"
+             <?php if (($activeItem['mobile'] ?? '') !== ''): ?>
+             data-gphp-mobile="<?= $esc($activeItem['mobile']) ?>"
+             <?php endif; ?>
+             alt="<?= $esc($altText) ?>"
+             class="<?= $esc($stageCss['mainImg']) ?>"
+             data-gphp-main="1"
+             loading="eager"
+             fetchpriority="high"
+             width="<?= $imgWidth ?>"
+             height="<?= $imgHeight ?>"/>
+    </picture>
+    <?php endif; ?>
+</div>
+
+<div class="<?= $esc($stageCss['thumbs']) ?>"
+     role="tablist"
+     aria-label="Gallery thumbnails"
+     data-gphp-thumbs="1"
+     <?= count($_stageItems) <= 1 ? 'hidden' : '' ?>>
+    <?php foreach ($_stageItems as $thumbIndex => $thumbItem): ?>
+        <?php $isActive = $thumbIndex === $_stageMainIdx; ?>
+        <button type="button"
+                class="<?= $esc(trim($stageCss['thumb'] . ($isActive ? ' is-active' : ''))) ?>"
+                data-gphp-thumb="<?= (int) $thumbIndex ?>"
+                aria-label="View image <?= (int) $thumbIndex + 1 ?>"
+                aria-selected="<?= $isActive ? 'true' : 'false' ?>"
+                role="tab">
+            <img src="<?= $esc($thumbItem['thumb'] !== '' ? $thumbItem['thumb'] : $thumbItem['medium']) ?>"
+                 alt=""
+                 width="72"
+                 height="72"
+                 loading="lazy"
+                 decoding="async"
+                 class="h-full w-full object-cover"/>
+        </button>
+    <?php endforeach; ?>
+</div>

@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!--
+  Handle: cms_index_index (storefront home route /).
+
+  Renders Magento_Cms::home.phtml as home.shell; Admin CMS page body is moved under that block
+  (see cms_home_hot_products for the Hot Sellers child). Global CSS is css/tailwind(.min).css only;
+  homepage promo rules live in web/tailwind/modules/cms/cms.scss (merged into that bundle).
+
+  Removes:
+  - page.main.title, breadcrumbs (same pattern as core Luma home: single hero, no duplicate H1 strip).
+  - genaker.resolve_css.cms_home: legacy stylesheet link; layout merge or cached themes may still
+    reference it; remove=true keeps the head free of css/cms-home.css.
+
+  Other storefront URL for the same CMS page (identifier "home"): cms/page/view — use handle
+  cms_page_view_id_home (cms_page_view_id_home.xml). Duplicate that file if the identifier changes.
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="cms_home_hot_products"/>
+    <body>
+        <referenceBlock name="genaker.resolve_css.cms_home" remove="true"/>
+        <referenceBlock name="page.main.title" remove="true"/>
+        <referenceBlock name="breadcrumbs" remove="true"/>
+        <referenceContainer name="page.wrapper" htmlClass="page-wrapper"/>
+        <referenceContainer name="main.content" htmlClass="page-main border border-neutral-200 px-5"/>
+        <referenceContainer name="columns" htmlClass="columns"/>
+        <referenceContainer name="main" htmlClass="column main"/>
+        <referenceContainer name="header.container" htmlClass="page-header"/>
+        <referenceContainer name="footer-container" htmlClass="page-footer"/>
+        <referenceContainer name="content">
+            <block class="Magento\Framework\View\Element\Template"
+                   name="home.shell"
+                   template="Magento_Cms::home.phtml"
+                   before="-"/>
+        </referenceContainer>
+        <move element="cms_page" destination="home.shell"/>
+    </body>
+</page>

@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!--
+  Handle: cms_page_view_id_home (CMS page identifier "home", e.g. /home).
+  Not merged with cms_index_index; body matches that handle (shell, htmlClass, title/breadcrumb
+  removes, legacy genaker.resolve_css.cms_home remove).
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="cms_home_hot_products"/>
+    <body>
+        <referenceBlock name="genaker.resolve_css.cms_home" remove="true"/>
+        <referenceBlock name="page.main.title" remove="true"/>
+        <referenceBlock name="breadcrumbs" remove="true"/>
+        <referenceContainer name="page.wrapper" htmlClass="page-wrapper"/>
+        <referenceContainer name="main.content" htmlClass="page-main border border-neutral-200 px-5"/>
+        <referenceContainer name="columns" htmlClass="columns"/>
+        <referenceContainer name="main" htmlClass="column main"/>
+        <referenceContainer name="header.container" htmlClass="page-header"/>
+        <referenceContainer name="footer-container" htmlClass="page-footer"/>
+        <referenceContainer name="content">
+            <block class="Magento\Framework\View\Element\Template"
+                   name="home.shell"
+                   template="Magento_Cms::home.phtml"
+                   before="-"/>
+        </referenceContainer>
+        <move element="cms_page" destination="home.shell"/>
+    </body>
+</page>

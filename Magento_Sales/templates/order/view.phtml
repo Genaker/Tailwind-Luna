@@ -1,0 +1,51 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+?>
+<?php /** @var  $block \Magento\Sales\Block\Order\View*/?>
+<div class="order-details-items ordered space-y-6">
+    <?php $_order = $block->getOrder() ?>
+
+    <div class="order-title flex flex-wrap items-center justify-between gap-3 text-lg font-semibold text-neutral-900 pb-3 border-b border-neutral-200">
+        <strong class="font-semibold"><?= $block->escapeHtml(__('Items Ordered')) ?></strong>
+        <?php if (!empty($_order->getTracksCollection()->getItems())) : ?>
+            <?= $block->getChildHtml('tracking-info-link') ?>
+        <?php endif; ?>
+    </div>
+
+    <?= $block->getChildHtml('order_items') ?>
+
+    <?php if ($this->helper(\Magento\GiftMessage\Helper\Message::class)->isMessagesAllowed('order', $_order)
+        && $_order->getGiftMessageId()
+    ) : ?>
+    <div class="mb-6 mb-8">
+        <div class="text-lg font-semibold text-neutral-900 mb-3 pb-2 border-b border-neutral-200"><strong><?= $block->escapeHtml(__('Gift Message for This Order')) ?></strong></div>
+        <?php
+        $_giftMessage = $this->helper(\Magento\GiftMessage\Helper\Message::class)->getGiftMessageForEntity($_order);
+        ?>
+        <div class="text-sm text-neutral-700">
+            <dl class="item-options space-y-2">
+                <dt class="item-sender text-sm font-medium text-neutral-800"><?= $block->escapeHtml(__('From')) ?></dt>
+                <dd class="mb-0 text-neutral-700"><?= $block->escapeHtml($_giftMessage->getSender()) ?></dd>
+                <dt class="item-recipient text-sm font-medium text-neutral-800"><?= $block->escapeHtml(__('To')) ?></dt>
+                <dd class="mb-0 text-neutral-700"><?= $block->escapeHtml($_giftMessage->getRecipient()) ?></dd>
+                <dt class="sr-only"><?= $block->escapeHtml(__('Message')) ?></dt>
+                <dd class="item-message mt-2 text-neutral-700">
+                    <?= /* @noEscape */
+                    $this->helper(\Magento\GiftMessage\Helper\Message::class)->getEscapedGiftMessage($_order) ?>
+                </dd>
+            </dl>
+        </div>
+    </div>
+    <?php endif; ?>
+
+    <div class="flex flex-wrap items-center justify-between gap-4 py-4 clear-both border-t border-neutral-200">
+        <a class="inline-flex items-center justify-center gap-2 rounded-md text-sm font-semibold border border-neutral-300 bg-white px-4 py-2 text-neutral-900 transition-colors hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600 back"
+           href="<?= $block->escapeUrl($block->getBackUrl()) ?>">
+            <span><?= $block->escapeHtml($block->getBackTitle()) ?></span>
+        </a>
+    </div>
+</div>

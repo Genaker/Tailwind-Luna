@@ -1,0 +1,23 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * @var $block \Magento\OfflinePayments\Block\Form\Cashondelivery
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
+$instructions = $block->getInstructions();
+?>
+<?php if ($instructions) : ?>
+    <?php $methodCode = $block->escapeHtmlAttr($block->getMethodCode()); ?>
+    <div class="items <?= /* @noEscape */ $methodCode ?> instructions agreement mt-2 rounded-lg border border-neutral-200 bg-neutral-50 p-3 text-sm text-neutral-700"
+         id="payment_form_<?= /* @noEscape */ $methodCode ?>">
+        <?= /* @noEscape */ nl2br($block->escapeHtml($instructions)) ?>
+    </div>
+    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+        'display:none',
+        'div#payment_form_' . /* @noEscape */ $methodCode
+    ) ?>
+<?php endif; ?>

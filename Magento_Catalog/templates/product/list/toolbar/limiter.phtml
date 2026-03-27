@@ -1,0 +1,27 @@
+<?php
+/**
+ * Toolbar limiter - Items per page selector
+ *
+ * @var $block \Magento\Catalog\Block\Product\ProductList\Toolbar
+ */
+?>
+<div class="limiter flex items-center gap-2">
+    <label class="limiter-label text-sm font-medium text-neutral-700" for="limiter">
+        <?= $block->escapeHtml(__('Show')) ?>
+    </label>
+    <select id="limiter"
+            data-role="limiter"
+            class="limiter-options min-w-[4rem] rounded-lg border-neutral-300 px-3 py-2 pr-8 text-sm focus:border-primary focus:ring-2 focus:ring-primary focus:ring-offset-0">
+        <?php foreach ($block->getAvailableLimit() as $_key => $_limit): ?>
+            <option value="<?= $block->escapeHtmlAttr($_key) ?>"
+                <?php if ($block->isLimitCurrent($_key)): ?>
+                    selected="selected"
+                <?php endif; ?>>
+                <?= $block->escapeHtml($_limit) ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+    <span class="limiter-text text-sm text-neutral-600">
+        <?= $block->escapeHtml(__('per page')) ?>
+    </span>
+</div>

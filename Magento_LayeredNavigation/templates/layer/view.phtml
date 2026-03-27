@@ -1,0 +1,87 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php
+/**
+ * Category layered navigation
+ *
+ * @var $block \Magento\LayeredNavigation\Block\Navigation
+ */
+?>
+
+<?php if ($block->canShowBlock()) : ?>
+    <?php $filtered = count($block->getLayer()->getState()->getFilters()) ?>
+    <div class="block filter mb-0 rounded-xl border border-neutral-200 bg-white shadow-sm"
+         id="layered-filter-block"
+         data-count="<?= /* @noEscape */ $filtered ?>">
+
+        <button type="button"
+                aria-controls="filter-content-block"
+                aria-expanded="false"
+                onclick="var c=document.getElementById('filter-content-block');var open=c.classList.toggle('hidden');this.setAttribute('aria-expanded',!open);this.querySelector('.filter-chevron').style.transform=open?'':'rotate(180deg)'"
+                class="filter-title flex w-full cursor-pointer items-center justify-between gap-3 rounded-t-xl px-5 py-4 text-left transition-colors hover:bg-neutral-50">
+            <strong class="text-[1.0625rem] font-bold leading-snug text-neutral-900"><?= $block->escapeHtml(__('Shop By')); ?></strong>
+            <svg class="filter-chevron h-4 w-4 shrink-0 text-neutral-400 transition-transform duration-200 lg:rotate-180" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd"/>
+            </svg>
+        </button>
+
+        <div class="filter-content block-content hidden lg:block px-5 pb-5" id="filter-content-block">
+            <?= $block->getChildHtml('state') ?>
+
+            <?php if ($block->getLayer()->getState()->getFilters()) : ?>
+                <div class="filter-actions block-actions border-t border-neutral-200 pt-3 pb-1 mb-3">
+                    <a href="<?= $block->escapeUrl($block->getClearUrl()) ?>"
+                       class="action clear filter-clear text-sm font-medium text-primary no-underline hover:underline">
+                        <span><?= $block->escapeHtml(__('Clear All')) ?></span>
+                    </a>
+                </div>
+            <?php endif; ?>
+            <?php $wrapOptions = false; ?>
+            <?php foreach ($block->getFilters() as $filter) : ?>
+                <?php if ($filter->getItemsCount()) : ?>
+                    <?php if (!$wrapOptions) : ?>
+                        <strong role="heading"
+                                aria-level="2"
+                                class="filter-subtitle block-subtitle mb-3 mt-1 block text-xs font-semibold uppercase tracking-wide text-neutral-500"><?= $block->escapeHtml(__('Shopping Options')) ?></strong>
+                        <div class="filter-options mb-0.5"
+                             id="narrow-by-list"
+                             data-role="content"
+                             data-mage-init='
+                        {
+                            "accordion":
+                            {
+                                "openedState": "active",
+                                "collapsible": true,
+                                "active": false,
+                                "multipleCollapsible": false
+                            }
+                        }'>
+                        <?php $wrapOptions = true;
+                        endif; ?>
+                    <div data-role="collapsible"
+                         class="filter-options-item group/filter-item border-b border-neutral-100 pb-3 last:border-b-0 last:pb-0">
+                        <div data-role="title"
+                             class="filter-options-title flex cursor-pointer items-center justify-between gap-3 rounded-md px-0.5 py-2 text-[0.9375rem] font-semibold leading-snug text-neutral-900 transition-colors after:box-border after:inline-block after:h-1.5 after:w-1.5 after:shrink-0 after:border-0 after:border-r-2 after:border-b-2 after:border-solid after:border-neutral-400 after:transition-transform after:duration-200 after:content-[''] after:-rotate-45 after:origin-center hover:bg-primary/[0.06] hover:text-primary group-[.active]/filter-item:after:rotate-45 group-[.active]/filter-item:after:origin-[65%_65%]"><?= $block->escapeHtml(__($filter->getName())) ?></div>
+                        <div data-role="content"
+                             class="filter-options-content pl-0.5 pt-1"><?= /* @noEscape */ $block->getChildBlock('renderer')->render($filter) ?></div>
+                    </div>
+                <?php endif; ?>
+            <?php endforeach; ?>
+            <?php if ($wrapOptions) : ?>
+                </div>
+            <?php else : ?>
+                <script>
+                    require([
+                        'jquery'
+                    ], function ($) {
+                        $('#layered-filter-block').addClass('filter-no-options');
+                    });
+                </script>
+            <?php endif; ?>
+        </div>
+    </div>
+<?php endif; ?>

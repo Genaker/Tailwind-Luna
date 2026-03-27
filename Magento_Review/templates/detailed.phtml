@@ -1,0 +1,37 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+/**
+ * @var \Magento\Review\Block\Rating\Entity\Detailed $block
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
+?>
+<?php if (!empty($collection) && $collection->getSize()): ?>
+    <div class="overflow-x-auto rounded-lg border border-neutral-200">
+        <table class="table data ratings review summary w-full border-collapse text-sm">
+            <caption class="sr-only"><?= $block->escapeHtml(__('Ratings Review Summary')) ?></caption>
+            <tbody>
+            <?php foreach ($collection as $_rating): ?>
+                <?php if ($_rating->getSummary()): ?>
+                    <tr class="border-b border-neutral-200 last:border-b-0">
+                        <th class="px-4 py-3 text-left text-sm font-semibold text-neutral-800 align-top" scope="row"><?= $block->escapeHtml(__($_rating->getRatingCode())) ?></th>
+                        <td class="value px-4 py-3 align-top">
+                            <div class="rating box rounded-md border border-neutral-200 bg-neutral-50">
+                                <div class="rating h-2 rounded bg-neutral-200 overflow-hidden"></div>
+                            </div>
+                            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                                "width:" . /* @noEscape */ ceil((float) $_rating->getSummary()) . "%;",
+                                'div.rating.box div.rating'
+                            ) ?>
+                        </td>
+                    </tr>
+                <?php endif; ?>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+<?php endif; ?>

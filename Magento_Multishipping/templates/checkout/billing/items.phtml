@@ -1,0 +1,37 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+?>
+<?php if ($block->getQuote()->hasVirtualItems()) : ?>
+<div class="mb-8 space-y-4">
+    <div class="flex flex-wrap items-center justify-between gap-2 border-b border-neutral-200 pb-2">
+        <strong class="text-lg font-semibold text-neutral-900"><?= $block->escapeHtml(__('Other items in your order')) ?></strong>
+        <a href="<?= $block->escapeUrl($block->getVirtualProductEditUrl()) ?>" class="edit inline-flex items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-sm font-semibold text-neutral-900 transition-colors hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"><span><?= $block->escapeHtml(__('Edit Items')) ?></span></a>
+    </div>
+    <div class="text-sm text-neutral-700">
+        <p class="text-neutral-600"><?= $block->escapeHtml(__('Shipping is not applicable.')) ?></p>
+        <div class="overflow-x-auto">
+            <table class="table data mt-4 w-full border-collapse text-sm text-neutral-800" id="unavailable-shipping-table">
+                <caption class="sr-only"><?= $block->escapeHtml(__('Other items in your order')) ?></caption>
+                <thead>
+                    <tr>
+                        <th class="border border-neutral-200 bg-neutral-50 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-neutral-700" scope="col"><?= $block->escapeHtml(__('Product Name')) ?></th>
+                        <th class="w-24 border border-neutral-200 bg-neutral-50 px-3 py-2 text-center text-xs font-semibold uppercase tracking-wide text-neutral-700" scope="col"><?= $block->escapeHtml(__('Qty')) ?></th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($block->getVirtualQuoteItems() as $_item) : ?>
+                    <tr class="border-b border-neutral-200 last:border-b-0">
+                        <td class="border border-neutral-200 px-3 py-3 align-top" data-th="<?= $block->escapeHtmlAttr(__('Product Name')) ?>"><?= $block->getItemHtml($_item) ?></td>
+                        <td class="border border-neutral-200 px-3 py-3 text-center text-sm tabular-nums text-neutral-800" data-th="<?= $block->escapeHtmlAttr(__('Qty')) ?>"><?= $block->escapeHtml($_item->getQty()) ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<?php endif; ?>

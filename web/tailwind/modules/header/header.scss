@@ -1,0 +1,623 @@
+.page-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  border-bottom: 1px solid #e5e7eb;
+  background-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+
+.panel.wrapper {
+  border-bottom: 1px solid #e5e7eb;
+  background-color: #f5f5f5;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: #404040;
+}
+
+.panel.header {
+  position: relative;
+  box-sizing: border-box;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1280px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 1.5rem;
+  row-gap: 0.5rem;
+  padding: 0.5rem 1rem;
+}
+
+@media (min-width: 640px) {
+  .panel.header {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .panel.header {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+.header.content {
+  box-sizing: border-box;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1280px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+}
+
+@media (min-width: 640px) {
+  .header.content {
+    gap: 1rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .header.content {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* ——— Layout child hooks (header row order, search, nav) ——— */
+.header.content .action.nav-toggle {
+  order: 1;
+}
+
+/* Hamburger: visuals in logo.phtml (Tailwind); bars morph when html.nav-open */
+
+@media (max-width: 1023px) {
+  .header.content .action.nav-toggle .nav-toggle__bar {
+    transform-origin: center;
+    transition:
+      transform 0.2s ease,
+      opacity 0.15s ease;
+  }
+
+  html.nav-open .header.content .action.nav-toggle .nav-toggle__bar:nth-child(1) {
+    transform: translateY(0.5rem) rotate(45deg);
+  }
+
+  html.nav-open .header.content .action.nav-toggle .nav-toggle__bar:nth-child(2) {
+    opacity: 0;
+  }
+
+  html.nav-open .header.content .action.nav-toggle .nav-toggle__bar:nth-child(3) {
+    transform: translateY(-0.5rem) rotate(-45deg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .header.content .action.nav-toggle .nav-toggle__bar {
+      transition: none;
+    }
+  }
+}
+
+.header.content .logo {
+  order: 2;
+  flex: 1 1 auto;
+}
+
+@media (min-width: 1024px) {
+  /* logo.phtml nav toggle; hide from 1024px alongside .lg:hidden */
+  .header.content .action.nav-toggle {
+    display: none !important;
+  }
+
+  .header.content .logo {
+    flex: 0 0 auto;
+  }
+}
+
+/*
+ * Luma sets a wide .minicart-wrapper + floats; inside flex header that can wrap the chip
+ * to its own top row or blow out layout. Keep the trigger in-flow; flyout is positioned
+ * under the chip (see .block-minicart below).
+ */
+.header.content .minicart-wrapper,
+.page-header .minicart-wrapper {
+  order: 3;
+  position: relative;
+  z-index: 1;
+  float: none !important;
+  clear: none !important;
+  width: auto !important;
+  max-width: none;
+  flex: 0 0 auto;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+.header.content .minicart-wrapper.active,
+.page-header .minicart-wrapper.active {
+  z-index: 200;
+}
+
+.header.content .minicart-wrapper .action.showcart,
+.page-header .minicart-wrapper .action.showcart {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 0.375rem;
+  border: 1px solid #e5e7eb;
+  background-color: #fff;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #171717;
+  text-decoration: none;
+}
+.header.content .minicart-wrapper .action.showcart:hover,
+.page-header .minicart-wrapper .action.showcart:hover {
+  border-color: #1979c3;
+  color: #1979c3;
+}
+
+/* Icon-only cart trigger: keep chip aligned; SVG uses stroke currentColor */
+.header.content .minicart-wrapper .action.showcart.showcart--icon .showcart__icon,
+.page-header .minicart-wrapper .action.showcart.showcart--icon .showcart__icon {
+  color: inherit;
+}
+
+/*
+ * dropdownDialog wraps the flyout in jQuery UI .ui-dialog.mage-dropdown-dialog.
+ * If that shell stays in normal flow (position: relative), it widens the flex header and shoves search.
+ * Keep it absolutely positioned under .minicart-wrapper (position: relative).
+ */
+.minicart-wrapper > .ui-dialog.mage-dropdown-dialog,
+.page-header .minicart-wrapper > .ui-dialog.mage-dropdown-dialog {
+  position: absolute !important;
+  top: 100%;
+  right: 0;
+  /* jQuery UI often sets width + left; never let the panel extend past the viewport left edge */
+  left: auto !important;
+  inset-inline-start: auto !important;
+  inset-inline-end: 0 !important;
+  /* Right edge of trigger ≈ viewport minus header padding; cap width so (triggerRight - width) >= 0 */
+  width: min(24.375rem, calc(100vw - 2rem)) !important;
+  max-width: min(24.375rem, calc(100vw - 2rem)) !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+  margin: 0.375rem 0 0;
+  padding: 0 !important;
+  z-index: 200;
+  float: none !important;
+  transform: none !important;
+}
+
+.minicart-wrapper > .ui-dialog.mage-dropdown-dialog .ui-dialog-content,
+.page-header .minicart-wrapper > .ui-dialog.mage-dropdown-dialog .ui-dialog-content {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box;
+}
+
+.minicart-wrapper > .ui-dialog.mage-dropdown-dialog .block-minicart,
+.page-header .minicart-wrapper > .ui-dialog.mage-dropdown-dialog .block-minicart {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/*
+ * Mobile: jQuery UI keeps absolute positioning + inline width/left; the flyout is wider than
+ * the space from viewport-left to the cart trigger, so it clips at the left/right. Pin the shell
+ * to the viewport on small screens (desktop uses absolute + page-wrapper overflow visible).
+ */
+@media (max-width: 767px) {
+  .header.content .minicart-wrapper > .ui-dialog.mage-dropdown-dialog,
+  .page-header .minicart-wrapper > .ui-dialog.mage-dropdown-dialog {
+    position: fixed !important;
+    left: 0.5rem !important;
+    right: 0.5rem !important;
+    top: calc(env(safe-area-inset-top, 0px) + 5.75rem) !important;
+    bottom: auto !important;
+    width: auto !important;
+    max-width: none !important;
+    margin: 0 !important;
+    max-height: calc(100vh - env(safe-area-inset-top, 0px) - 6.25rem) !important;
+    max-height: calc(100dvh - env(safe-area-inset-top, 0px) - 6.25rem) !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch;
+    z-index: 10000 !important;
+    transform: none !important;
+  }
+
+  .header.content .minicart-wrapper > .ui-dialog.mage-dropdown-dialog .block-minicart,
+  .page-header .minicart-wrapper > .ui-dialog.mage-dropdown-dialog .block-minicart {
+    max-height: inherit;
+  }
+}
+
+/* Before / without dialog upgrade: panel is still a direct child */
+.header.content .minicart-wrapper > .block-minicart,
+.page-header .minicart-wrapper > .block-minicart {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  left: auto;
+  margin-top: 0.375rem;
+  float: none !important;
+}
+
+/* Minicart flyout body (Knockout + Magento_Checkout/web/template/minicart/content.html) */
+.block-minicart .block-content {
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.block-minicart .block-content .subtotal {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.375rem 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 0.875rem;
+  color: #404040;
+}
+
+.block-minicart .block-content .subtotal .label {
+  font-weight: 500;
+  color: #525252;
+}
+
+.block-minicart .minicart-items .product {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+/* Luma can let the photo column grow (flex) while details collapse to a narrow strip */
+.block-minicart .minicart-items .product-item-photo {
+  flex: 0 0 auto;
+  width: auto;
+  max-width: 4.5rem;
+  min-width: 0;
+}
+
+.block-minicart .minicart-items .product-item-photo .product-image-container {
+  max-width: 4.5rem !important;
+  width: auto !important;
+}
+
+.block-minicart .minicart-items .product-item-photo .product-image-photo,
+.block-minicart .minicart-items .product-item-photo img {
+  display: block;
+  max-width: 100%;
+  width: auto;
+  height: auto;
+}
+
+.block-minicart .minicart-items .product-item-details {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+.block-minicart .minicart-items li.item {
+  margin: 0;
+  padding: 0.75rem 1.25rem;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.block-minicart .minicart-items li.item:last-child {
+  border-bottom: none;
+}
+
+.block-minicart .product-item-name {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: #171717;
+}
+
+.block-minicart .product-item-name a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.block-minicart .product-item-name a:hover {
+  color: #1979c3;
+  text-decoration: underline;
+}
+
+.block-minicart .product-item-pricing {
+  margin-top: 0.5rem;
+}
+
+.block-minicart .details-qty.qty {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.block-minicart .details-qty .item-qty {
+  width: 4rem;
+  border-radius: 0.375rem;
+  border: 1px solid #d4d4d4;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.8125rem;
+}
+
+.block-minicart .product.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+  font-size: 0.8125rem;
+}
+
+.block-minicart .product.actions a {
+  font-weight: 500;
+  color: #1979c3;
+  text-decoration: none;
+}
+
+.block-minicart .product.actions a:hover {
+  text-decoration: underline;
+}
+
+/*
+ * Line-item Edit / Remove: global `.primary .action` (below) styles any `.action` inside `.primary`
+ * as a solid blue CTA with white label text. The minicart rule `.block-minicart .product.actions a`
+ * sets link color #1979c3 with higher specificity than `.primary .action`’s white text — result:
+ * blue label on blue button (invisible “Edit”). Reset these to plain links.
+ */
+.block-minicart .product.actions .primary .action.edit,
+.block-minicart .product.actions .secondary .action.delete {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  font-size: 0.8125rem !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+  color: #1979c3 !important;
+  text-decoration: none !important;
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+  transform: none !important;
+}
+
+.block-minicart .product.actions .primary .action.edit span,
+.block-minicart .product.actions .secondary .action.delete span {
+  color: inherit !important;
+}
+
+.block-minicart .product.actions .primary .action.edit:hover,
+.block-minicart .product.actions .secondary .action.delete:hover {
+  background-color: transparent !important;
+  color: #145a95 !important;
+  text-decoration: underline !important;
+  transform: none !important;
+}
+
+.block-minicart .block-content .action.viewcart {
+  display: inline-block;
+}
+
+.block-minicart .action.close {
+  line-height: 1;
+}
+
+.header.content .block-search {
+  order: 4;
+  position: relative;
+  z-index: 0;
+  width: 100%;
+  min-width: 0;
+  flex: 1 1 100%;
+}
+
+@media (min-width: 1024px) {
+  .header.content .block-search {
+    flex: 1 1 16rem;
+    max-width: 28rem;
+  }
+}
+
+.header.content .compare.wrapper {
+  order: 5;
+  margin: 0;
+  width: 100%;
+  list-style: none;
+  padding: 0;
+}
+
+@media (min-width: 640px) {
+  .header.content .compare.wrapper {
+    width: auto;
+  }
+}
+
+@media (min-width: 1024px) {
+  .header.content .compare.wrapper {
+    margin-left: auto;
+  }
+}
+
+/* Tablet: keep search + compare on one row under logo row when space allows */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .header.content .block-search {
+    flex: 1 1 auto;
+    width: auto;
+    min-width: 12rem;
+  }
+}
+
+@media (max-width: 639px) {
+  .header.content .compare.wrapper {
+    text-align: center;
+  }
+}
+
+/*
+ * Hide compare strip until the link is actually shown (count &gt; 0).
+ * Core keeps <a> in DOM with .no-display until KO; :has(a) alone matched hidden links and caused a flash.
+ */
+.compare.wrapper:not(:has(a.action.compare:not(.no-display))) {
+  display: none !important;
+}
+
+.compare.wrapper a.header-account-link:hover {
+  text-decoration: none;
+  color: #171717;
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  max-width: min(10rem, 48vw);
+}
+
+.logo img {
+  display: block;
+  height: auto;
+  width: auto;
+  max-height: 2rem;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+@media (min-width: 640px) {
+  .logo {
+    max-width: 11rem;
+  }
+
+  .logo img {
+    max-height: 2.25rem;
+  }
+}
+
+/* ——— Search ——— */
+.block-search .block-content {
+  width: 100%;
+  min-width: 0;
+}
+
+.block-search .field.search .label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.block-search .actions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Icon-only submit: sizing fallback if Tailwind utilities are purged */
+.block-search .action.search {
+  box-sizing: border-box;
+  min-width: 2.5rem;
+  min-height: 2.5rem;
+  padding: 0;
+  line-height: 1;
+}
+.block-search .action.search:hover {
+  background-color: #166aaf;
+}
+.block-search .action.search:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px #1979c3;
+}
+
+.header.links {
+  margin: 0;
+  display: flex;
+  list-style: none;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  padding: 0;
+}
+
+.panel.header .header.links a {
+  color: #262626;
+  text-decoration: none;
+  text-underline-offset: 2px;
+}
+.panel.header .header.links a:hover {
+  color: #1979c3;
+  text-decoration: underline;
+}
+
+.panel.header .header.links a.header-account-link:hover {
+  text-decoration: none;
+  color: #171717;
+}
+
+.action.skip.contentarea {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.action.skip.contentarea:focus {
+  position: fixed;
+  left: 1rem;
+  top: 1rem;
+  z-index: 100;
+  width: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  padding: 0.5rem 1rem;
+  clip: auto;
+  white-space: normal;
+  border-radius: 0.375rem;
+  background-color: #1979c3;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #fff;
+  text-decoration: none;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px #1979c3;
+}

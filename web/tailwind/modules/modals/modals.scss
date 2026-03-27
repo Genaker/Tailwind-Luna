@@ -1,0 +1,17 @@
+/**
+ * Magento_Ui modals (confirm, alert): modal.js sets inline z-index via $.fn.zIndex()
+ * on ancestors; with this theme’s sticky header + minicart stacking, that can resolve
+ * to 1 — dialog and overlay sit under the chrome. !important overrides that inline value.
+ * Overlay div is created without layout styles if Magento _modals.less isn’t in the bundle.
+ */
+.modals-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10050 !important;
+  background-color: rgb(15 23 42 / 45%);
+}
+
+aside.modal-popup._show,
+aside.modal-slide._show {
+  z-index: 10051 !important;
+}

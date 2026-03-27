@@ -1,0 +1,12 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+/** @var \Magento\Weee\Block\Item\Price\Renderer $block */
+$_item = $block->getItem();
+?>
+<?php $_order = $block->getItem()->getOrderItem()->getOrder() ?>
+<?= /* @noEscape */ $_order->formatPrice($block->getTotalAmount($_item)) ?>

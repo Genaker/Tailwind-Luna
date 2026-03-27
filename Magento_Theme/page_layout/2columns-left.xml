@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Win Luna: columns + sidebars — utilities on containers (inherits 1column shell).
+ */
+-->
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_layout.xsd">
+    <update handle="1column"/>
+    <referenceContainer name="columns" htmlClass="columns mx-auto flex w-full max-w-layout flex-wrap gap-3 px-4 py-6 sm:px-6 lg:flex-nowrap lg:gap-10 lg:px-8">
+        <container name="div.sidebar.main" htmlTag="div" htmlClass="sidebar sidebar-main order-1 w-full shrink-0 lg:w-64" after="main">
+            <container name="sidebar.main" as="sidebar_main" label="Sidebar Main"/>
+        </container>
+        <container name="div.sidebar.additional" htmlTag="div" htmlClass="sidebar sidebar-additional order-3 w-full shrink-0 lg:order-3 lg:w-64" after="div.sidebar.main">
+            <container name="sidebar.additional" as="sidebar_additional" label="Sidebar Additional"/>
+        </container>
+    </referenceContainer>
+    <referenceContainer name="main" htmlClass="column main order-2 w-full min-w-0 flex-1 px-0 py-0"/>
+</layout>

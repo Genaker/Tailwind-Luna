@@ -1,0 +1,15 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Image $block */
+
+/** @var \Magento\Wishlist\Model\Item $item */
+$item = $block->getItem();
+$product = $item->getProduct();
+?>
+<a class="block overflow-hidden rounded-md border border-neutral-200 bg-neutral-50" tabindex="-1" href="<?= $block->escapeUrl($block->getProductUrl($item)) ?>" title="<?= $block->escapeHtmlAttr($product->getName()) ?>">
+    <?= $block->getImage($block->getProductForThumbnail($item), 'category_page_grid')->toHtml() ?>
+</a>

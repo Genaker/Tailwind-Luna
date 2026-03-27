@@ -1,0 +1,33 @@
+<?php
+/**
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+/** @var \Magento\Framework\View\Element\Template $block */
+/** @var \Magento\Framework\Escaper $escaper */
+
+$order = $block->getOrder();
+$orderId = (string) $order->getId();
+?>
+<div id="cancel-order-modal-<?= $escaper->escapeHtmlAttr($orderId) ?>" class="rounded-lg border border-neutral-200 bg-white p-4 text-neutral-800">
+    <div class="modal-body-content space-y-4">
+        <h3 class="text-lg font-semibold text-neutral-900">
+            <?= $escaper->escapeHtml(__('Cancel order')) ?>
+            <span class="cancel-order-id font-medium text-neutral-700"><?= $escaper->escapeHtml($order->getRealOrderId()) ?></span>
+        </h3>
+        <p class="text-sm text-neutral-600"><?= $escaper->escapeHtml(__('Provide a cancellation reason:')) ?></p>
+        <form>
+            <select id="cancel-order-reason-<?= $escaper->escapeHtmlAttr($orderId) ?>"
+                    class="cancel-order-reason w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                    name="reason">
+                <?php foreach ($block->getReasons() as $key => $description) : ?>
+                    <option value="<?= $escaper->escapeHtmlAttr((string) $key) ?>">
+                        <?= $escaper->escapeHtml((string) $description) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </form>
+    </div>
+</div>

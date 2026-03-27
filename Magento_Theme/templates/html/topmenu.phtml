@@ -1,0 +1,45 @@
+<?php
+/**
+ * Top menu — Tailwind styling
+ *
+ * Why two PHP variables for classes?
+ * Magento builds <li>/<a>/<ul> in Topmenu::getHtml(). Those class strings live inside PHP, and
+ * tailwind.config.js strips <?php ?> before JIT scan — so the same strings are duplicated in
+ * web/tailwind/css-safelist.html (Topmenu section). If you edit $menuTopLinkClasses or
+ * $menuSubmenuClasses, update that file too, then run npm run build:tailwind.
+ *
+ * Tailwind map (what utilities are for):
+ * - $menuTopLinkClasses → top-level <a class="level-top …">: row tap target; mobile chevron/order
+ *   is styled in web/tailwind/input.css (border chevron on .ui-menu-icon; Luma :after suppressed). lg:* = bar + pill.
+ * - $menuSubmenuClasses → each <ul class="levelN submenu …">: mobile = left accent bar, nested link
+ *   spacing via [&_a]:* and [&_li]:*; desktop = lg:absolute flyout panel + shadow/border.
+ * - <nav> … : page width, text-left, neutral text, desktop horizontal padding.
+ * - <ul.nav-primary> … : list reset, divide-y between level-0 rows on mobile; lg:flex strip.
+ *
+ * JS: mediaBreakpoint must stay (max-width: 1023px) to match drawer CSS in web/tailwind/input.css.
+ *
+ * @var \Magento\Theme\Block\Html\Topmenu $block
+ */
+$columnsLimit = (int) $block->getColumnsLimit() ?: 0;
+
+// Top-level category links (see docblock — sync web/tailwind/css-safelist.html Topmenu section)
+$menuTopLinkClasses = 'level-top relative flex w-full max-w-full items-center justify-between gap-2 border-0 bg-transparent px-4 py-3.5 text-left text-sm font-semibold tracking-tight text-neutral-900 no-underline outline-none transition-colors duration-150 hover:bg-neutral-100 hover:text-primary active:bg-neutral-200/50 lg:inline-flex lg:h-auto lg:w-auto lg:flex-row lg:justify-center lg:rounded-lg lg:px-3.5 lg:py-2.5 lg:text-sm lg:font-medium lg:text-neutral-800 lg:hover:text-primary';
+
+// Nested <ul.submenu> panels (see docblock — sync web/tailwind/css-safelist.html Topmenu section)
+$menuSubmenuClasses = 'submenu m-0 w-full max-w-full list-none border-0 border-l-2 border-primary/40 bg-neutral-50/95 py-2 pl-3 max-lg:ml-2 max-lg:rounded-r-xl [&_li]:w-full [&_li]:max-w-full [&_a]:block [&_a]:w-full [&_a]:max-w-full [&_a]:break-words [&_a]:px-3 [&_a]:py-2.5 [&_a]:text-left [&_a]:text-sm [&_a]:font-medium [&_a]:text-neutral-700 [&_a]:no-underline [&_a]:transition-colors [&_a]:hover:bg-white/90 [&_a]:hover:text-primary [&_li.all-category>a]:bg-primary/10 [&_li.all-category>a]:font-semibold [&_li.all-category>a]:text-primary-dark lg:absolute lg:left-full lg:top-0 lg:z-50 lg:ml-1 lg:min-w-[14rem] lg:rounded-xl lg:border lg:border-neutral-200 lg:bg-white lg:p-1.5 lg:shadow-lg lg:[&_a]:rounded-lg';
+
+$_menuHtml = $block->getHtml($menuTopLinkClasses, $menuSubmenuClasses, $columnsLimit);
+?>
+
+<?php /* Tailwind: layout shell for tree (scanned — outside PHP) */ ?>
+<nav class="navigation w-full max-w-7xl mx-auto text-left text-neutral-800 antialiased lg:px-4"
+     data-action="navigation"
+     aria-label="<?= $block->escapeHtmlAttr(__('Category navigation')) ?>">
+    <?php /* Tailwind: mobile = block + divide-y between roots; desktop = flex row */ ?>
+    <ul id="main-menu-primary"
+        class="nav-primary m-0 w-full max-w-full list-none divide-y divide-neutral-200 p-0 text-left max-lg:block lg:flex lg:flex-nowrap lg:items-center lg:gap-1 lg:divide-y-0"
+        data-mage-init='{"menu":{"responsive":true,"expanded":false,"mediaBreakpoint":"(max-width: 1023px)","position":{"my":"left top","at":"right top","collision":"flipfit"}}}'>
+        <?= /* @noEscape */ $_menuHtml?>
+        <?= $block->getChildHtml() ?>
+    </ul>
+</nav>

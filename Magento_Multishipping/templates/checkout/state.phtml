@@ -1,0 +1,23 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// phpcs:disable Magento2.Files.LineLength
+
+?>
+<?php
+/**
+ * Multishipping state
+ *
+ * @see \Magento\Multishipping\Block\Checkout\State
+ */
+?>
+<ol class="progress mb-8 flex list-none flex-wrap gap-2 p-0 md:gap-3" id="checkout-progress-state">
+    <?php foreach ($block->getSteps() as $_step) : ?>
+        <li title="<?= $block->escapeHtmlAttr($_step->getLabel()) ?>" class="item rounded-full border px-3 py-1.5 text-xs font-semibold <?= ($_step->getIsActive()) ? 'active border-blue-600 bg-blue-50 text-blue-900' : 'border-neutral-200 bg-white text-neutral-600' ?>">
+            <span><?= $block->escapeHtml($_step->getLabel()) ?></span>
+        </li>
+    <?php endforeach; ?>
+</ol>

@@ -1,0 +1,209 @@
+.block-products-list > .block-title {
+  margin-bottom: 0;
+  border: 0;
+  text-align: center;
+}
+
+@media (min-width: 640px) {
+  .block-products-list > .block-title {
+    text-align: left;
+  }
+}
+
+.block-products-list > .block-title strong {
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: #171717;
+}
+
+/* Hyvä-style PLP / widget grid: responsive columns matching demo.hyva.io */
+.products-grid .product-items,
+.block-products-list.grid .product-items,
+ol.product-items.widget-product-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+@media (min-width: 640px) {
+  .products-grid .product-items,
+  .block-products-list.grid .product-items,
+  ol.product-items.widget-product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* 768–1023px: keep 2 columns (do not reset to 1 col — that broke ~900px tablets). */
+
+@media (min-width: 1024px) {
+  .products-grid .product-items,
+  .block-products-list.grid .product-items,
+  ol.product-items.widget-product-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Related / upsell / cross-sell: horizontal snap track (Hyvä demo pattern, no JS) */
+/* --snap-cols: 1 on phone made each card full-width (huge); use 2+ cols like desktop density */
+.products-grid.products-related .product-items,
+.products-grid.products-upsell .product-items,
+.products-grid.products-crosssell .product-items {
+  --snap-cols: 2;
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 0.25rem;
+  -webkit-overflow-scrolling: touch;
+  gap: 1rem;
+  grid-template-columns: unset;
+}
+
+@media (min-width: 768px) {
+  .products-grid.products-related .product-items,
+  .products-grid.products-upsell .product-items,
+  .products-grid.products-crosssell .product-items {
+    --snap-cols: 3;
+  }
+}
+
+.products-grid.products-related .product-items > .product-item,
+.products-grid.products-upsell .product-items > .product-item,
+.products-grid.products-crosssell .product-items > .product-item {
+  flex: 0 0
+    calc((100% - (var(--snap-cols) - 1) * 1rem) / var(--snap-cols));
+  min-width: 0;
+  max-width: calc((100% - (var(--snap-cols) - 1) * 1rem) / var(--snap-cols));
+  scroll-snap-align: start;
+}
+
+.products-grid.products-related .product-items.snap-track:focus-visible,
+.products-grid.products-upsell .product-items.snap-track:focus-visible,
+.products-grid.products-crosssell .product-items.snap-track:focus-visible {
+  outline: 2px solid #1979c3;
+  outline-offset: 2px;
+  border-radius: 0.375rem;
+}
+
+.products-grid.products-related .product-item-actions,
+.products-grid.products-upsell .product-item-actions,
+.products-grid.products-crosssell .product-item-actions {
+  margin-top: auto;
+}
+
+.products-grid .product-item,
+.products-grid li.product-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.products-grid .product-item-inner {
+  margin-top: auto;
+}
+
+.products-grid .product-item-name,
+.products-grid .product-item-name .product-item-link {
+  text-align: center;
+  font-size: 1.125rem;
+  line-height: 1.375;
+}
+
+/* Match category_page_grid (view.xml): 240×300 — cap link so img is not upscaled on wide mobile columns */
+.products-grid .product-item-photo,
+div[class*='products-'][class*='grid'] .product-item-photo {
+  width: 100%;
+  max-width: 240px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 0.75rem;
+}
+
+.products-grid .rating-summary {
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.products-grid .product-item-actions {
+  margin-top: 0;
+  padding-top: 0.75rem;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 0.5rem;
+}
+
+.products-grid .product-item-actions .actions-primary {
+  width: auto;
+  flex: 1 1 auto;
+  min-width: min-content;
+}
+
+.products-grid .product-item-actions .actions-secondary {
+  justify-content: flex-end;
+  margin-left: auto;
+  padding-top: 0;
+  border-top: none;
+  gap: 0.5rem;
+}
+
+.products-list .product-items {
+  margin: 0;
+  display: flex;
+  list-style: none;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 0;
+}
+
+.products-list .product-item-info {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 1.5rem;
+}
+
+.products-list .product-item-photo {
+  flex-shrink: 0;
+  width: 12rem;
+  margin-bottom: 0;
+}
+
+@media (max-width: 639px) {
+  .products-list .product-item-photo {
+    width: 8rem;
+  }
+}
+
+.products-list .product-item-details {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.products-list .product-item-description {
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: #525252;
+}
+
+.products-list .product-item-actions {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+}
+
+.products-list .product-item-actions .actions-primary {
+  width: auto;
+}
+
+.products-list .product-item-actions .actions-secondary {
+  justify-content: flex-start;
+  padding-top: 0;
+  border-top: none;
+}

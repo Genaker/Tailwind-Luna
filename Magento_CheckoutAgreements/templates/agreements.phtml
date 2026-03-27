@@ -1,0 +1,69 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+use Magento\CheckoutAgreements\Model\AgreementModeOptions;
+?>
+<?php
+/**
+ * @var $block \Magento\CheckoutAgreements\Block\Agreements
+ */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+?>
+<?php if (!$block->getAgreements()) {
+    return;
+} ?>
+<ol id="checkout-agreements" class="checkout agreements m-0 list-none space-y-4 p-0">
+    <?php /** @var \Magento\CheckoutAgreements\Api\Data\AgreementInterface $agreement */ ?>
+    <?php foreach ($block->getAgreements() as $agreement):?>
+        <li class="overflow-hidden rounded-lg border border-neutral-200 bg-white">
+            <div class="checkout-agreement-item-content overflow-auto border-b border-neutral-100 p-4 text-sm leading-relaxed text-neutral-800 [&_a]:text-blue-600 [&_a]:hover:underline"
+                 id="<?= /* @noEscape */ $agreement->getAgreementId() ?>">
+                <?php if ($agreement->getIsHtml()):?>
+                    <?= /* @noEscape */ $agreement->getContent() ?>
+                <?php else:?>
+                    <?= /* @noEscape */ nl2br($block->escapeHtml($agreement->getContent())) ?>
+                <?php endif; ?>
+            </div>
+            <?php if ($agreement->getContentHeight()): ?>
+                <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                    'height:' . $agreement->getContentHeight(),
+                    '#' . $agreement->getAgreementId()
+                ) ?>
+            <?php endif; ?>
+            <?php if ($agreement->getMode() == AgreementModeOptions::MODE_MANUAL):?>
+            <form id="checkout-agreements-form-<?= (int) $agreement->getAgreementId() ?>"
+                  class="agree required flex items-start gap-2 p-4">
+                <input type="checkbox"
+                       id="agreement-<?= (int) $agreement->getAgreementId() ?>"
+                       name="agreement[<?= (int) $agreement->getAgreementId() ?>]"
+                       value="1"
+                       title="<?= $block->escapeHtmlAttr($agreement->getCheckboxText()) ?>"
+                       class="mt-0.5 h-4 w-4 shrink-0 rounded border-neutral-300 text-blue-600 accent-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-0"
+                       data-validate="{required:true}"/>
+                <label class="cursor-pointer text-sm font-medium text-neutral-800" for="agreement-<?= (int) $agreement->getAgreementId() ?>">
+                    <span>
+                        <?php if ($agreement->getIsHtml()):?>
+                            <?= /* @noEscape */ $agreement->getCheckboxText() ?>
+                        <?php else:?>
+                            <?= $block->escapeHtml($agreement->getCheckboxText()) ?>
+                        <?php endif; ?>
+                    </span>
+                </label>
+            </form>
+            <?php elseif ($agreement->getMode() == AgreementModeOptions::MODE_AUTO):?>
+            <div class="agree p-4 text-sm text-neutral-800">
+                <span>
+                    <?php if ($agreement->getIsHtml()):?>
+                        <?= /* @noEscape */ $agreement->getCheckboxText() ?>
+                    <?php else:?>
+                        <?= $block->escapeHtml($agreement->getCheckboxText()) ?>
+                    <?php endif; ?>
+                </span>
+            </div>
+            <?php endif; ?>
+        </li>
+    <?php endforeach ?>
+</ol>

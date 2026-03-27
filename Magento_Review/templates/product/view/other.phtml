@@ -1,0 +1,13 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+/** @var \Magento\Review\Block\Product\View\Other $block */
+?>
+<?php $_product = $block->getProduct(); ?>
+<div class="flex flex-wrap gap-2">
+    <a href="<?= $block->escapeUrl($_product->getProductUrl()) ?>" class="inline-flex items-center justify-center gap-2 rounded-md text-sm font-semibold border border-neutral-300 px-4 py-2 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600 disabled:opacity-50 disabled:pointer-events-none text-neutral-800 hover:bg-neutral-50 back"><span><?= $block->escapeHtml(__('Back to Main Product Info')) ?></span></a>
+</div>

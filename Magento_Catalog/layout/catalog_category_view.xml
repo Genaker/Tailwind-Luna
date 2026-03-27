@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!--
+  Category PLP: page title h1 should not use aria-labelledby pointing at toolbar text (confusing SR / audits).
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="page.main.title">
+            <arguments>
+                <argument name="add_base_attribute_aria" xsi:type="string"/>
+            </arguments>
+        </referenceBlock>
+    </body>
+</page>

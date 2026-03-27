@@ -1,0 +1,539 @@
+/**
+ * Cart + one-page checkout (loaded on checkout_cart_index + checkout_index_index).
+ * Not in catalog tailwind.css. Layout utilities also on .cart-container / .checkout-container via layout + onepage.phtml.
+ */
+
+html {
+  scroll-padding-top: 5rem;
+}
+
+/* ——— Shopping cart: layout XML moves .cart-summary after .form-cart; flex + order below are fallback — */
+/*
+ * Mobile: .cart-container is flex column. Only .form-cart / .cart-summary had explicit order — other
+ * direct children (form.before, checkout.cart.widget) default to order:0 and render *above* the cart
+ * table. Cross-sell is moved to `content` after `checkout.cart` (layout XML) so it sits at the bottom.
+ */
+.checkout-cart-index .cart-container > .rewards {
+  order: 0;
+}
+
+.checkout-cart-index .cart-container > .form-cart {
+  order: 1;
+}
+
+.checkout-cart-index .cart-container > .cart-summary {
+  order: 2;
+}
+
+.checkout-cart-index .cart-container > .cart-slot-after-items {
+  order: 3;
+}
+
+/* Blank/Luma theme.js applies mage/sticky to .cart-summary (inline top) — keep normal flow */
+.checkout-cart-index .cart-summary {
+  position: static !important;
+  top: auto !important;
+}
+
+@media (min-width: 768px) {
+  .checkout-cart-index .cart-container > .form-cart {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .checkout-cart-index .cart-container > .cart-summary {
+    flex: 0 0 20rem;
+    max-width: 100%;
+    align-self: flex-start;
+  }
+
+  /* Wrapper with Tailwind lg:sticky — keep summary in page flow (scrolls with content) */
+  @media (min-width: 1024px) {
+    .checkout-cart-index .cart-container .card {
+      position: static;
+      top: auto;
+    }
+  }
+
+  .checkout-cart-index .cart-container > #gift-options-cart,
+  .checkout-cart-index .cart-container > .cart-discount,
+  .checkout-cart-index .cart-container > .cart-slot-after-items {
+    order: 10;
+    flex: 1 1 100%;
+    width: 100%;
+    min-width: 100%;
+  }
+}
+
+.checkout-cart-index .cart-summary .cart-totals .table.totals {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.checkout-cart-index .cart-summary .cart-totals .table.totals .mark {
+  text-align: left;
+  width: 55%;
+}
+
+.checkout-cart-index .cart-summary .cart-totals .table.totals .amount {
+  text-align: right;
+  width: 45%;
+}
+
+.checkout-cart-index .cart-summary .cart-totals .table.totals .table-caption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.checkout-cart-index .cart-summary .summary.title {
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+/* Flex layout: do not rely only on Tailwind on the container — keeps line items before summary */
+.checkout-cart-index .cart-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .checkout-cart-index .cart-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 2rem;
+  }
+}
+
+.checkout-cart-index .page-title-wrapper {
+  margin-bottom: 1.25rem;
+}
+
+.checkout-cart-index .page-title-wrapper .page-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #171717;
+}
+
+/* Cart grid: bordered table (Luma LESS removed) */
+.checkout-cart-index .cart.table-wrapper {
+  overflow: hidden;
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
+  background-color: #fff;
+}
+
+.checkout-cart-index .cart.table-wrapper .cart.items.data.table {
+  margin: 0;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.checkout-cart-index .cart.table-wrapper .cart.items thead th {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  background-color: #fafafa;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #525252;
+  text-align: left;
+}
+
+.checkout-cart-index .cart.table-wrapper .cart.items tbody td {
+  padding: 1rem;
+  border-bottom: 1px solid #f5f5f5;
+  vertical-align: middle;
+}
+
+.checkout-cart-index .cart.table-wrapper .cart.items tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.checkout-cart-index .cart-summary .block.shipping .title,
+.checkout-cart-index .cart-summary .block.discount .title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #262626;
+}
+
+/* Cross-sell lives in `content` after checkout.cart — full width under cart + summary */
+.checkout-cart-index .column.main .block.crosssell {
+  width: 100%;
+  max-width: 100%;
+  margin-top: 2rem;
+}
+
+/* ——— One-page checkout: main flow first, order summary second (match cart) — */
+.checkout-index-index .page-main {
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.checkout-index-index .page-title-wrapper {
+  margin-bottom: 1.25rem;
+}
+
+.checkout-index-index .page-title-wrapper .page-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #171717;
+}
+
+.checkout-index-index #checkout {
+  position: relative;
+}
+
+.checkout-index-index .checkout-container {
+  margin-bottom: 1.5rem;
+}
+
+.checkout-index-index .checkout-container > .opc-wrapper {
+  order: 1;
+}
+
+.checkout-index-index .checkout-container > #opc-sidebar,
+.checkout-index-index .checkout-container > .opc-sidebar {
+  order: 2;
+}
+
+.checkout-index-index .opc-progress-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0 0 1.75rem;
+  padding: 0;
+  list-style: none;
+}
+
+.checkout-index-index .opc-progress-bar-item {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.375rem;
+  border: 1px solid #e5e7eb;
+  background-color: #fafafa;
+  font-size: 0.875rem;
+  text-align: center;
+  color: #525252;
+}
+
+.checkout-index-index .opc-progress-bar-item._active {
+  border-color: #1979c3;
+  background-color: #e8f4fc;
+  color: #135a91;
+  font-weight: 600;
+}
+
+.checkout-index-index .opc-progress-bar-item._complete {
+  border-color: #86c5e8;
+  background-color: #f0f9ff;
+  color: #166aaf;
+}
+
+.checkout-index-index .opc-wrapper .opc {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.checkout-index-index .opc-wrapper .fieldset > .legend,
+.checkout-index-index .opc-wrapper .fieldset > .legend span {
+  margin-bottom: 1rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #171717;
+}
+
+.checkout-index-index .opc-wrapper .step-title {
+  scroll-margin-top: 5rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #171717;
+}
+
+.checkout-index-index .opc-wrapper .step-content {
+  margin-bottom: 1.5rem;
+}
+
+.checkout-index-index .authentication-wrapper {
+  margin-bottom: 1.5rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  background-color: #fafafa;
+}
+
+.checkout-index-index .authentication-wrapper .block-title {
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #262626;
+}
+
+.checkout-index-index .authentication-wrapper .actions-toolbar {
+  margin-top: 0.75rem;
+}
+
+.checkout-index-index .fieldset > .field,
+.checkout-index-index .field {
+  margin-bottom: 1.125rem;
+}
+
+.checkout-index-index .field .label {
+  display: block;
+  margin-bottom: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #404040;
+}
+
+.checkout-index-index .field .control input.input-text,
+.checkout-index-index .field .control input[type='email'],
+.checkout-index-index .field .control input[type='tel'],
+.checkout-index-index .field .control input[type='password'],
+.checkout-index-index .field .control select,
+.checkout-index-index .field .control textarea {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  border-radius: 0.375rem;
+  border: 1px solid #d4d4d4;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: #171717;
+  background-color: #fff;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.checkout-index-index .field .control input:focus,
+.checkout-index-index .field .control select:focus,
+.checkout-index-index .field .control textarea:focus {
+  outline: none;
+  border-color: #1979c3;
+  box-shadow: 0 0 0 3px rgb(25 121 195 / 0.2);
+}
+
+.checkout-index-index .field .control select {
+  min-height: 2.75rem;
+}
+
+.checkout-index-index .field-tooltip.toggle {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+}
+
+.checkout-index-index .field-tooltip .field-tooltip-action {
+  box-sizing: border-box;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.375rem;
+  min-height: 1.375rem;
+  padding: 0;
+  border-radius: 9999px;
+  border: 1px solid #d4d4d4;
+  background-color: #fff;
+  cursor: help;
+  font-size: 0;
+  line-height: 0;
+  overflow: hidden;
+  color: transparent;
+}
+
+.checkout-index-index .field-tooltip .field-tooltip-action::after {
+  content: '?';
+  position: absolute;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #737373;
+}
+
+.checkout-index-index .field-tooltip .field-tooltip-action:focus-visible {
+  outline: 2px solid #1979c3;
+  outline-offset: 2px;
+}
+
+.checkout-index-index .field-tooltip .field-tooltip-content {
+  z-index: 50;
+  border-radius: 0.375rem;
+  border: 1px solid #e5e7eb;
+  background-color: #fff;
+  padding: 0.75rem;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: #404040;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.12);
+}
+
+.checkout-index-index .table-checkout-shipping-method {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 0.5rem;
+}
+
+.checkout-index-index .table-checkout-shipping-method tbody tr {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.375rem;
+  background-color: #fff;
+}
+
+.checkout-index-index .table-checkout-shipping-method tbody td {
+  padding: 0.75rem 1rem;
+  border: none;
+  vertical-align: middle;
+}
+
+.checkout-index-index .table-checkout-shipping-method tbody tr.row-selected td,
+.checkout-index-index .table-checkout-shipping-method tbody tr._checked td {
+  background-color: #f0f8fd;
+}
+
+.checkout-index-index .table-checkout-shipping-method tbody tr.row-selected,
+.checkout-index-index .table-checkout-shipping-method tbody tr._checked {
+  border-color: #1979c3;
+}
+
+.checkout-index-index .table-checkout-shipping-method .col-price {
+  font-weight: 600;
+  color: #171717;
+  white-space: nowrap;
+}
+
+.checkout-index-index .actions-toolbar {
+  margin-top: 1rem;
+}
+
+.checkout-index-index .actions-toolbar .primary .action,
+.checkout-index-index button.action.primary {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.375rem;
+  font-weight: 600;
+  background-color: #1979c3;
+  color: #fff;
+  border: 1px solid #1979c3;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.checkout-index-index .actions-toolbar .primary .action:hover,
+.checkout-index-index button.action.primary:hover {
+  background-color: #166aaf;
+  border-color: #166aaf;
+}
+
+.checkout-index-index .actions-toolbar .secondary .action {
+  border-radius: 0.375rem;
+  font-weight: 600;
+}
+
+/* Cart summary + checkout order summary — shared card */
+.checkout-cart-index .cart-summary,
+.checkout-index-index .opc-block-summary {
+  padding: 1.25rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  background-color: #fafafa;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.08);
+}
+
+.checkout-index-index .opc-block-summary .title {
+  margin-bottom: 1rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #171717;
+}
+
+.checkout-index-index .opc-block-summary .items-in-cart {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.checkout-index-index .opc-block-summary .minicart-items .product-item {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.checkout-index-index .opc-block-summary .minicart-items .product-item:last-child {
+  border-bottom: none;
+}
+
+.checkout-index-index .opc-block-summary .block.discount {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.checkout-index-index .opc-block-summary .block.discount .title {
+  font-size: 1rem;
+}
+
+@media (min-width: 768px) {
+  .checkout-index-index .checkout-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 0 2rem;
+  }
+
+  .checkout-index-index .checkout-container > *:not(.opc-wrapper):not(#opc-sidebar):not(.opc-sidebar) {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+
+  .checkout-index-index .checkout-container > .opc-wrapper {
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: calc(100% - 22rem);
+  }
+
+  .checkout-index-index #opc-sidebar,
+  .checkout-index-index .opc-sidebar {
+    flex: 0 0 20rem;
+    width: 20rem;
+    max-width: 100%;
+    align-self: flex-start;
+  }
+}
+
+@media (max-width: 767px) {
+  .checkout-index-index .checkout-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .checkout-index-index #opc-sidebar,
+  .checkout-index-index .opc-sidebar {
+    width: 100%;
+    max-width: 100%;
+  }
+}

@@ -1,0 +1,34 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+/** @var \Magento\Wishlist\Block\Item\Configure $block */
+$wishlistHelper = $this->helper(\Magento\Wishlist\Helper\Data::class);
+$compareHelper = $this->helper(\Magento\Catalog\Helper\Product\Compare::class);
+$jsonHelper = $this->helper(\Magento\Framework\Json\Helper\Data::class);
+?>
+
+<div class="product-addto-links" data-role="add-to-links">
+    <?php if ($wishlistHelper->isAllow()) : ?>
+        <a href="#" data-post='<?= /* @noEscape */ $block->getUpdateParams() ?>' class="inline-flex items-center justify-center gap-2 rounded-md text-sm font-semibold border border-neutral-300 px-4 py-2 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600 disabled:opacity-50 disabled:pointer-events-none towishlist updated" data-action="add-to-wishlist">
+            <span><?= $block->escapeHtml(__('Update Wish List')) ?></span>
+        </a>
+    <?php endif; ?>
+    <?php $_product = $block->getProduct(); ?>
+    <?php $_compareUrl = $compareHelper->getAddUrl($_product); ?>
+    <?php if ($_compareUrl) : ?>
+        <a href="<?= $block->escapeUrl($_compareUrl) ?>" class="inline-flex items-center justify-center gap-2 rounded-md text-sm font-semibold border border-neutral-300 px-4 py-2 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600 disabled:opacity-50 disabled:pointer-events-none tocompare">
+            <span><?= $block->escapeHtml(__('Add to Compare')) ?></span>
+        </a>
+    <?php endif; ?>
+</div>
+<script type="text/x-magento-init">
+    {
+        "body": {
+            "addToWishlist": <?= /* @noEscape */ $jsonHelper->jsonEncode($block->getWishlistOptions()) ?>
+        }
+    }
+</script>

@@ -1,0 +1,49 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\Multishipping\Block\Checkout\Success $block */
+?>
+<form action="<?= $block->escapeUrl($block->getContinueUrl()); ?>" method="post">
+    <div class="space-y-4 rounded-lg border border-green-200 bg-green-50 p-4 text-green-950">
+        <p class="text-sm leading-relaxed"><?= $block->escapeHtml(__('For successfully order items, you\'ll receive a confirmation email including '.
+                'order numbers, tracking information and more details.')) ?></p>
+        <?php if ($orderIds = $block->getOrderIds()) : ?>
+            <h3 class="text-base font-semibold text-green-900"><?= $block->escapeHtml(__('Successfully ordered'))?></h3>
+            <div class="orders-succeed">
+            <ul class="orders-list m-0 list-none space-y-4 p-0">
+            <?php foreach ($orderIds as $orderId => $incrementId) : ?>
+                <li class="shipping-list border-b border-green-200/60 pb-4 last:border-b-0 last:pb-0">
+                    <div class="order-id font-medium"><a class="text-green-800 underline hover:text-green-950" href="<?= $block->escapeUrl($block->getViewOrderUrl($orderId)); ?>">
+                        <?= $block->escapeHtml($incrementId); ?></a>
+                    </div>
+                <?php $shippingAddress = $block->getCheckoutData()->getOrderShippingAddress($orderId); ?>
+                    <div class="shipping-item mt-1 text-sm">
+                        <?php if ($shippingAddress) : ?>
+                        <span class="shipping-label font-medium text-green-900"><?= $block->escapeHtml(__('Ship to:')); ?></span>
+                        <span class="shipping-address text-green-800">
+                            <?= $block->escapeHtml(
+                                $block->getCheckoutData()->formatOrderShippingAddress($shippingAddress)
+                            ); ?>
+                        </span>
+                        <?php else : ?>
+                            <span class="shipping-address text-green-800">
+                                <?= $block->escapeHtml(__('No shipping required.')); ?>
+                            </span>
+                        <?php endif; ?>
+                    </div>
+                </li>
+            <?php endforeach; ?>
+            </ul>
+            </div>
+        <?php endif; ?>
+        <?= $block->getChildHtml() ?>
+        <div class="flex flex-wrap items-center gap-4 border-t border-green-200/60 pt-4" id="review-buttons-container">
+                <button type="submit"
+                        class="submit inline-flex items-center justify-center gap-2 rounded-md border border-blue-600 bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"><span><?= $block->escapeHtml(__('Continue Shopping')); ?></span>
+                </button>
+        </div>
+    </div>
+</form>

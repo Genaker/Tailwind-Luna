@@ -1,0 +1,12 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\Framework\View\Element\Template $block */
+/** @var \Magento\Directory\Model\Currency $currency */
+
+?>
+<p class="text-sm text-neutral-800"><?= $block->escapeHtml(__('Your current currency is: %1.', $currency->getCode())) ?></p>
+<p class="mt-3"><a href="<?= $block->escapeUrl($block->getBaseUrl()) ?>" class="continue inline-flex items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-semibold text-neutral-800 transition-colors hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"><span><?= $block->escapeHtml(__('Continue')) ?></span></a></p>

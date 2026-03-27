@@ -1,0 +1,33 @@
+<?php
+declare(strict_types=1);
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * @deprecated
+ * @var \Magento\Catalog\Block\Product\Compare\ListCompare $block
+ */
+$outputHelper = $this->helper(\Magento\Catalog\Helper\Output::class);
+?>
+<?php if ($_products = $block->getRecentlyComparedProducts()) : ?>
+<div class="mb-8 widget">
+    <div class="text-lg font-semibold text-neutral-900 mb-3 pb-2 border-b border-neutral-200">
+        <strong><?= $block->escapeHtml(__('Recently Compared')) ?></strong>
+    </div>
+    <div class="text-sm text-neutral-700">
+        <ol id="widget-compared-<?= $block->escapeHtmlAttr($block->getNameInLayout()) ?>" class="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3 list-none p-0 m-0 product-items-names">
+        <?php foreach ($_products as $_product) : ?>
+            <li class="flex flex-col border border-neutral-200 rounded-lg bg-white overflow-hidden p-4">
+                <strong class="text-base font-semibold leading-snug">
+                    <a href="<?= $block->escapeUrl($_product->getProductUrl()) ?>" class="text-blue-600 hover:text-blue-800 hover:underline">
+                        <?= $block->escapeHtml($outputHelper->productAttribute($_product, $_product->getName(), 'name')) ?>
+                    </a>
+                </strong>
+            </li>
+        <?php endforeach; ?>
+        </ol>
+    </div>
+</div>
+<?php endif; ?>

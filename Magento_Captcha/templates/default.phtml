@@ -1,0 +1,54 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\Captcha\Block\Captcha\DefaultCaptcha $block */
+
+/** @var \Magento\Captcha\Model\DefaultModel $captcha */
+$captcha = $block->getCaptchaModel();
+/** @var bool $validationEnabled */
+$validationEnabled = $block->hasData('frontend_validation') ? $block->getData('frontend_validation') : true;
+$inputName = $block->escapeHtmlAttr(\Magento\Captcha\Helper\Data::INPUT_NAME_FIELD_VALUE);
+$loaderUrl = $block->escapeUrl($block->getViewFileUrl('images/loader-2.gif'));
+$note = $block->escapeHtml(__('<strong>Attention</strong>: Captcha is case sensitive.'), ['strong']);
+?>
+<div class="field captcha<?php if ($validationEnabled): ?> required<?php endif; ?>"
+     role="<?= $block->escapeHtmlAttr($block->getFormId()) ?>">
+    <label for="captcha_<?= $block->escapeHtmlAttr($block->getFormId()) ?>" class="block text-sm font-medium text-neutral-800 mb-1">
+        <span><?= $block->escapeHtml(__('Please type the letters and numbers below')) ?></span>
+    </label>
+    <div class="mt-1 captcha">
+        <input
+            name="<?= /* @noEscape */ $inputName ?>[<?= $block->escapeHtmlAttr($block->getFormId()) ?>]"
+            type="text"
+            class="input-text<?php if ($validationEnabled): ?> required-entry<?php endif; ?>"
+            <?php if ($validationEnabled): ?>data-validate="{required:true}"<?php endif; ?>
+            id="captcha_<?= $block->escapeHtmlAttr($block->getFormId()) ?>"
+            autocomplete="off"/>
+        <div class="pl-4 border-l border-neutral-200">
+            <div class="mb-4 captcha no-label"
+                 data-captcha="<?= $block->escapeHtmlAttr($block->getFormId()) ?>"
+                 id="captcha-container-<?= $block->escapeHtmlAttr($block->getFormId()) ?>"
+                 data-mage-init='{"captcha":{"url": "<?= $block->escapeUrl($block->getRefreshUrl()) ?>",
+                                            "imageLoader": "<?= /* @noEscape */ $loaderUrl ?>",
+                                             "type": "<?= $block->escapeHtmlAttr($block->getFormId()) ?>"}}'>
+                <div class="mt-1 captcha-image">
+                    <img alt="<?= $block->escapeHtmlAttr(__('Please type the letters and numbers below')) ?>"
+                         class="captcha-img"
+                         height="<?= /* @noEscape */ (float) $block->getImgHeight() ?>"
+                         src="<?= $block->escapeUrl($captcha->getImgSrc()) ?>"/>
+                    <button type="button"
+                            class="inline-flex items-center justify-center gap-2 rounded-md text-sm font-semibold border px-4 py-2 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600 disabled:opacity-50 disabled:pointer-events-none reload captcha-reload"
+                            title="<?= $block->escapeHtmlAttr(__('Reload captcha')) ?>">
+                        <span><?= $block->escapeHtml(__('Reload captcha')) ?></span>
+                    </button>
+                </div>
+            </div>
+            <?php if ($captcha->isCaseSensitive()):?>
+                <div class="text-xs text-neutral-500 mt-1 captcha-note"><?= /* @noEscape */ $note ?></div>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>

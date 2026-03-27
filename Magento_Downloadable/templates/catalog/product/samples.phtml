@@ -1,0 +1,27 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * Downloadable product links
+ *
+ * @var $block \Magento\Downloadable\Block\Catalog\Product\Samples
+ */
+?>
+
+<?php if ($block->hasSamples()) : ?>
+    <dl class="samples m-0 list-none space-y-0 p-0">
+        <dt class="item-title samples-item-title mb-2 text-sm font-semibold text-neutral-800"><?= $block->escapeHtml($block->getSamplesTitle()) ?></dt>
+        <?php $_samples = $block->getSamples() ?>
+        <?php foreach ($_samples as $_sample) : ?>
+            <dd class="samples-item border-b border-neutral-200 py-2 last:border-b-0">
+                <a href="<?= $block->escapeHtml($block->getSampleUrl($_sample)) ?>" <?= $block->getIsOpenInNewWindow() ? 'onclick="this.target=\'_blank\'"' : '' ?>
+                   class="item-link samples-item-link text-sm text-blue-600 no-underline hover:underline">
+                    <?= $block->escapeHtml($_sample->getTitle()) ?>
+                </a>
+            </dd>
+        <?php endforeach; ?>
+    </dl>
+<?php endif; ?>

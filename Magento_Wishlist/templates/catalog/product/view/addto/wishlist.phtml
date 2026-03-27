@@ -1,0 +1,26 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\Wishlist\Block\Catalog\Product\View\AddTo\Wishlist $block */
+?>
+<?php if ($block->isWishListAllowed()) : ?>
+    <a href="#"
+       class="action towishlist"
+       title="<?= $block->escapeHtmlAttr(__('Add to Wish List')) ?>"
+       aria-label="<?= $block->escapeHtmlAttr(__('Add to Wish List')) ?>"
+       data-post='<?= /* @noEscape */ $block->getWishlistParams() ?>'
+       data-action="add-to-wishlist"
+       role="button">
+        <span><?= $block->escapeHtml(__('Add to Wish List')) ?></span>
+    </a>
+<?php endif; ?>
+<script type="text/x-magento-init">
+    {
+        "body": {
+            "addToWishlist": <?= /* @noEscape */ $block->getWishlistOptionsJson() ?>
+        }
+    }
+</script>

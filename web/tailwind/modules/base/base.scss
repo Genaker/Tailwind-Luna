@@ -1,0 +1,53 @@
+@layer base {
+  body {
+    font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+      "Segoe UI Symbol", "Noto Color Emoji";
+    color: #262626;
+    background-color: #fff;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Magento / Luma Knockout toggles (e.g. compare link when count is 0) */
+.no-display {
+  display: none !important;
+}
+
+.switcher .switcher-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.switcher-dropdown a {
+  display: block;
+  border-radius: 0.25rem;
+  padding: 0.5rem 0.75rem;
+  color: #262626;
+}
+.switcher-dropdown a:hover {
+  background-color: #fff;
+  color: #1979c3;
+}
+
+@media print {
+  .page-header,
+  .navigation,
+  .sidebar,
+  .block-search,
+  .footer.content .links {
+    display: none !important;
+  }
+
+  body {
+    background-color: #fff;
+    color: #000;
+  }
+}

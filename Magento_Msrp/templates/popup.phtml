@@ -1,0 +1,60 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php
+/** @var \Magento\Msrp\Block\Popup $block */
+?>
+<?php if ($block->isEnabled()) : ?>
+    <script data-role="msrp-popup-template" type="text/x-magento-template">
+    <div id="map-popup-click-for-price" class="map-popup max-w-sm rounded-lg border border-neutral-200 bg-white p-4 text-neutral-800 shadow-xl">
+        <div class="popup-header mb-3 border-b border-neutral-200 pb-2">
+            <strong class="text-base font-semibold text-neutral-900" id="map-popup-heading-price"></strong>
+        </div>
+        <div class="popup-content space-y-3 text-sm">
+            <div class="map-info-price" id="map-popup-content">
+                <div class="price-box">
+                    <div class="map-msrp" id="map-popup-msrp-box">
+                        <span class="block text-sm font-medium text-neutral-800 mb-1"><?= $block->escapeHtml(__('Price')) ?></span>
+                        <span class="text-sm text-neutral-500 line-through map-old-price" id="map-popup-msrp">
+                            <span class="text-base font-semibold"></span>
+                        </span>
+                    </div>
+                    <div class="map-price" id="map-popup-price-box">
+                        <span class="block text-sm font-medium text-neutral-800 mb-1"><?= $block->escapeHtml(__('Actual Price')) ?></span>
+                        <span id="map-popup-price" class="actual-price"></span>
+                    </div>
+                </div>
+                <form action="" method="POST" class="map-form-addtocart">
+                    <input type="hidden" name="product" class="product_id" value="" />
+                    <button type="button"
+                            title="<?= $block->escapeHtmlAttr(__('Add to Cart')) ?>"
+                            class="tocart inline-flex items-center justify-center gap-2 rounded-md border border-blue-600 bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600 disabled:pointer-events-none disabled:opacity-50">
+                        <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
+                    </button>
+                    <div class="additional-addtocart-box">
+                        <?= $block->getChildHtml() ?>
+                    </div>
+                </form>
+            </div>
+            <div class="map-text mt-3 text-xs text-neutral-600" id="map-popup-text">
+                <?= /* @noEscape */ $block->getExplanationMessage() ?>
+            </div>
+        </div>
+    </div>
+    </script>
+    <script data-role="msrp-info-template" type="text/x-magento-template">
+    <div id="map-popup-what-this" class="map-popup max-w-sm rounded-lg border border-neutral-200 bg-white p-4 text-neutral-800 shadow-xl">
+        <div class="popup-header mb-3 border-b border-neutral-200 pb-2">
+            <strong class="text-base font-semibold text-neutral-900" id="map-popup-heading-what-this"></strong>
+        </div>
+        <div class="popup-content text-sm text-neutral-700">
+            <div class="map-help-text" id="map-popup-text-what-this">
+                <?= /* @noEscape */ $block->getExplanationMessageWhatsThis() ?>
+            </div>
+        </div>
+    </div>
+    </script>
+<?php endif; ?>

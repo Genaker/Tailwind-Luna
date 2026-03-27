@@ -1,0 +1,45 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * @var $block \Magento\CatalogInventory\Block\Stockqty\Composite
+ */
+?>
+<?php if ($block->isMsgVisible()) : ?>
+    <div class="availability only">
+        <a href="#"
+           data-mage-init='{"toggleAdvanced": {"selectorsToggleClass": "active", "baseToggleClass": "expanded", "toggleContainers": "#<?= $block->escapeHtmlAttr($block->getDetailsPlaceholderId()) ?>"}}'
+           id="<?= $block->escapeHtmlAttr($block->getPlaceholderId()) ?>"
+           title="<?= $block->escapeHtmlAttr(__('Only %1 left', ($block->getStockQtyLeft()))) ?>"
+           class="show text-sm font-medium text-blue-600 underline decoration-blue-300 decoration-2 underline-offset-2 hover:text-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+            <?= /* @noEscape */ __('Only %1 left', "<strong>{$block->escapeHtml($block->getStockQtyLeft())}</strong>") ?>
+        </a>
+    </div>
+    <div class="availability only detailed mt-3" id="<?= $block->escapeHtmlAttr($block->getDetailsPlaceholderId()) ?>">
+        <div class="overflow-x-auto rounded-lg border border-neutral-200">
+            <table class="table data w-full border-collapse text-sm">
+                <caption class="sr-only"><?= $block->escapeHtml(__('Product availability')) ?></caption>
+                <thead>
+                <tr class="border-b border-neutral-200 bg-neutral-50">
+                    <th class="px-4 py-3 text-left text-sm font-semibold text-neutral-800" scope="col"><?= $block->escapeHtml(__('Product Name')) ?></th>
+                    <th class="px-4 py-3 text-center text-sm font-semibold text-neutral-800" scope="col"><?= $block->escapeHtml(__('Qty')) ?></th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($block->getChildProducts() as $childProduct) : ?>
+                    <?php $childProductStockQty = $block->getProductStockQty($childProduct); ?>
+                    <?php if ($childProductStockQty > 0) : ?>
+                        <tr class="border-b border-neutral-200 last:border-b-0">
+                            <td data-th="<?= $block->escapeHtmlAttr(__('Product Name')) ?>" class="px-4 py-3 align-top text-neutral-800"><?= $block->escapeHtml($childProduct->getName()) ?></td>
+                            <td data-th="<?= $block->escapeHtmlAttr(__('Qty')) ?>" class="px-4 py-3 text-center align-top tabular-nums text-neutral-900"><?= $block->escapeHtml($childProductStockQty) ?></td>
+                        </tr>
+                    <?php endif ?>
+                <?php endforeach ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+<?php endif ?>

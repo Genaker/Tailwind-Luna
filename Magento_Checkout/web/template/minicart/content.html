@@ -1,0 +1,135 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<!-- Screen-reader heading only — avoid a second visible “My Cart + qty” next to the header chip. -->
+<div class="block-title sr-only">
+    <strong>
+        <span class="text" translate="'My Cart'"></span>
+        <span
+            class="qty empty"
+            text="getCartParam('summary_count')"
+            data-bind="css: { empty: !!getCartParam('summary_count') == false },
+                       attr: { title: $t('Items in Cart') }">
+        </span>
+    </strong>
+</div>
+
+<div class="block-content relative box-border px-5 pb-5 pt-6 text-sm leading-normal text-neutral-700">
+    <button type="button"
+            id="btn-minicart-close"
+            class="action close absolute right-3 top-3 z-[2] m-0 inline-flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-md border border-neutral-200 bg-white p-0 text-neutral-600 shadow-sm transition-colors hover:border-neutral-300 hover:bg-neutral-50 hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-1"
+            data-action="close"
+            data-bind="
+                attr: {
+                    title: $t('Close'),
+                    'aria-label': $t('Close')
+                },
+                click: closeMinicart()
+            ">
+        <svg class="pointer-events-none h-5 w-5 shrink-0"
+             width="20"
+             height="20"
+             viewBox="0 0 24 24"
+             fill="none"
+             xmlns="http://www.w3.org/2000/svg"
+             aria-hidden="true">
+            <path stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  d="M6 6l12 12M18 6L6 18"/>
+        </svg>
+    </button>
+
+    <if args="getCartParam('summary_count')">
+        <div class="items-total mb-4 flex flex-wrap items-baseline gap-x-1.5 gap-y-0.5 text-sm text-neutral-600">
+            <span class="count font-semibold tabular-nums text-neutral-900" if="maxItemsToDisplay < getCartLineItemsCount()" text="maxItemsToDisplay"></span>
+            <translate args="'of'" if="maxItemsToDisplay < getCartLineItemsCount()"></translate>
+            <span class="count font-semibold tabular-nums text-neutral-900" text="getCartParam('summary_count').toLocaleString(window.LOCALE)"></span>
+                <!-- ko if: (getCartParam('summary_count') > 1) -->
+                    <span translate="'Items in Cart'"></span>
+                <!--/ko-->
+                <!-- ko if: (getCartParam('summary_count') <= 1) -->
+                    <span translate="'Item in Cart'"></span>
+                <!--/ko-->
+        </div>
+
+        <each args="getRegion('subtotalContainer')" render=""></each>
+        <each args="getRegion('extraInfo')" render=""></each>
+
+        <div class="actions mt-4" if="getCartParam('possible_onepage_checkout')">
+            <div class="primary w-full">
+                <button
+                        id="top-cart-btn-checkout"
+                        type="button"
+                        class="action primary checkout inline-flex w-full items-center justify-center rounded-md border border-transparent bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1"
+                        data-action="close"
+                        data-bind="
+                            attr: {
+                                title: $t('Proceed to Checkout')
+                            },
+                            click: closeMinicart()
+                        "
+                        translate="'Proceed to Checkout'">
+                </button>
+                <div data-bind="html: getCartParamUnsanitizedHtml('extra_actions')"></div>
+            </div>
+        </div>
+    </if>
+
+    <if args="getCartParam('summary_count')">
+        <strong class="subtitle mb-2 mt-3 block text-[0.8125rem] font-semibold leading-snug text-neutral-900" translate="'Recently added item(s)'"></strong>
+        <div data-action="scroll" class="minicart-items-wrapper max-h-64 overflow-y-auto overflow-x-hidden border-y border-neutral-200">
+            <ol id="mini-cart" class="minicart-items" data-bind="foreach: { data: getCartItems(), as: 'item' }">
+                <each args="$parent.getRegion($parent.getItemRenderer(item.product_type))"
+                      render="{name: getTemplate(), data: item, afterRender: function() {$parents[1].initSidebar()}}"></each>
+            </ol>
+        </div>
+    </if>
+
+    <ifnot args="getCartParam('summary_count')">
+        <div class="minicart-empty-state flex flex-col items-center gap-4 px-4 pb-6 pt-14 text-center sm:px-6">
+            <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-neutral-100 text-neutral-400"
+                 aria-hidden="true">
+                <!-- Same cart asset as header minicart (tailstore cart-shopping.svg) via base64 + mask -->
+                <span class="pointer-events-none inline-block h-7 w-7 shrink-0 bg-current"
+                      style="-webkit-mask:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSI+PHBhdGggZD0iTTYuMjk5NzcgNUgyMUwxOSAxMkg3LjM3NjcxTTIwIDE2SDhMNiAzSDNNOSAyMEM5IDIwLjU1MjMgOC41NTIyOCAyMSA4IDIxQzcuNDQ3NzIgMjEgNyAyMC41NTIzIDcgMjBDNyAxOS40NDc3IDcuNDQ3NzIgMTkgOCAxOUM4LjU1MjI4IDE5IDkgMTkuNDQ3NyA5IDIwWk0yMCAyMEMyMCAyMC41NTIzIDE5LjU1MjMgMjEgMTkgMjFDMTguNDQ3NyAyMSAxOCAyMC41NTIzIDE4IDIwQzE4IDE5LjQ0NzcgMTguNDQ3NyAxOSAxOSAxOUMxOS41NTIzIDE5IDIwIDE5LjQ0NzcgMjAgMjBaIiBzdHJva2U9ImJsYWNrIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjwvc3ZnPg==) center/contain no-repeat;mask:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSI+PHBhdGggZD0iTTYuMjk5NzcgNUgyMUwxOSAxMkg3LjM3NjcxTTIwIDE2SDhMNiAzSDNNOSAyMEM5IDIwLjU1MjMgOC41NTIyOCAyMSA4IDIxQzcuNDQ3NzIgMjEgNyAyMC41NTIzIDcgMjBDNyAxOS40NDc3IDcuNDQ3NzIgMTkgOCAxOUM4LjU1MjI4IDE5IDkgMTkuNDQ3NyA5IDIwWk0yMCAyMEMyMCAyMC41NTIzIDE5LjU1MjMgMjEgMTkgMjFDMTguNDQ3NyAyMSAxOCAyMC41NTIzIDE4IDIwQzE4IDE5LjQ0NzcgMTguNDQ3NyAxOSAxOSAxOUMxOS41NTIzIDE5IDIwIDE5LjQ0NzcgMjAgMjBaIiBzdHJva2U9ImJsYWNrIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjwvc3ZnPg==) center/contain no-repeat"></span>
+            </div>
+            <div class="max-w-[18rem] space-y-2">
+                <p class="text-base font-semibold leading-snug text-neutral-900" translate="'Your cart is empty'"></p>
+                <p class="text-sm leading-relaxed text-neutral-600" translate="'You have no items in your shopping cart.'"></p>
+            </div>
+            <a class="action continue inline-flex w-full max-w-[16rem] items-center justify-center rounded-md border border-transparent bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-primary-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1"
+               href="/"
+               data-bind="attr: { href: storeBaseUrl },
+                          click: function () { closeMinicart(); return true; }">
+                <span translate="'Continue Shopping'"></span>
+            </a>
+            <if args="getCartParam('cart_empty_message')">
+                <p class="minicart empty text max-w-[18rem] text-center text-sm text-neutral-600" text="getCartParam('cart_empty_message')"></p>
+                <div class="actions mt-1 w-full">
+                    <div class="secondary text-center">
+                        <a class="action viewcart text-sm font-semibold text-primary hover:text-primary-hover hover:underline" data-bind="attr: {href: shoppingCartUrl}">
+                            <span translate="'View and Edit Cart'"></span>
+                        </a>
+                    </div>
+                </div>
+            </if>
+        </div>
+    </ifnot>
+
+    <div class="actions mt-4" if="getCartParam('summary_count')">
+        <div class="secondary text-center">
+            <a class="action viewcart text-sm font-semibold text-primary hover:text-primary-hover hover:underline" data-bind="attr: {href: shoppingCartUrl}">
+                <span translate="'View and Edit Cart'"></span>
+            </a>
+        </div>
+    </div>
+
+    <div id="minicart-widgets" class="minicart-widgets mt-4" if="regionHasElements('promotion')">
+        <each args="getRegion('promotion')" render=""></each>
+    </div>
+</div>
+<each args="getRegion('sign-in-popup')" render=""></each>

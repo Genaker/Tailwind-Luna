@@ -1,0 +1,105 @@
+/* Merged from web/tailwind/modules + extensions + optional scss.config.json roots (npm run build:tilewindscss) */
+@import "./_merged.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Tailwind preflight sets `a { color: inherit; text-decoration: inherit }`, which hides links.
+ * Restore readable link styling here (in @layer base, after preflight). Unlayered theme rules
+ * still override via specificity; button-like `a.action.*` get text-decoration: none in actions-forms.scss.
+ */
+@layer base {
+  a {
+    color: #1979c3;
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+
+  a:hover {
+    color: #145a95;
+  }
+
+  a:focus-visible {
+    outline: 2px solid #1979c3;
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+}
+
+@layer components {
+  .product-item-details:has(.swatch-opt) .product-item-inner {
+    @apply mt-1;
+  }
+
+  .products-grid .product-item-details:has(.swatch-opt) .product-item-actions {
+    @apply pt-2;
+  }
+
+  .products-list .product-item-details:has(.swatch-opt) .product-item-actions {
+    @apply mt-2 pt-2;
+  }
+}
+
+/*
+ * PDP / listing swatches (JS-injected under .swatch-opt). Layered/filter swatches use PHTML utilities.
+ * These rules MUST stay unlayered: _merged.css is imported unlayered and wins over @layer components
+ * even when our selectors are more specific — so global .swatch-attribute-options / .swatch-option there
+ * was overriding gap + touch targets. See CSS Cascade Level 5 (unlayered vs layered).
+ */
+input.swatch-input.super-attribute-select {
+  @apply hidden;
+}
+
+.swatch-opt .swatch-attribute-label,
+.swatch-opt span[id^="option-label-"] {
+  @apply font-semibold;
+}
+
+.swatch-opt .swatch-attribute-label::after,
+.swatch-opt span[id^="option-label-"]::after {
+  content: ':';
+}
+
+/* Desktop-first small chips; max-md: 48px touch. lg: one compact size (28px) for text + color + image. */
+.swatch-opt .swatch-attribute-options {
+  @apply flex flex-wrap items-center gap-2 max-md:gap-4 lg:gap-1.5;
+}
+
+/* No base border — typed .text/.color/.image use border-2 only (avoids 1px+2px “double” border bug). */
+.swatch-opt .swatch-option {
+  @apply m-0 inline-block cursor-pointer touch-manipulation rounded border-0 p-0 transition-colors duration-150 ease-out;
+}
+
+.swatch-opt .swatch-option:not(.text):not(.color):not(.image) {
+  @apply border border-neutral-300;
+}
+
+.swatch-opt .swatch-option.color,
+.swatch-opt .swatch-option.image {
+  @apply box-border h-9 w-9 min-h-9 min-w-9 shrink-0 rounded-md border-2 border-solid border-neutral-300 max-md:h-12 max-md:w-12 max-md:min-h-[48px] max-md:min-w-[48px] lg:h-7 lg:w-7 lg:min-h-7 lg:min-w-7;
+}
+
+.swatch-opt .swatch-option.color:hover,
+.swatch-opt .swatch-option.image:hover {
+  @apply border-neutral-500;
+}
+
+.swatch-opt .swatch-option.text {
+  @apply box-border inline-flex h-9 w-9 min-h-9 min-w-9 shrink-0 items-center justify-center rounded-md border-2 border-solid border-neutral-300 bg-white px-2 py-1 text-sm font-bold leading-none text-neutral-700 max-md:min-h-[48px] max-md:min-w-[48px] max-md:h-auto max-md:w-auto max-md:px-3 max-md:py-2 max-md:text-base max-md:leading-tight lg:h-7 lg:w-7 lg:min-h-7 lg:min-w-7 lg:px-1.5 lg:py-0.5 lg:text-[11px];
+}
+
+.swatch-opt .swatch-option.text:hover {
+  @apply border-neutral-500 text-neutral-900;
+}
+
+.swatch-opt .swatch-option.color.selected,
+.swatch-opt .swatch-option.image.selected,
+.swatch-opt .swatch-option.text.selected {
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgb(25 121 195 / 0.85);
+}
+
+.swatch-opt .swatch-option.selected {
+  @apply border-primary bg-primary text-white;
+}

@@ -1,0 +1,14 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+// @deprecated
+?>
+<?php if (!empty($count)) : ?>
+    <a href="#customer-reviews" class="text-sm font-medium text-blue-600 hover:text-blue-800 hover:underline nobr">
+        <?= $block->escapeHtml(__('%1 Review(s)', $count)) ?>
+    </a>
+<?php endif; ?>

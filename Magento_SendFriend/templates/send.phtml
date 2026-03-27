@@ -1,0 +1,148 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+/**
+ * Send to friend form
+ *
+ * @var \Magento\SendFriend\Block\Send $block
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
+if (!$block->getButtonLockManager()) {
+    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+    $block->setButtonLockManager(
+        $objectManager->get(\Magento\Framework\View\Element\ButtonLockManager::class)
+    );
+}
+// phpcs:disable PHPCompatibility.Miscellaneous.RemovedAlternativePHPTags.MaybeASPOpenTagFound
+
+?>
+<script id="add-recipient-tmpl" type="text/x-magento-template">
+    <div class="flex flex-wrap items-center justify-between gap-4 py-4 clear-both">
+        <button type="button" id="btn-remove<%- data._index_ %>" class="action remove inline-flex items-center justify-center gap-2 rounded-md text-sm font-semibold border px-4 py-2 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-red-600 disabled:opacity-50 disabled:pointer-events-none text-red-700 border-red-200 hover:bg-red-50"
+           title="<?= $escaper->escapeHtmlAttr(__('Remove Recipient')) ?>">
+           <span><?= $escaper->escapeHtml(__('Remove')) ?></span>
+        </button>
+    </div>
+    <fieldset class="min-w-0 border-0 p-0 m-0">
+        <div class="mb-4 name required">
+            <label for="recipients-name<%- data._index_ %>" class="block text-sm font-medium text-neutral-800 mb-1">
+                <span><?= $escaper->escapeHtml(__('Name')) ?></span>
+            </label>
+            <div class="mt-1">
+                <input name="recipients[name][<%- data._index_ %>]" type="text"
+                       title="<?= $escaper->escapeHtmlAttr(__('Name')) ?>" class="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                       id="recipients-name<%- data._index_ %>" data-validate="{required:true}"/>
+            </div>
+        </div>
+
+        <div class="mb-4 email required">
+            <label for="recipients-email<%- data._index_ %>" class="block text-sm font-medium text-neutral-800 mb-1">
+                <span><?= $escaper->escapeHtml(__('Email')) ?></span>
+            </label>
+            <div class="mt-1">
+                <input name="recipients[email][<%- data._index_ %>]"
+                       title="<?= $escaper->escapeHtmlAttr(__('Email')) ?>"
+                       id="recipients-email<%- data._index_ %>" type="email" class="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                       data-mage-init='{"mage/trim-input":{}}'
+                       data-validate="{required:true, 'validate-email':true}"/>
+            </div>
+        </div>
+    </fieldset>
+</script>
+
+<form action="<?= $escaper->escapeUrl($block->getSendUrl()) ?>" method="post" id="product-sendtofriend-form"
+      data-mage-init='{
+        "rowBuilder":{
+            "rowTemplate":"#add-recipient-tmpl",
+            "rowContainer":"#recipients-options",
+            "rowParentElem":"<div></div>",
+            "remEventSelector":"button",
+            "btnRemoveSelector":".action.remove",
+            "maxRows":<?= (int) $block->getMaxRecipients() ?>,
+            "maxRowsMsg":"#max-recipient-message",
+            "addRowBtn":"#add-recipient-button",
+            "additionalRowClass":"additional"},
+        "validation":{}}'
+      class="form send friend" data-hasrequired="<?= $escaper->escapeHtmlAttr(__('* Required Fields')) ?>">
+    <fieldset class="min-w-0 border-0 p-0 m-0 sender" id="sender_options">
+        <?= $block->getBlockHtml('formkey') ?>
+        <legend class="mb-3 text-base font-semibold text-neutral-900"><span><?= $escaper->escapeHtml(__('Sender')) ?></span></legend>
+        <br>
+        <div class="mb-4 sender required">
+            <label for="sender-name" class="block text-sm font-medium text-neutral-800 mb-1"><span><?= $escaper->escapeHtml(__('Name')) ?></span></label>
+            <div class="mt-1">
+                <input name="sender[name]" value="<?= $escaper->escapeHtmlAttr($block->getUserName()) ?>"
+                       title="<?= $escaper->escapeHtmlAttr(__('Name')) ?>"
+                       id="sender-name" type="text" class="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                       data-validate="{required:true}"/>
+            </div>
+        </div>
+
+        <div class="mb-4 email required">
+            <label for="sender-email" class="block text-sm font-medium text-neutral-800 mb-1"><span><?= $escaper->escapeHtml(__('Email')) ?></span></label>
+            <div class="mt-1">
+                <input name="sender[email]" value="<?= $escaper->escapeHtmlAttr($block->getEmail()) ?>"
+                       title="<?= $escaper->escapeHtmlAttr(__('Email')) ?>" id="sender-email" type="email"
+                       class="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                       data-mage-init='{"mage/trim-input":{}}'
+                       data-validate="{required:true, 'validate-email':true}"/>
+            </div>
+        </div>
+
+        <div class="mb-4 text required">
+            <label for="sender-message" class="block text-sm font-medium text-neutral-800 mb-1">
+                <span><?= $escaper->escapeHtml(__('Message')) ?></span>
+            </label>
+            <div class="mt-1">
+                <textarea name="sender[message]" class="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500" id="sender-message" cols="3" rows="3"
+                          data-validate="{required:true}"><?= $escaper->escapeHtml($block->getMessage()) ?></textarea>
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset class="min-w-0 border-0 p-0 m-0 recipients">
+        <?= $block->getBlockHtml('formkey') ?>
+        <legend class="mb-3 text-base font-semibold text-neutral-900"><span><?= $escaper->escapeHtml(__('Invitee')) ?></span></legend>
+        <br />
+        <div id="recipients-options"></div>
+        <?php if ($block->getMaxRecipients()): ?>
+            <div id="max-recipient-message" class="mb-4 rounded-md border text-sm border-blue-200 bg-blue-50 text-blue-900 limit" role="alert">
+                <span>
+                    <?= $escaper->escapeHtml(__('Maximum %1 email addresses allowed.', $block->getMaxRecipients())) ?>
+                </span>
+            </div>
+            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag("display: none;", 'div#max-recipient-message') ?>
+        <?php endif; ?>
+        <div class="flex flex-wrap items-center justify-between gap-4 py-4 clear-both">
+            <?php if (1 < $block->getMaxRecipients()): ?>
+                <button type="button" id="add-recipient-button" class="inline-flex items-center justify-center gap-2 rounded-md text-sm font-semibold border border-neutral-300 px-4 py-2 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600 disabled:opacity-50 disabled:pointer-events-none text-neutral-800 hover:bg-neutral-50 add">
+                    <span><?= $escaper->escapeHtml(__('Add Invitee')) ?></span></button>
+            <?php endif; ?>
+        </div>
+        <?= $block->getChildHtml('form_additional_info') ?>
+    </fieldset>
+    <?= $block->getChildHtml('captcha'); ?>
+    <div class="flex flex-wrap items-center justify-between gap-4 py-4 clear-both">
+        <button type="submit"
+                class="inline-flex items-center justify-center gap-2 rounded-md text-sm font-semibold border px-4 py-2 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600 disabled:opacity-50 disabled:pointer-events-none bg-blue-600 text-white border-blue-600 hover:bg-blue-700 submit"
+                <?php if (!$block->canSend() ||
+                    $block->getButtonLockManager()->isDisabled('sendfriend_form_submit')): ?>
+                disabled="disabled"
+                <?php endif ?>>
+            <span><?= $escaper->escapeHtml(__('Send Email')) ?></span></button>
+        <a class="inline-flex items-center justify-center gap-2 rounded-md text-sm font-semibold border border-neutral-300 px-4 py-2 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600 disabled:opacity-50 disabled:pointer-events-none text-neutral-800 hover:bg-neutral-50 back" href="#" role="back"><span><?= $escaper->escapeHtml(__('Back')) ?></span></a>
+    </div>
+</form>
+
+<script type="text/x-magento-init">
+    {
+        "a[role='back']": {
+            "Magento_SendFriend/js/back-event": {}
+        }
+    }
+</script>

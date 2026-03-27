@@ -1,0 +1,49 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+?>
+<?php
+/** @var \Magento\LayeredNavigation\Block\Navigation\FilterRenderer $block */
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var \Magento\Framework\Locale\LocaleFormatter $localeFormatter */
+/** @var \Magento\LayeredNavigation\ViewModel\Layer\Filter $viewModel */
+$viewModel = $block->getData('product_layer_view_model');
+?>
+
+<ol class="items m-0 list-none space-y-0.5 p-0 pt-1">
+    <?php foreach ($filterItems as $filterItem): ?>
+        <li class="item m-0 p-0">
+            <?php if ($filterItem->getCount() > 0): ?>
+                <a class="flex items-start justify-between gap-3 rounded-md px-2 py-2 text-sm leading-snug text-neutral-700 no-underline transition-colors hover:bg-neutral-100 hover:text-primary [&_span.price]:tabular-nums"
+                    href="<?= $escaper->escapeUrl($filterItem->getUrl()) ?>"
+                    rel="nofollow"
+                ><?= /* @noEscape */ $filterItem->getLabel() ?><?php
+                if ($viewModel->shouldDisplayProductCountOnLayer()): ?><span
+                        class="count ml-auto inline-flex shrink-0 items-center gap-1 rounded-full bg-neutral-100 px-2 py-0.5 text-xs font-medium tabular-nums text-neutral-500">
+                            <?= /* @noEscape */ $localeFormatter->formatNumber((int) $filterItem->getCount()) ?><span
+                            class="filter-count-label font-normal text-neutral-400"><?php
+                            if ($filterItem->getCount() == 1): ?>
+                                <?= $escaper->escapeHtml(__('item')) ?><?php
+                            else:
+                                ?><?= $escaper->escapeHtml(__('items')) ?><?php
+                            endif;?></span></span>
+                    <?php endif; ?></a>
+            <?php else: ?>
+                <span class="flex items-start justify-between gap-3 px-2 py-2 text-sm text-neutral-400"><?= /* @noEscape */ $filterItem->getLabel() ?><?php
+                if ($viewModel->shouldDisplayProductCountOnLayer()): ?><span
+                        class="count ml-auto inline-flex shrink-0 items-center gap-1 rounded-full bg-neutral-100 px-2 py-0.5 text-xs font-medium tabular-nums text-neutral-400">
+                            <?= /* @noEscape */ $localeFormatter->formatNumber((int) $filterItem->getCount()) ?><span
+                            class="filter-count-label font-normal text-neutral-400"><?php
+                            if ($filterItem->getCount() == 1): ?>
+                                <?= $escaper->escapeHtml(__('item')) ?><?php
+                            else:
+                                ?><?= $escaper->escapeHtml(__('items')) ?><?php
+                            endif;?></span></span>
+                <?php endif; ?></span>
+            <?php endif; ?>
+        </li>
+    <?php endforeach ?>
+</ol>

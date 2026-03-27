@@ -1,0 +1,63 @@
+<?php
+/**
+ * Product details: exclusive <details name> tabs (no mage.tabs / collapsible tab ARIA).
+ *
+ * @var \Magento\Catalog\Block\Product\View\Details $block
+ */
+$layout = $block->getLayout();
+$detailedInfoGroup = $block->getGroupSortedChildNames('detailed_info', 'getChildHtml');
+$tabs = [];
+if ($detailedInfoGroup) {
+    foreach ($detailedInfoGroup as $name) {
+        $html = $layout->renderElement($name);
+        if (!$html || !trim($html)) {
+            continue;
+        }
+        $alias = $layout->getElementAlias($name);
+        $tabs[] = [
+            'alias' => $alias,
+            'label' => $block->getChildData($alias, 'title'),
+            'html' => $html,
+        ];
+    }
+}
+?>
+<?php if ($tabs !== []): ?>
+    <?php
+    $nTabs = count($tabs);
+    $gridColumnsStyle = 'grid-template-columns: repeat(' . (int) $nTabs . ', minmax(0, 1fr));';
+    ?>
+    <div class="product info detailed mt-8 w-full max-w-full sm:mt-10">
+        <div class="product data items product-detail-details grid w-full min-w-0 gap-0 border-b border-neutral-200"
+             style="<?= $block->escapeHtmlAttr($gridColumnsStyle) ?>">
+            <?php foreach ($tabs as $i => $tab): ?>
+                <?php
+                $alias = $tab['alias'];
+                $isFirst = $i === 0;
+                $titleBase = 'data item title product-detail-tab-summary -mb-px cursor-pointer list-none border-b-2 border-transparent px-3 py-3 text-center text-sm font-semibold text-neutral-600 transition-colors sm:px-4 marker:content-[\'\'] hover:border-neutral-200 hover:text-neutral-900 [&::-webkit-details-marker]:hidden';
+                $titleGrid = 'grid-column: ' . ($i + 1) . '; grid-row: 1;';
+                $contentGrid = 'grid-column: 1 / -1; grid-row: 2;';
+                $contentClasses = 'data item content min-w-0 border-t border-neutral-200 pt-4 sm:pt-6';
+                ?>
+                <details class="product-detail-tab"
+                         name="product-detail-tabs"
+                         <?= $isFirst ? 'open' : '' ?>>
+                    <summary class="<?= $block->escapeHtmlAttr($titleBase) ?>"
+                             style="<?= $block->escapeHtmlAttr($titleGrid) ?>"
+                             id="tab-label-<?= $block->escapeHtmlAttr($alias) ?>">
+                        <span class="inline-flex min-w-0 flex-wrap items-center justify-center gap-1.5 text-inherit [&_.counter]:inline-flex [&_.counter]:shrink-0 [&_.counter]:items-center [&_.counter]:justify-center [&_.counter]:rounded-full [&_.counter]:bg-primary [&_.counter]:px-1.5 [&_.counter]:py-0.5 [&_.counter]:text-[11px] [&_.counter]:font-bold [&_.counter]:tabular-nums [&_.counter]:leading-none [&_.counter]:text-white [&_.counter]:shadow-sm [&_.counter]:ring-1 [&_.counter]:ring-white/25">
+                            <?= /* @noEscape */ $tab['label'] ?>
+                        </span>
+                    </summary>
+                    <div class="<?= $block->escapeHtmlAttr($contentClasses) ?>"
+                         style="<?= $block->escapeHtmlAttr($contentGrid) ?>"
+                         aria-labelledby="tab-label-<?= $block->escapeHtmlAttr($alias) ?>"
+                         id="<?= $block->escapeHtmlAttr($alias) ?>"
+                         data-role="content">
+                        <?= /* @noEscape */ $tab['html'] ?>
+                    </div>
+                </details>
+            <?php endforeach; ?>
+        </div>
+    </div>
+<?php endif; ?>

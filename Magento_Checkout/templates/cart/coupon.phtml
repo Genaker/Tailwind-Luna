@@ -1,0 +1,84 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// phpcs:disable Generic.Files.LineLength.TooLong
+
+/**
+ * @var \Magento\Framework\View\Element\AbstractBlock $block
+ */
+
+// We should use strlen function because coupon code could be "0", converted to bool will lead to false
+$hasCouponCode = $block->getCouponCode() !== null && strlen($block->getCouponCode()) > 0;
+?>
+<div class="group block discount overflow-hidden rounded-lg border border-neutral-200 bg-white shadow-sm"
+     id="block-discount"
+     data-mage-init='{"collapsible":{"active":true,"openedState":"active","saveState":false}}'>
+    <div class="title flex w-full cursor-pointer list-none items-center justify-between gap-2 px-4 py-3 text-left transition-colors hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+         data-role="title"
+         role="button"
+         tabindex="0">
+        <strong id="block-discount-heading"
+                class="text-base font-semibold tracking-tight text-neutral-900"
+                role="heading"
+                aria-level="2"><?= $block->escapeHtml(__('Apply Discount Code')) ?></strong>
+        <span class="shrink-0 text-neutral-400 transition-transform duration-200 group-[.active]:rotate-180" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="block"><path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/></svg>
+        </span>
+    </div>
+    <div class="content border-t border-neutral-200 bg-neutral-50/80 px-4 py-4"
+         data-role="content"
+         aria-labelledby="block-discount-heading">
+        <form id="discount-coupon-form"
+              class="space-y-3"
+              action="<?= $block->escapeUrl($block->getUrl('checkout/cart/couponPost')) ?>"
+              method="post"
+              data-mage-init='{"discountCode":{"couponCodeSelector": "#coupon_code",
+                                               "removeCouponSelector": "#remove-coupon",
+                                               "applyButton": "button.action.apply",
+                                               "cancelButton": "button.action.cancel"}}'>
+            <div class="fieldset coupon space-y-3<?= $hasCouponCode ? ' applied' : '' ?>">
+                <input type="hidden" name="remove" id="remove-coupon" value="0" />
+                <div class="field">
+                    <label for="coupon_code" class="label">
+                        <span><?= $block->escapeHtml(__('Enter discount code')) ?></span>
+                    </label>
+                    <div class="control">
+                        <input type="text"
+                               class="input-text"
+                               id="coupon_code"
+                               name="coupon_code"
+                               value="<?= $block->escapeHtmlAttr($block->getCouponCode()) ?>"
+                               placeholder="<?= $block->escapeHtmlAttr(__('Enter discount code')) ?>"
+                                <?php if ($hasCouponCode): ?>
+                                   disabled="disabled"
+                                <?php endif; ?>
+                        />
+                    </div>
+                </div>
+                <div class="actions-toolbar">
+                    <?php if (!$hasCouponCode): ?>
+                    <div class="primary">
+                        <button class="action apply primary" type="button"
+                                value="<?= $block->escapeHtmlAttr(__('Apply Discount')) ?>">
+                            <span><?= $block->escapeHtml(__('Apply Discount')) ?></span>
+                        </button>
+                    </div>
+                    <?php else: ?>
+                        <div class="primary">
+                            <button  type="button" class="action cancel primary"
+                                     value="<?= $block->escapeHtmlAttr(__('Cancel Coupon')) ?>">
+                                <span><?= $block->escapeHtml(__('Cancel Coupon')) ?></span>
+                            </button>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <?php if (!$hasCouponCode): ?>
+                <?= /* @noEscape */ $block->getChildHtml('captcha') ?>
+            <?php endif; ?>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,33 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+?>
+
+<?php
+/** @var \Magento\PaymentServicesPaypal\Block\SmartButtons\Review\Details $block */
+/** @var \Magento\Framework\Escaper $escaper */
+?>
+
+<div id="details-reload" class="overflow-x-auto order-items cart">
+    <table id="details-table" class="list-none p-0 m-0 table cart data table-magento-payments-review-items">
+        <caption class="sr-only"><?= $escaper->escapeHtml(__('Items in Your Shopping Cart')) ?></caption>
+        <thead>
+        <tr class="border-b border-neutral-200 bg-neutral-50">
+            <th class="name px-4 py-3 text-left text-sm font-semibold text-neutral-800" scope="col"><?= $escaper->escapeHtml(__('Item')) ?></th>
+            <th class="px-4 py-3 text-left text-sm font-semibold text-neutral-800" scope="col"><?= $escaper->escapeHtml(__('Price')) ?></th>
+            <th class="px-4 py-3 text-center text-sm font-semibold text-neutral-800" scope="col"><?= $escaper->escapeHtml(__('Qty')) ?></th>
+            <th class="subtotal px-4 py-3 text-left text-sm font-semibold text-neutral-800" scope="col"><?= $escaper->escapeHtml(__('Subtotal')) ?></th>
+        </tr>
+        </thead>
+            <?php foreach ($block->getItems() as $item) : ?>
+                <?= $block->getItemHtml($item) ?>
+            <?php endforeach ?>
+        <tfoot class="opc-block-summary">
+            <?= $block->getChildHtml('totals') ?>
+        </tfoot>
+    </table>
+</div>

@@ -1,0 +1,104 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * Grouped product data template
+ *
+ * @var $block \Magento\Catalog\Block\Product\View\BaseImage
+ * @var $block \Magento\GroupedProduct\Block\Product\View\Type\Grouped
+ */
+?>
+<?php $block->setPreconfiguredValue(); ?>
+<?php $_product = $block->getProduct(); ?>
+<?php $_associatedProducts = $block->getAssociatedProducts(); ?>
+<?php $_hasAssociatedProducts = count($_associatedProducts) > 0; ?>
+<?php $_colCount = $_product->isSaleable() ? 2 : 1; ?>
+
+<div class="grouped overflow-x-auto">
+    <table class="table data grouped w-full border-collapse text-sm text-neutral-800"
+           id="super-product-table"
+           data-mage-init='{ "Magento_GroupedProduct/js/product-ids-resolver": {} }'>
+        <caption class="sr-only"><?= $block->escapeHtml(__('Grouped product items')) ?></caption>
+        <thead>
+        <tr>
+            <th class="border border-neutral-200 bg-neutral-50 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-neutral-700" scope="col"><?= $block->escapeHtml(__('Product Name')) ?></th>
+            <?php if ($_product->isSaleable()): ?>
+                <th class="w-28 border border-neutral-200 bg-neutral-50 px-3 py-2 text-center text-xs font-semibold uppercase tracking-wide text-neutral-700" scope="col"><?= $block->escapeHtml(__('Qty')) ?></th>
+            <?php endif; ?>
+        </tr>
+        </thead>
+
+        <?php if ($_hasAssociatedProducts): ?>
+        <tbody>
+            <?php foreach ($_associatedProducts as $_item): ?>
+            <tr>
+                <td data-th="<?= $block->escapeHtmlAttr(__('Product Name')) ?>" class="border border-neutral-200 px-3 py-3 align-top">
+                    <strong class="text-base font-semibold leading-snug text-neutral-900"><?= $block->escapeHtml($_item->getName()) ?></strong>
+                    <?php if ($block->getCanShowProductPrice($_product)): ?>
+                        <?php if ($block->getCanShowProductPrice($_item)): ?>
+                            <div class="mt-1 text-sm text-neutral-700">
+                                <?= /* @noEscape */ $block->getProductPrice($_item) ?>
+                            </div>
+                        <?php endif; ?>
+                        <?php endif; ?>
+                </td>
+                <?php if ($_product->isSaleable()): ?>
+                <td data-th="<?= $block->escapeHtmlAttr(__('Qty')) ?>" class="border border-neutral-200 px-3 py-3 align-middle text-center">
+                    <?php if ($_item->isSaleable()): ?>
+                    <input type="number"
+                           name="super_group[<?= $block->escapeHtmlAttr($_item->getId()) ?>]"
+                           data-selector="super_group[<?= $block->escapeHtmlAttr($_item->getId()) ?>]"
+                           value="<?= $block->escapeHtmlAttr($_item->getQty() * 1) ?>"
+                           title="<?= $block->escapeHtmlAttr(__('Qty')) ?>"
+                           class="qty w-full min-w-[5rem] max-w-[6rem] rounded-md border border-neutral-300 px-2 py-2 text-center text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                           data-validate="{'validate-grouped-qty':'#super-product-table'}"
+                           data-errors-message-box="#validation-message-box"/>
+                <?php else: ?>
+                    <div class="text-sm text-red-700" title="<?= $block->escapeHtmlAttr(__('Availability')) ?>">
+                        <span><?= $block->escapeHtml(__('Out of stock')) ?></span>
+                    </div>
+                <?php endif; ?>
+                </td>
+                <?php endif; ?>
+            </tr>
+                <?php if ($block->getCanShowProductPrice($_product)
+                && $block->getCanShowProductPrice($_item)
+                && trim($block->getProductPriceHtml(
+                    $_item,
+                    \Magento\Catalog\Pricing\Price\TierPrice::PRICE_CODE
+                ))): ?>
+                <tr class="row-tier-price">
+                    <td class="border border-neutral-200 bg-neutral-50 px-3 py-2" colspan="<?= (int) $_colCount ?>">
+                        <?= $block->getProductPriceHtml(
+                            $_item,
+                            \Magento\Catalog\Pricing\Price\TierPrice::PRICE_CODE
+                        ) ?>
+                    </td>
+                </tr>
+            <?php endif; ?>
+        <?php endforeach; ?>
+        </tbody>
+        <?php else: ?>
+        <tbody>
+            <tr>
+                <td class="border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm text-neutral-700"
+                    colspan="<?= (int) $_colCount ?>">
+                    <?= $block->escapeHtml(__('No options of this product are available.')) ?>
+                </td>
+            </tr>
+        </tbody>
+        <?php endif; ?>
+    </table>
+</div>
+<div id="validation-message-box"></div>
+<script type="text/x-magento-init">
+    {
+        "#product_addtocart_form": {
+            "groupedProduct": {
+            }
+        }
+    }
+</script>

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+    Extra gallery URL (400px) for responsive srcset.
+    Argument name MUST match the constructor parameter: galleryImagesConfig (see core Magento_Catalog/etc/frontend/di.xml).
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Catalog\Block\Product\View\Gallery">
+        <arguments>
+            <argument name="galleryImagesConfig" xsi:type="array">
+                <item name="medium_mobile" xsi:type="array">
+                    <item name="image_id" xsi:type="string">product_page_image_medium_mobile</item>
+                    <item name="data_object_key" xsi:type="string">medium_mobile_url</item>
+                    <item name="json_object_key" xsi:type="string">medium_mobile</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+</config>

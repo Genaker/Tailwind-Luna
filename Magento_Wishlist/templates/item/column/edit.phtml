@@ -1,0 +1,19 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Edit $block */
+
+/** @var \Magento\Wishlist\Model\Item $item */
+$item = $block->getItem();
+$product = $item->getProduct();
+?>
+
+<?php if ($product->isVisibleInSiteVisibility()) : ?>
+    <a class="edit inline-flex items-center justify-center gap-1 rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-xs font-semibold text-neutral-900 transition-colors hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600 sm:text-sm"
+       href="<?= $block->escapeUrl($block->getItemConfigureUrl($item)) ?>">
+        <span><?= $block->escapeHtml(__('Edit')) ?></span>
+    </a>
+<?php endif ?>

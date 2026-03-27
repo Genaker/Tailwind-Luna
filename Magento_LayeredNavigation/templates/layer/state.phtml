@@ -1,0 +1,56 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+?>
+<?php
+/**
+ * Category layered navigation state
+ *
+ * @var $block \Magento\LayeredNavigation\Block\Navigation\State
+ */
+?>
+<?php $_filters = $block->getActiveFilters() ?>
+<?php if (!empty($_filters)): ?>
+<div class="filter-current mb-6 rounded-lg border border-neutral-200 bg-neutral-50 p-4"
+     data-mage-init='{"collapsible":{"openedState": "active", "collapsible": true, "active": false }}'>
+    <strong class="filter-current-subtitle block-subtitle mb-3 block text-sm font-semibold text-neutral-900"
+            role="heading"
+            aria-level="2"
+            data-role="title"
+            data-count="<?= /* @noEscape */ count($_filters) ?>"><?= $block->escapeHtml(__('Now Shopping by')) ?></strong>
+    <ol class="items m-0 flex list-none flex-wrap gap-2 p-0">
+        <?php foreach ($_filters as $_filter): ?>
+            <li class="item inline-flex max-w-full flex-wrap items-center gap-2 rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-xs text-neutral-700">
+                <span class="filter-label font-medium text-neutral-600"><?= $block->escapeHtml(__($_filter->getName())) ?></span>
+                <span class="filter-value text-neutral-900"><?= $block->escapeHtml($block->stripTags($_filter->getLabel())) ?></span>
+                <?php
+                $clearLinkUrl = $_filter->getClearLinkUrl();
+                $currentFilterName = $block->escapeHtmlAttr(__($_filter->getName()) . " " . $block->stripTags($_filter->getLabel()));
+                if ($clearLinkUrl):
+                    ?>
+                    <a class="action previous text-xs font-medium text-primary no-underline hover:underline"
+                       href="<?= $block->escapeUrl($_filter->getRemoveUrl()) ?>"
+                       title="<?= $block->escapeHtmlAttr(__('Previous')) ?>">
+                        <span><?= $block->escapeHtml(__('Previous')) ?></span>
+                    </a>
+                    <a class="action remove inline-flex items-center justify-center rounded-full bg-neutral-200 px-2 py-1 text-xs font-medium text-neutral-600 no-underline transition-colors hover:bg-red-600 hover:text-white"
+                       title="<?= $block->escapeHtmlAttr($_filter->getFilter()->getClearLinkText()) ?>"
+                       href="<?= $block->escapeUrl($clearLinkUrl) ?>">
+                        <span><?= $block->escapeHtml($_filter->getFilter()->getClearLinkText()) ?></span>
+                    </a>
+                <?php else: ?>
+                    <a class="action remove inline-flex items-center justify-center rounded-full bg-neutral-200 px-2 py-1 text-xs font-medium text-neutral-600 no-underline transition-colors hover:bg-red-600 hover:text-white"
+                       href="<?= $block->escapeUrl($_filter->getRemoveUrl()) ?>"
+                       title="<?= /* @noEscape */ $block->escapeHtmlAttr(__('Remove')) . " " . $currentFilterName ?>">
+                        <span><?= $block->escapeHtml(__('Remove This Item')) ?></span>
+                    </a>
+                <?php endif; ?>
+            </li>
+        <?php endforeach; ?>
+    </ol>
+</div>
+<?php endif; ?>

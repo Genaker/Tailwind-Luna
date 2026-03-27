@@ -1,0 +1,32 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * @var \Magento\PayPal\Block\Express\Form $block
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @see \Magento\PayPal\Block\Express\Form
+ */
+$code = $block->escapeHtml($block->getBillingAgreementCode());
+?>
+<fieldset class="paypal redirect m-0 min-w-0 list-none border-0 p-0" id="payment_form_<?= $block->escapeHtmlAttr($block->getMethodCode()) ?>">
+    <div class="text-sm text-neutral-700"><?= $block->escapeHtml($block->getRedirectMessage()) ?></div>
+    <?php if ($code): ?>
+        <div class="mt-3 flex items-start gap-2">
+            <input type="checkbox" id="<?= /* @noEscape */ $code ?>" value="1"
+                   class="mt-0.5 h-4 w-4 shrink-0 rounded border-neutral-300 text-blue-600 accent-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-0"
+                   name="payment[<?= /* @noEscape */ $code ?>]">
+            <label for="<?= /* @noEscape */ $code ?>" class="cursor-pointer text-sm font-medium text-neutral-800">
+                <span>
+                    <?= $block->escapeHtml(__('Sign a billing agreement to streamline further purchases  with PayPal.')) ?>
+                </span>
+            </label>
+        </div>
+    <?php endif; ?>
+</fieldset>
+<?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+    'display:none',
+    'fieldset#payment_form_' . $block->escapeHtml($block->getMethodCode())
+) ?>

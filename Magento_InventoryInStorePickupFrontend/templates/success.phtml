@@ -1,0 +1,29 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+?>
+<?php /** @var \Magento\Framework\View\Element\Template $block */ ?>
+<div class="checkout-success mx-auto max-w-2xl space-y-4 px-0 py-6 text-neutral-800">
+    <?php if ($block->getOrderId()) : ?>
+        <?php if ($block->getCanViewOrder()) : ?>
+            <p class="text-base text-neutral-900"><?= $block->escapeHtml(__('Your order number is: %1.', sprintf('<a href="%s" class="order-number font-semibold text-blue-600 underline hover:text-blue-800"><strong>%s</strong></a>', $block->escapeUrl($block->getViewOrderUrl()), $block->getOrderId())), ['a', 'strong']) ?></p>
+        <?php else : ?>
+            <p class="text-base text-neutral-900"><?= $block->escapeHtml(__('Your order # is: <span>%1</span>.', $block->getOrderId()), ['span']) ?></p>
+        <?php endif; ?>
+        <?php if ($block->getIsOrderStorePickup()->execute()) : ?>
+            <p class="text-sm text-neutral-600"><?= $block->escapeHtml(__('We\'ll email you an order and pick-up confirmation with details.')) ?></p>
+        <?php else : ?>
+            <p class="text-sm text-neutral-600"><?= $block->escapeHtml(__('We\'ll email you an order confirmation with details and tracking info.')) ?></p>
+        <?php endif; ?>
+    <?php endif; ?>
+
+    <?= $block->getAdditionalInfoHtml() ?>
+
+    <div class="clear-both flex flex-wrap items-center gap-3 border-t border-neutral-200 pt-6">
+        <a class="continue inline-flex items-center justify-center gap-2 rounded-md border border-blue-600 bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"
+           href="<?= $block->escapeUrl($block->getContinueUrl()) ?>"><span><?= $block->escapeHtml(__('Continue Shopping')) ?></span></a>
+    </div>
+</div>

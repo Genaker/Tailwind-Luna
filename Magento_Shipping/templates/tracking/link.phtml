@@ -1,0 +1,24 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+/** @var \Magento\Shipping\Block\Tracking\Link $block */
+$order = $block->getOrder();
+?>
+<a href="#" class="inline-flex items-center justify-center gap-2 rounded-md text-sm font-semibold border px-4 py-2 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600 disabled:opacity-50 disabled:pointer-events-none track"
+   title="<?= $block->escapeHtmlAttr($block->getLabel()) ?>"
+   data-mage-init='{"popupWindow": {
+        "windowURL":"<?= $block->escapeJs($block->getWindowUrl($order)) ?>",
+        "windowName":"trackorder",
+        "width":800,
+        "height":600,
+        "left":0,
+        "top":0,
+        "resizable":1,
+        "scrollbars":1
+    }}'>
+    <span><?= $block->escapeHtml($block->getLabel()) ?></span>
+</a>

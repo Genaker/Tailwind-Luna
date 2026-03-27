@@ -1,0 +1,119 @@
+<?php
+/**
+ * Store home shell: promo rows below plus CMS page output from layout (widgets/copy).
+ *
+ * Content → Pages → Home: do not duplicate this promo markup in the CMS body; use the page for
+ * extra widgets and the Hot Sellers block from layout (cms_home_hot_products).
+ */
+/** @var \Magento\Framework\View\Element\Template $block */
+$base = rtrim($block->getUrl(''), '/');
+$media = $base . '/media/wysiwyg/home/';
+/** @var callable $cat Category URL by url_key (default suffix .html; override via layout data category_url_suffix). */
+$suffix = $block->getData('category_url_suffix');
+$suffix = $suffix !== null && $suffix !== '' ? (string) $suffix : '.html';
+$cat = static function (string $urlKey) use ($block, $base, $suffix): string {
+    return $block->escapeUrl($base . '/' . $urlKey . $suffix);
+};
+?>
+<div class="cms-content cms-home home-page w-full" data-appearance="home-shell">
+    <div class="flex flex-col gap-4">
+        <!-- Hero -->
+        <a href="<?= $cat('yoga-new') ?>"
+           class="group block-promo home-main relative block min-h-[280px] overflow-hidden rounded-lg text-inherit no-underline sm:min-h-[360px] md:min-h-[450px]">
+            <img src="<?= $block->escapeUrl($media . 'home-main.jpg') ?>"
+                 alt=""
+                 class="absolute inset-0 z-0 h-full w-full object-cover"
+                 loading="eager"
+                 fetchpriority="high"/>
+            <span class="content absolute left-4 right-4 top-4 z-10 flex min-w-0 max-w-none flex-col gap-2 rounded-xl border border-neutral-200/60 bg-white/80 p-4 text-neutral-800 shadow-lg backdrop-blur-sm sm:p-5 sm:top-6 md:left-4 md:right-10 md:top-auto md:bottom-10 md:max-w-md md:py-6 md:pl-10 md:pr-8">
+                <span class="info text-xs font-semibold uppercase tracking-widest text-neutral-600"><?= $block->escapeHtml(__('New Luma Yoga Collection')) ?></span>
+                <strong class="title break-words text-lg font-light leading-tight tracking-tight text-neutral-900 sm:text-xl md:text-2xl"><?= $block->escapeHtml(__('Get fit and look fab in new seasonal styles')) ?></strong>
+                <span class="mt-2 inline-flex min-h-[2.75rem] items-center justify-center self-start rounded-lg border border-transparent bg-primary px-6 py-2.5 text-sm font-semibold text-white shadow-md transition-[background-color,box-shadow] duration-150 hover:bg-primary-hover hover:shadow-lg group-hover:bg-primary-hover group-hover:shadow-lg"><?= $block->escapeHtml(__('Shop New Yoga')) ?></span>
+            </span>
+        </a>
+
+        <!-- Promo grid: pants | tees | Erin | performance -->
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-3 md:grid-rows-2">
+            <a href="<?= $cat('pants-all') ?>"
+               class="group block-promo home-pants relative block min-h-[280px] overflow-hidden rounded-lg text-inherit no-underline md:col-start-1 md:row-span-2 md:row-start-1 md:min-h-0">
+                <img src="<?= $block->escapeUrl($media . 'home-pants.jpg') ?>"
+                     alt=""
+                     class="absolute inset-0 z-0 h-full w-full object-cover"
+                     loading="lazy"/>
+                <span class="content absolute left-4 top-4 z-10 flex max-w-[80%] flex-col gap-1 sm:left-6 sm:top-6">
+                    <strong class="title text-4xl font-semibold leading-tight text-white drop-shadow-md sm:text-5xl"><?= $block->escapeHtml(__('20% OFF')) ?></strong>
+                    <span class="info text-base font-normal text-white drop-shadow"><?= $block->escapeHtml(__('Luma pants when you shop today*')) ?></span>
+                    <span class="mt-2 inline-flex items-center gap-1 text-sm font-semibold text-white underline-offset-4 group-hover:underline"><?= $block->escapeHtml(__('Shop Pants')) ?></span>
+                </span>
+            </a>
+
+            <a href="<?= $cat('tees-all') ?>"
+               class="group block-promo home-t-shirts relative flex min-h-[200px] flex-col overflow-hidden rounded-lg bg-[#ffdd16] text-inherit no-underline sm:min-h-[240px] sm:flex-row md:col-span-2 md:col-start-2 md:row-start-1 md:min-h-[276px]">
+                <span class="image flex flex-1 items-center justify-center p-4 sm:p-5">
+                    <img src="<?= $block->escapeUrl($media . 'home-t-shirts.png') ?>"
+                         alt=""
+                         class="max-h-full max-w-full object-contain"
+                         loading="lazy"/>
+                </span>
+                <span class="content relative z-10 flex max-w-full flex-1 flex-col justify-center gap-2 p-5 text-neutral-900 sm:max-w-[45%]">
+                    <strong class="title text-lg font-semibold leading-snug sm:text-xl"><?= $block->escapeHtml(__('Even more ways to mix and match')) ?></strong>
+                    <span class="info text-sm"><?= $block->escapeHtml(__('Buy 3 Luma tees get a 4th free')) ?></span>
+                    <span class="mt-2 inline-flex items-center gap-1 text-sm font-semibold underline-offset-4 group-hover:underline"><?= $block->escapeHtml(__('Shop Tees')) ?></span>
+                </span>
+            </a>
+
+            <a href="<?= $cat('erin-recommends') ?>"
+               class="group block-promo home-erin relative block min-h-[220px] overflow-hidden rounded-lg text-inherit no-underline md:col-start-2 md:row-start-2 md:min-h-[373px]">
+                <img src="<?= $block->escapeUrl($media . 'home-erin.jpg') ?>"
+                     alt=""
+                     class="absolute inset-0 z-0 h-full w-full object-cover"
+                     loading="lazy"/>
+                <span class="content absolute right-0 top-0 z-10 flex max-w-[60%] flex-col gap-2 p-5 text-white drop-shadow">
+                    <strong class="title text-xl font-semibold"><?= $block->escapeHtml(__('Take it from Erin')) ?></strong>
+                    <span class="info text-sm"><?= $block->escapeHtml(__('Luma founder Erin Renny shares her favorites!')) ?></span>
+                    <span class="mt-2 inline-flex items-center gap-1 text-sm font-semibold underline-offset-4 group-hover:underline"><?= $block->escapeHtml(__('Shop Erin Recommends')) ?></span>
+                </span>
+            </a>
+
+            <a href="<?= $cat('performance-fabrics') ?>"
+               class="group block-promo home-performance relative block min-h-[300px] overflow-hidden rounded-lg text-inherit no-underline md:col-start-3 md:row-start-2 md:min-h-[380px]">
+                <img src="<?= $block->escapeUrl($media . 'home-performance.jpg') ?>"
+                     alt=""
+                     class="absolute inset-0 z-0 h-full w-full object-cover"
+                     loading="lazy"/>
+                <span class="content absolute left-4 right-4 top-4 z-10 flex flex-col gap-2 rounded-xl border border-neutral-200/90 bg-white p-5 text-neutral-800 shadow-lg sm:left-6 sm:right-6 sm:top-6">
+                    <strong class="title text-xl font-semibold text-neutral-900"><?= $block->escapeHtml(__('Science meets performance')) ?></strong>
+                    <span class="info text-sm text-neutral-700"><?= $block->escapeHtml(__('Wicking to raingear, Luma covers you')) ?></span>
+                    <span class="mt-2 inline-flex items-center gap-1 text-sm font-semibold text-primary underline-offset-4 group-hover:underline"><?= $block->escapeHtml(__('Shop Performance')) ?></span>
+                </span>
+            </a>
+        </div>
+
+        <!-- Eco band -->
+        <a href="<?= $cat('eco-friendly') ?>"
+           class="group block-promo home-eco relative block min-h-[200px] overflow-hidden rounded-lg text-inherit no-underline md:min-h-[274px]">
+            <img src="<?= $block->escapeUrl($media . 'home-eco.jpg') ?>"
+                 alt=""
+                 class="absolute inset-0 z-0 h-full w-full object-cover"
+                 loading="lazy"/>
+            <span class="content absolute left-4 top-4 z-10 flex w-[min(92%,28rem)] max-w-xl flex-col gap-2 rounded-xl border border-neutral-200/90 bg-white p-6 text-left text-neutral-800 shadow-xl sm:left-8 sm:top-8 md:left-10 md:top-11 md:w-auto">
+                <strong class="title text-xl font-semibold text-neutral-900 sm:text-2xl"><?= $block->escapeHtml(__('Twice around, twice as nice')) ?></strong>
+                <span class="info text-sm text-neutral-700"><?= $block->escapeHtml(__('Find conscientious, comfy clothing in our eco-friendly collection')) ?></span>
+                <span class="mt-2 inline-flex items-center gap-1 text-sm font-semibold text-primary underline-offset-4 group-hover:underline"><?= $block->escapeHtml(__('Shop Eco-Friendly')) ?></span>
+            </span>
+        </a>
+
+        <!-- Hot Sellers: child block home.hot.products (cms_home_hot_products) -->
+        <section class="hot-sellers w-full space-y-3" aria-label="<?= $block->escapeHtmlAttr(__('Hot Sellers')) ?>">
+            <div class="content-heading">
+                <h2 class="text-2xl font-light text-neutral-900"><?= $block->escapeHtml(__('Hot Sellers')) ?></h2>
+                <p class="text-sm text-neutral-600"><?= $block->escapeHtml(__('Here is what\'s trending on Luma right now')) ?></p>
+            </div>
+            <?= $block->getChildHtml('home.hot.products') ?>
+        </section>
+
+    </div>
+
+    <?php /* cms_page: Admin HTML/widgets below promos */ ?>
+    <?= $block->getChildHtml('cms_page') ?>
+</div>

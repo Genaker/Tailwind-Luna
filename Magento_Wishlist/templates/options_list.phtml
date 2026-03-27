@@ -1,0 +1,31 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+/** @var \Magento\Wishlist\Block\Customer\Wishlist\Item\Options $block */
+?>
+
+<?php $options = $block->getOptionList(); ?>
+<?php if ($options) : ?>
+<div class="inline-block w-full product-item-tooltip">
+    <span class="inline-flex items-center justify-center gap-2 rounded-md text-sm font-semibold border border-neutral-300 px-4 py-2 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600 disabled:opacity-50 disabled:pointer-events-none toggle"><?= $block->escapeHtml(__('See Details')) ?></span>
+    <div class="inline-block content">
+        <strong class="text-sm text-neutral-600"><?= $block->escapeHtml(__('Options Details')) ?></strong>
+        <dl>
+            <?php foreach ($options as $option) : ?>
+            <dt class="block text-sm font-medium text-neutral-800 mb-1"><?= $block->escapeHtml($option['label']) ?></dt>
+            <dd class="values text-sm text-neutral-700">
+                <?php if (is_array($option['value'])) : ?>
+                    <?= /* @noEscape */ nl2br(implode("\n", $option['value'])) ?>
+                <?php else : ?>
+                    <?= /* @noEscape */ $option['value'] ?>
+                <?php endif; ?>
+            </dd>
+            <?php endforeach; ?>
+        </dl>
+    </div>
+</div>
+<?php endif ?>

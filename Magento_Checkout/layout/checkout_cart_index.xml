@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Cart + checkout flow CSS (web/css/checkout.css) and flex utilities on cart-container
+ * so the summary is row 2 (same visual order as desktop: form first, summary second).
+ * Checkout CSS: Genaker_ThemeTileWindLuna Block\ResolveCss prefers css/checkout.min.css when present.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="head.additional">
+            <block class="Genaker\ThemeTileWindLuna\Block\ResolveCss" name="genaker.resolve_css.checkout.cart" after="-">
+                <arguments>
+                    <argument name="css_path" xsi:type="string">css/checkout.css</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+        <referenceContainer name="checkout.cart.container" htmlClass="cart-container flex flex-col gap-6 md:flex-row md:flex-wrap md:items-start md:gap-x-8"/>
+        <!-- Slot after line items (gift/discount widgets): wrapper + class so flex order works on mobile. -->
+        <referenceContainer name="checkout.cart.widget" htmlTag="div" htmlClass="cart-slot-after-items"/>
+        <!-- Core DOM order is cart.summary before the grid — move summary after the form so line items + actions come first (matches flex order + a11y). -->
+        <move element="cart.summary" destination="checkout.cart.container" after="checkout.cart.form"/>
+        <!-- “More Choices” last in the main column: not inside .cart-container (avoids flex/order fighting summary/discount). -->
+        <move element="checkout.cart.crosssell" destination="content" after="checkout.cart"/>
+    </body>
+</page>
+

@@ -1,0 +1,74 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+
+/** @var $block \Magento\Sales\Block\Order\Recent */
+?>
+<div class="mb-6 mb-8">
+<?php
+    $_orders = $block->getOrders();
+    $count = count($_orders);
+?>
+    <div class="order mb-3 flex flex-wrap items-center justify-between gap-3 border-b border-neutral-200 pb-3 text-lg font-semibold text-neutral-900">
+        <strong class="font-semibold"><?= $block->escapeHtml(__('Recent Orders')) ?></strong>
+        <?php if ($count > 0) : ?>
+            <a class="view inline-flex items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-semibold text-neutral-900 transition-colors hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"
+               href="<?= $block->escapeUrl($block->getUrl('sales/order/history')) ?>">
+                <span><?= $block->escapeHtml(__('View All')) ?></span>
+            </a>
+        <?php endif; ?>
+    </div>
+    <div class="text-sm text-neutral-700">
+    <?= $block->getChildHtml() ?>
+    <?php if ($count > 0) : ?>
+        <div class="orders-recent overflow-x-auto rounded-lg border border-neutral-200">
+            <table class="table data table-order-items recent w-full border-collapse text-sm" id="my-orders-table">
+                <caption class="sr-only"><?= $block->escapeHtml(__('Recent Orders')) ?></caption>
+                <thead>
+                    <tr class="border-b border-neutral-200 bg-neutral-50">
+                        <th scope="col" class="id px-4 py-3 text-left text-sm font-semibold text-neutral-800"><?= $block->escapeHtml(__('Order #')) ?></th>
+                        <th scope="col" class="date px-4 py-3 text-left text-sm font-semibold text-neutral-800"><?= $block->escapeHtml(__('Date')) ?></th>
+                        <th scope="col" class="shipping px-4 py-3 text-left text-sm font-semibold text-neutral-800"><?= $block->escapeHtml(__('Ship To')) ?></th>
+                        <th scope="col" class="total px-4 py-3 text-left text-sm font-semibold text-neutral-800"><?= $block->escapeHtml(__('Order Total')) ?></th>
+                        <th scope="col" class="status px-4 py-3 text-left text-sm font-semibold text-neutral-800"><?= $block->escapeHtml(__('Status')) ?></th>
+                        <th scope="col" class="px-4 py-3 text-right text-sm font-semibold text-neutral-800"><?= $block->escapeHtml(__('Action')) ?></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($_orders as $_order) : ?>
+                        <tr class="border-b border-neutral-200 last:border-b-0">
+                            <td data-th="<?= $block->escapeHtml(__('Order #')) ?>" class="id px-4 py-3 align-top text-neutral-800"><?= $block->escapeHtml($_order->getRealOrderId()) ?></td>
+                            <td data-th="<?= $block->escapeHtml(__('Date')) ?>" class="date px-4 py-3 align-top text-neutral-700"><?= $block->escapeHtml($block->formatDate($_order->getCreatedAt())) ?></td>
+                            <td data-th="<?= $block->escapeHtml(__('Ship To')) ?>" class="shipping px-4 py-3 align-top text-neutral-700"><?= $_order->getShippingAddress() ? $block->escapeHtml($_order->getShippingAddress()->getName()) : "&nbsp;" ?></td>
+                            <td data-th="<?= $block->escapeHtml(__('Order Total')) ?>" class="total px-4 py-3 align-top font-medium text-neutral-900"><?= /* @noEscape */ $_order->formatPrice($_order->getGrandTotal()) ?></td>
+                            <td data-th="<?= $block->escapeHtml(__('Status')) ?>" class="status px-4 py-3 align-top text-neutral-700"><?= $block->escapeHtml($_order->getStatusLabel()) ?></td>
+                            <td data-th="<?= $block->escapeHtml(__('Action')) ?>" class="px-4 py-3 align-top text-right">
+                                <div class="flex flex-wrap items-center justify-end gap-2">
+                                <a href="<?= $block->escapeUrl($block->getViewUrl($_order)) ?>" class="view inline-flex items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-semibold text-neutral-900 transition-colors hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600">
+                                    <span><?= $block->escapeHtml(__('View Order')) ?></span>
+                                </a>
+                                <?php if ($this->helper(\Magento\Sales\Helper\Reorder::class)
+                                    ->canReorder($_order->getEntityId())
+                                ) : ?>
+                                    <a href="#" data-post='<?= /* @noEscape */
+                                    $this->helper(\Magento\Framework\Data\Helper\PostHelper::class)
+                                        ->getPostData($block->getReorderUrl($_order))
+                                    ?>' class="order inline-flex items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-semibold text-neutral-900 transition-colors hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600">
+                                        <span><?= $block->escapeHtml(__('Reorder')) ?></span>
+                                    </a>
+                                <?php endif ?>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    <?php else : ?>
+        <div class="mb-4 rounded-md border text-sm border-blue-200 bg-blue-50 text-blue-900 empty"><span><?= $block->escapeHtml(__('You have placed no orders.')) ?></span></div>
+    <?php endif; ?>
+    </div>
+</div>

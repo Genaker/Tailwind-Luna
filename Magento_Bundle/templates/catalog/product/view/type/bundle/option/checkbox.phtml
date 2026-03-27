@@ -1,0 +1,69 @@
+<?php
+/**
+ * Copyright 2024 Adobe
+ * All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+
+<?php
+/**
+ * @var $block \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Checkbox
+ * @var \Magento\Framework\Escaper $escaper
+ */
+?>
+<?php $_option = $block->getOption() ?>
+<?php $_selections = $_option->getSelections() ?>
+<?php $inputClass = 'checkbox product bundle option bundle-option-' . $escaper->escapeHtmlAttr($_option->getId()) ?>
+<?php $inputId = 'bundle-option-' . $escaper->escapeHtmlAttr($_option->getId()) ?>
+<?php $inputName = 'bundle_option[' . $escaper->escapeHtmlAttr($_option->getId()) . ']' ?>
+<?php $dataValidation = 'data-validate="{\'validate-one-required-by-name\':\'input[name^=&quot;bundle_option[' .
+    $escaper->escapeHtmlAttr($_option->getId()) . ']&quot;]:checked\'}"' ?>
+
+<div class="field option <?= ($_option->getRequired()) ? ' required': '' ?>">
+    <label class="block text-sm font-medium text-neutral-800 mb-1">
+        <span><?= $escaper->escapeHtml($_option->getTitle()) ?></span>
+    </label>
+    <div class="mt-1">
+        <div class="options-list border-l border-neutral-200 pl-4">
+            <?php if ($block->showSingle()): ?>
+                <?= /* @noEscape */ $block->getSelectionQtyTitlePrice($_selections[0]) ?>
+                <?= /* @noEscape */ $block->getTierPriceRenderer()->renderTierPrice($_selections[0]) ?>
+                <input type="hidden"
+                       class="bundle-option-<?= $escaper->escapeHtmlAttr($_option->getId()) ?>  product bundle option"
+                       name="bundle_option[<?= $escaper->escapeHtml($_option->getId()) ?>]"
+                       value="<?= $escaper->escapeHtmlAttr($_selections[0]->getSelectionId()) ?>"/>
+            <?php else: ?>
+                <?php foreach ($_selections as $selection): ?>
+                    <?php $sectionId = $selection->getSelectionId() ?>
+                    <div class="mb-3 flex items-start gap-2">
+                        <input class="<?=/* @noEscape */ $inputClass ?> change-container-classname mt-0.5 h-4 w-4 shrink-0 rounded border-neutral-300 text-blue-600 accent-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-0"
+                           id="<?=/* @noEscape */ $inputId . '-' . $escaper->escapeHtmlAttr($sectionId)?>"
+                           type="checkbox"
+                           <?php if ($_option->getRequired()): ?>
+                                <?= /* @noEscape */ $dataValidation ?>
+                           <?php endif;?>
+                           name="<?=/* @noEscape */ $inputName .'['. $escaper->escapeHtmlAttr($sectionId)?>]"
+                           data-selector="<?= /* @noEscape */ $inputName.'['.$escaper->escapeHtmlAttr($sectionId)?>]"
+                            <?php if ($block->isSelected($selection)): ?>
+                                <?= ' checked="checked"' ?>
+                            <?php endif; ?>
+                            <?php if (!$selection->isSaleable()): ?>
+                                <?= ' disabled="disabled"' ?>
+                            <?php endif; ?>
+                           value="<?= $escaper->escapeHtmlAttr($sectionId) ?>"
+                        data-errors-msg-box="#validation-message-box-<?=$escaper->escapeHtmlAttr($_option->getId())?>"/>
+                        <label class="mb-1 block min-w-0 flex-1 text-sm font-medium text-neutral-800"
+                               for="<?= /* @noEscape */ $inputId . '-' . $escaper->escapeHtmlAttr($sectionId) ?>">
+                            <span class="block"><?= /* @noEscape */ $block->getSelectionQtyTitlePrice($selection) ?></span>
+                            <span class="mt-1 block font-normal text-neutral-700"><?= /* @noEscape */ $block->getTierPriceRenderer()->renderTierPrice($selection) ?></span>
+                        </label>
+                    </div>
+
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </div>
+        <div id="bundle-option-<?= $escaper->escapeHtmlAttr($_option->getId()) ?>-container"></div>
+        <div id="validation-message-box-<?= $escaper->escapeHtmlAttr($_option->getId()) ?>"></div>
+    </div>
+</div>

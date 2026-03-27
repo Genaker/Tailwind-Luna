@@ -1,0 +1,17 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+/* @var $block \Magento\Sales\Block\Order\Creditmemo */
+?>
+<div class="order-details-items creditmemo">
+    <?= $block->getChildHtml('creditmemo_items') ?>
+    <div class="flex flex-wrap items-center justify-between gap-4 py-4 clear-both">
+        <a href="<?= $block->escapeUrl($block->getBackUrl()) ?>" class="inline-flex items-center justify-center gap-2 rounded-md text-sm font-semibold border border-neutral-300 px-4 py-2 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600 disabled:opacity-50 disabled:pointer-events-none text-neutral-800 hover:bg-neutral-50 back">
+            <span><?= $block->escapeHtml($block->getBackTitle()) ?></span>
+        </a>
+    </div>
+</div>

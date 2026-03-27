@@ -1,0 +1,42 @@
+<?php
+/**
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+/** @var \Magento\Sales\Block\Order\Info\Buttons $block */
+/** @var \Magento\OrderCancellationUi\ViewModel\Config $viewModel */
+$viewModel = $block->getViewModel();
+?>
+<div class="flex flex-wrap gap-2">
+    <?php $_order = $block->getOrder() ?>
+    <?php if ($this->helper(\Magento\Sales\Helper\Reorder::class)->canReorder($_order->getEntityId())) : ?>
+        <a href="#" data-post='<?=
+        /* @noEscape */ $this->helper(\Magento\Framework\Data\Helper\PostHelper::class)
+            ->getPostData($block->getReorderUrl($_order))
+        ?>' class="order inline-flex items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-semibold text-neutral-900 transition-colors hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600">
+            <span><?= $block->escapeHtml(__('Reorder')) ?></span>
+        </a>
+    <?php endif ?>
+    <?php if ($viewModel->canCancel($_order->getEntityId())) : ?>
+        <a href="#" class="cancel-order inline-flex items-center justify-center gap-2 rounded-md border border-red-200 bg-white px-4 py-2 text-sm font-semibold text-red-800 transition-colors hover:bg-red-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-red-600"
+            id="cancel-order-<?= (int) $_order->getId() ?>"
+            data-mage-init='{"cancelOrderModal":{"url":"<?= $block->escapeJs($block->getBaseUrl()) ?>","order_id":"<?= $block->escapeJs((string) $_order->getId()) ?>"}}'>
+            <span><?= $block->escapeHtml(__('Cancel Order')) ?></span>
+        </a>
+    <?php endif ?>
+    <a href="<?= $block->escapeUrl($block->getPrintUrl($_order)) ?>"
+       class="print inline-flex items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-semibold text-neutral-900 transition-colors hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"
+       target="_blank"
+       rel="noopener">
+        <span><?= $block->escapeHtml(__('Print Order')) ?></span>
+    </a>
+    <?= $block->getChildHtml() ?>
+</div>
+
+<?php if ($viewModel->canCancel($_order->getEntityId())) : ?>
+    <?= $block->getLayout()->createBlock(\Magento\Framework\View\Element\Template::class)->setOrder($_order)
+        ->setReasons($viewModel->getCancellationReasons($_order->getEntityId()))
+        ->setTemplate('Magento_OrderCancellationUi::cancel-order-modal.phtml')->toHtml() ?>
+<?php endif ?>

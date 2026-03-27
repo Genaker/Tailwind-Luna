@@ -1,0 +1,21 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+// @deprecated
+/** @var \Magento\Store\Block\Switcher $block */
+?>
+<?php if (count($block->getStores()) > 1) : ?>
+<div class="form-language mb-4">
+    <label for="select-language" class="block text-sm font-medium text-neutral-800 mb-1"><?= $block->escapeHtml(__('Your Language:')) ?></label>
+    <select id="select-language" title="<?= $block->escapeHtmlAttr(__('Your Language')) ?>" onchange="window.location.href=this.value" class="flags w-full max-w-xs rounded-md border border-neutral-300 px-3 py-2 text-sm bg-white">
+    <?php foreach ($block->getStores() as $_lang) : ?>
+        <?php $_selected = ($_lang->getId() == $block->getCurrentStoreId()) ? ' selected="selected"' : '' ?>
+        <option value="<?= $block->escapeUrl($_lang->getCurrentUrl()) ?>" style="background-image:url('<?= $block->escapeUrl($block->getViewFileUrl('images/flags/flag_' . $_lang->getCode() . '.gif')) ?>');"<?= /* @noEscape */ $_selected ?>><?= $block->escapeHtml($_lang->getName()) ?></option>
+    <?php endforeach; ?>
+    </select>
+</div>
+<?php endif; ?>

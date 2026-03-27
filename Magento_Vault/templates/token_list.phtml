@@ -1,0 +1,27 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\Vault\Block\Customer\AccountTokens $block */
+/** @var \Magento\Framework\Escaper $escaper */
+$tokens = $block->getPaymentTokens();
+?>
+<?php if (count($tokens) !== 0): ?>
+    <div class="my-credit-cards overflow-x-auto rounded-lg border border-neutral-200">
+        <table class="table data table-credit-cards w-full border-collapse text-sm" id="token-list-table">
+            <thead>
+            <tr class="border-b border-neutral-200 bg-neutral-50">
+                <th scope="col" class="px-4 py-3 text-left text-sm font-semibold text-neutral-800"><?= $escaper->escapeHtml(__('Account')) ?></th>
+                <th scope="col" class="px-4 py-3 text-right text-sm font-semibold text-neutral-800"><?= $escaper->escapeHtml(__('Action')) ?></th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($tokens as $token): ?>
+                <?= /* @noEscape */ $block->renderTokenHtml($token) ?>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+<?php endif; ?>

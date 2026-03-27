@@ -1,0 +1,21 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+
+/** @var $block \Magento\Tax\Block\Item\Price\Renderer */
+?>
+<?php $_item = $block->getItem() ?>
+    <?php if ($block->displayPriceInclTax() || $block->displayBothPrices()) : ?>
+        <span class="price-including-tax block w-full text-sm tabular-nums font-medium text-neutral-900" data-label="<?= $block->escapeHtmlAttr(__('Incl. Tax')) ?>">
+            <?php $_incl = $_item->getPriceInclTax(); ?>
+            <?= /* @noEscape */ $this->helper(\Magento\Checkout\Helper\Data::class)->formatPrice($_incl) ?>
+        </span>
+    <?php endif; ?>
+    <?php if ($block->displayPriceExclTax() || $block->displayBothPrices()) : ?>
+        <span class="price-excluding-tax block w-full text-sm tabular-nums font-medium text-neutral-900" data-label="<?= $block->escapeHtmlAttr(__('Excl. Tax')) ?>">
+            <?= /* @noEscape */ $this->helper(\Magento\Checkout\Helper\Data::class)->formatPrice($_item->getCalculationPrice()) ?>
+        </span>
+    <?php endif; ?>

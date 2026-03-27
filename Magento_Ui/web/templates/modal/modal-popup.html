@@ -1,0 +1,62 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ *
+ * Win Luna: Tailwind utilities on the shell for layout; stacking fixed in
+ * web/tailwind/modules/modals/modals.scss (!important beats JS inline z-index: 1).
+ */
+-->
+
+<aside role="dialog"
+       class="modal-<%- data.type %> <%- data.modalClass %>
+               <% if(data.responsive){ %><%- data.responsiveClass %><% } %>
+               <% if(data.innerScroll){ %><%- data.innerScrollClass %><% } %>
+               fixed inset-0 flex min-h-full items-center justify-center overflow-y-auto p-4 sm:p-6"
+       <% if(data.title){ %> aria-labelledby="modal-title-<%- data.id %>"<% } %>
+       aria-describedby="modal-content-<%- data.id %>"
+       data-role="modal"
+       data-type="<%- data.type %>"
+       tabindex="0">
+    <div data-role="focusable-start" tabindex="0"></div>
+    <div class="modal-inner-wrap"
+         data-role="focusable-scope">
+        <header class="modal-header">
+            <% if(data.title || data.subTitle){ %>
+            <h1 id="modal-title-<%- data.id %>" class="modal-title"
+                data-role="title">
+                <% if(data.title){ %>
+                    <%= data.title %>
+                <% } %>
+
+                <% if(data.subTitle){ %>
+                <span class="modal-subtitle"
+                      data-role="subTitle">
+                    <%= data.subTitle %>
+                </span>
+                <% } %>
+            </h1>
+            <% } %>
+            <button
+                class="action-close"
+                data-role="closeBtn"
+                type="button">
+                <span><%= data.closeText %></span>
+            </button>
+        </header>
+        <div id="modal-content-<%- data.id %>"
+            class="modal-content"
+            data-role="content"></div>
+        <% if(data.buttons.length > 0){ %>
+        <footer class="modal-footer">
+            <% _.each(data.buttons, function(button) { %>
+            <button
+                class="<%- button.class %>"
+                type="button"
+                data-role="action"><span><%= button.text %></span></button>
+            <% }); %>
+        </footer>
+        <% } %>
+    </div>
+    <div data-role="focusable-end" tabindex="0"></div>
+</aside>

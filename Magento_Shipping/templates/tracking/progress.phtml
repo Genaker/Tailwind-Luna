@@ -1,0 +1,47 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+/** @var \Magento\Framework\View\Element\Template $block */
+$parentBlock = $block->getParentBlock();
+$track = $block->getData('track');
+?>
+<div class="overflow-x-auto rounded-lg border border-neutral-200">
+    <table class="table data order tracking w-full border-collapse text-sm" id="track-history-table-<?= $block->escapeHtmlAttr((string) $track->getTracking()) ?>">
+        <caption class="sr-only"><?= $block->escapeHtml(__('Track history')) ?></caption>
+        <thead>
+        <tr class="border-b border-neutral-200 bg-neutral-50">
+            <th class="location px-4 py-3 text-left text-sm font-semibold text-neutral-800" scope="col"><?= $block->escapeHtml(__('Location')) ?></th>
+            <th class="date px-4 py-3 text-left text-sm font-semibold text-neutral-800" scope="col"><?= $block->escapeHtml(__('Date')) ?></th>
+            <th class="time px-4 py-3 text-left text-sm font-semibold text-neutral-800" scope="col"><?= $block->escapeHtml(__('Local Time')) ?></th>
+            <th class="px-4 py-3 text-left text-sm font-semibold text-neutral-800" scope="col"><?= $block->escapeHtml(__('Description')) ?></th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($track->getProgressdetail() as $detail) : ?>
+            <?php $detailDate = (!empty($detail['deliverydate']) ?
+                $parentBlock->formatDeliveryDate($detail['deliverydate'] . ' ' . $detail['deliverytime']) :
+                ''); ?>
+            <?php $detailTime = (!empty($detail['deliverytime']) ?
+                $parentBlock->formatDeliveryTime($detail['deliverytime'], $detail['deliverydate']) :
+                ''); ?>
+            <tr class="border-b border-neutral-200 last:border-b-0">
+                <td data-th="<?= $block->escapeHtmlAttr(__('Location')) ?>" class="location px-4 py-3 align-top">
+                    <?= (!empty($detail['deliverylocation']) ? $block->escapeHtml($detail['deliverylocation']) : '') ?>
+                </td>
+                <td data-th="<?= $block->escapeHtmlAttr(__('Date')) ?>" class="date px-4 py-3 align-top tabular-nums">
+                    <?= /* @noEscape */ $detailDate ?>
+                </td>
+                <td data-th="<?= $block->escapeHtmlAttr(__('Local Time')) ?>" class="time px-4 py-3 align-top tabular-nums">
+                    <?= /* @noEscape */ $detailTime ?></td>
+                <td data-th="<?= $block->escapeHtmlAttr(__('Description')) ?>" class="px-4 py-3 align-top text-neutral-700">
+                    <?= (!empty($detail['activity']) ? $block->escapeHtml($detail['activity']) : '') ?>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,109 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * @var \Magento\Paypal\Block\Billing\Agreements $block
+ */
+
+$billingAgreements = $block->getBillingAgreements();
+$paymentMethods = $block->getWizardPaymentMethodOptions();
+?>
+<div class="account-billing-agreements">
+    <?php if (count($billingAgreements) > 0) : ?>
+        <?= $block->getChildHtml('pager') ?>
+        <div class="billing-agreements overflow-x-auto rounded-lg border border-neutral-200">
+            <table id="billing-agreements" class="table data table-billing-agreements w-full border-collapse text-sm">
+                <caption class="sr-only"><?= $block->escapeHtml(__('Billing Agreements')) ?></caption>
+                <thead>
+                <tr class="border-b border-neutral-200 bg-neutral-50">
+                    <th scope="col" class="id px-4 py-3 text-left text-sm font-semibold text-neutral-800"><?= $block->escapeHtml(__('Reference ID')) ?></th>
+                    <th scope="col" class="status px-4 py-3 text-left text-sm font-semibold text-neutral-800"><?= $block->escapeHtml(__('Status')) ?></th>
+                    <th scope="col" class="created px-4 py-3 text-left text-sm font-semibold text-neutral-800"><?= $block->escapeHtml(__('Created At')) ?></th>
+                    <th scope="col" class="updated px-4 py-3 text-left text-sm font-semibold text-neutral-800"><?= $block->escapeHtml(__('Updated At')) ?></th>
+                    <th scope="col" class="payment px-4 py-3 text-left text-sm font-semibold text-neutral-800"><?= $block->escapeHtml(__('Payment Method')) ?></th>
+                    <th scope="col" class="px-4 py-3 text-right text-sm font-semibold text-neutral-800"><?= $block->escapeHtml(__('Action')) ?></th>
+                </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($billingAgreements as $item) : ?>
+                        <tr class="border-b border-neutral-200 last:border-b-0">
+                            <td data-th="<?= $block->escapeHtmlAttr(__('Reference ID')) ?>" class="id px-4 py-3 align-top text-neutral-800">
+                                <?= $block->escapeHtml($block->getItemValue($item, 'reference_id')) ?>
+                            </td>
+                            <td data-th="<?= $block->escapeHtmlAttr(__('Status')) ?>" class="status px-4 py-3 align-top text-neutral-700">
+                                <?= $block->escapeHtml($block->getItemValue($item, 'status')) ?>
+                            </td>
+                            <td data-th="<?= $block->escapeHtmlAttr(__('Created At')) ?>" class="created px-4 py-3 align-top text-neutral-700">
+                                <?= $block->escapeHtml($block->getItemValue($item, 'created_at')) ?>
+                            </td>
+                            <td data-th="<?= $block->escapeHtmlAttr(__('Updated At')) ?>" class="updated px-4 py-3 align-top text-neutral-700">
+                                <?= $block->escapeHtml($block->getItemValue($item, 'updated_at')) ?>
+                            </td>
+                            <td data-th="<?= $block->escapeHtmlAttr(__('Payment Method')) ?>" class="payment px-4 py-3 align-top text-neutral-800">
+                                <?= $block->escapeHtml($block->getItemValue($item, 'payment_method_label')) ?>
+                            </td>
+                            <td data-th="<?= $block->escapeHtmlAttr(__('Action')) ?>" class="px-4 py-3 align-top text-right">
+                                <a href="<?= $block->escapeUrl($block->getItemValue($item, 'edit_url')) ?>"
+                                   class="view inline-flex items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-semibold text-neutral-900 transition-colors hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600">
+                                    <span><?= $block->escapeHtml(__('View')) ?></span>
+                                </a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    <?php else : ?>
+        <div class="mb-4 rounded-lg border border-neutral-200 bg-neutral-50 p-4 text-sm text-neutral-700 empty">
+            <span><?= $block->escapeHtml(__('There are no billing agreements yet.')) ?></span>
+        </div>
+    <?php endif; ?>
+
+    <?php if ($paymentMethods) : ?>
+        <form action="<?= $block->escapeUrl($block->getCreateUrl()) ?>" method="post"
+              class="form form-new-agreement">
+            <fieldset class="m-0 min-w-0 space-y-4 border-0 p-0">
+                <legend class="mb-0 text-base font-semibold text-neutral-900">
+                    <span><?= $block->escapeHtml(__('New Billing Agreement')) ?></span>
+                </legend>
+                <p class="text-sm text-neutral-600">
+                    <?= $block->escapeHtml(__('You will be redirected to the payment system website.')) ?>
+                </p>
+
+                <div class="payment method mb-0">
+                    <div class="mt-1">
+                        <select id="payment_method" name="payment_method"
+                                class="w-full max-w-xl rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                            <option value=""><?= $block->escapeHtml(__('-- Please Select --')) ?></option>
+                            <?php foreach ($paymentMethods as $code => $title) : ?>
+                                <option value="<?= $block->escapeHtmlAttr($code) ?>">
+                                    <?= $block->escapeHtml($title) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="clear-both flex flex-wrap items-center justify-between gap-4 py-4">
+                    <button type="submit"
+                            class="create inline-flex items-center justify-center gap-2 rounded-md border border-blue-600 bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600 disabled:pointer-events-none disabled:opacity-50">
+                        <span><?= $block->escapeHtml(__('Create...')) ?></span>
+                    </button>
+                    <a href="<?= $block->escapeUrl($block->getBackUrl()) ?>"
+                       class="back inline-flex items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-semibold text-neutral-900 transition-colors hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600">
+                        <span><?= $block->escapeHtml(__('Back')) ?></span>
+                    </a>
+                </div>
+            </fieldset>
+        </form>
+    <?php else : ?>
+    <div class="flex flex-wrap items-center justify-between gap-4 py-4 clear-both">
+        <a href="<?= $block->escapeUrl($block->getBackUrl()) ?>"
+           class="back inline-flex items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-semibold text-neutral-900 transition-colors hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600">
+            <span><?= $block->escapeHtml(__('Back')) ?></span>
+        </a>
+    </div>
+    <?php endif; ?>
+</div>

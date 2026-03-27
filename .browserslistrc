@@ -1,0 +1,9 @@
+# CSS build (Tailwind + Autoprefixer). No legacy IE / Opera Mini; trims unused vendor prefixes.
+# See: https://github.com/browserslist/browserslist
+
+>= 0.5%
+last 2 versions
+not dead
+not op_mini all
+not ie <= 11
+not ie_mob <= 11

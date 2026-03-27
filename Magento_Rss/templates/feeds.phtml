@@ -1,0 +1,41 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+/** @var \Magento\Rss\Block\Feeds $block */
+?>
+<div class="overflow-x-auto rounded-lg border border-neutral-200">
+<table class="table data rss w-full border-collapse text-sm">
+    <caption class="sr-only"><?= $block->escapeHtml(__('Feed')) ?></caption>
+    <tbody>
+        <tr>
+            <th colspan="2" scope="colgroup" class="px-4 py-3 text-left text-sm font-semibold text-neutral-800 bg-neutral-50 border-b border-neutral-200"><?= $block->escapeHtml(__('Miscellaneous Feeds')) ?></th>
+        </tr>
+    <?php foreach ($block->getFeeds() as $feed) : ?>
+        <?php if (!isset($feed['group'])) : ?>
+        <tr class="border-b border-neutral-200 last:border-b-0">
+            <td class="px-4 py-3 align-top text-neutral-800 feed"><?= $block->escapeHtml($feed['label']) ?></td>
+            <td class="px-4 py-3 align-top">
+                <a href="<?= $block->escapeUrl($feed['link']) ?>" class="inline-flex items-center justify-center gap-2 rounded-md text-sm font-semibold border border-neutral-300 px-4 py-2 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600 text-neutral-800 hover:bg-neutral-50 get"><?= $block->escapeHtml(__('Get Feed')) ?></a>
+            </td>
+        </tr>
+        <?php else : ?>
+            <tr>
+                <th colspan="2" scope="colgroup" class="px-4 py-3 text-left text-sm font-semibold text-neutral-800 bg-neutral-50 border-b border-neutral-200"><?= $block->escapeHtml($feed['group']) ?></th>
+            </tr>
+            <?php foreach ($feed['feeds'] as $item) :?>
+                <tr class="border-b border-neutral-200 last:border-b-0">
+                    <td class="px-4 py-3 align-top feed text-neutral-800"><?= $block->escapeHtml($item['label']) ?></td>
+                    <td class="px-4 py-3 align-top">
+                        <a href="<?= $block->escapeUrl($item['link']) ?>" class="inline-flex items-center justify-center gap-2 rounded-md text-sm font-semibold border border-neutral-300 px-4 py-2 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600 text-neutral-800 hover:bg-neutral-50 get"><?= $block->escapeHtml(__('Get Feed')) ?></a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+</div>

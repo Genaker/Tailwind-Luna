@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!--
+  PDP hero (#product-info): gallery + buy column.
+
+  Preserve core Magento container htmlClass (verbatim from Catalog — theme merge replaces htmlClass,
+  so core tokens must be repeated first, then Tailwind):
+
+  Magento_Catalog/view/frontend/layout/catalog_product_view.xml
+    • product.info.media  → product media
+    • product.info.main   → product-info-main
+
+  Section product.view.hero is theme-only (no core counterpart).
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <remove src="mage/gallery/gallery.css"/>
+        <script src="js/gallery-swatch-bridge.js" defer="defer"/>
+    </head>
+    <body>
+        <referenceContainer name="skip_gallery_after.wrapper"
+                            htmlClass="action-skip-wrapper hidden"/>
+        <referenceContainer name="content">
+            <container name="product.view.hero"
+                       htmlTag="section"
+                       htmlId="product-info"
+                       htmlClass="product-view-hero grid w-full min-w-0 grid-cols-1 gap-6 lg:grid-cols-2 lg:items-start"
+                       before="product.info.details"/>
+        </referenceContainer>
+        <!-- Core: product media (+ theme layout utilities) -->
+        <referenceContainer name="product.info.media"
+                            htmlClass="product media relative w-full min-w-0 lg:flex lg:flex-col lg:items-center"/>
+        <!-- Core: product-info-main (+ theme layout utilities) -->
+        <referenceContainer name="product.info.main"
+                            htmlClass="product-info-main w-full min-w-0"/>
+        <move element="product.info.media" destination="product.view.hero" before="-"/>
+        <move element="product.info.main" destination="product.view.hero" after="product.info.media"/>
+        <!-- PDP: stack wishlist/compare under qty+add-to-cart with consistent gap (Tailwind on container). -->
+        <referenceContainer name="product.info.social"
+                            htmlClass="product-social-links mt-4 flex flex-col gap-3"/>
+        <!-- PDP gallery stage: child block (see gallery.phtml) — not raw include -->
+        <referenceBlock name="product.info.media.image">
+            <arguments>
+                <argument name="gallery_image_service" xsi:type="object">Genaker\ThemeTileWindLuna\Service\ProductGalleryImageService</argument>
+            </arguments>
+            <block class="Magento\Framework\View\Element\Template"
+                   name="product.gallery.stage"
+                   template="Magento_Catalog::product/view/gallery-stage.phtml"/>
+        </referenceBlock>
+    </body>
+</page>

@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Checkout-only CSS: not merged into global tailwind.css (catalog).
+ * Checkout CSS: Genaker_ThemeTileWindLuna Block\ResolveCss — see checkout_cart_index.xml.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="head.additional">
+            <block class="Genaker\ThemeTileWindLuna\Block\ResolveCss" name="genaker.resolve_css.checkout.onepage" after="-">
+                <arguments>
+                    <argument name="css_path" xsi:type="string">css/checkout.css</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+    </body>
+</page>
+

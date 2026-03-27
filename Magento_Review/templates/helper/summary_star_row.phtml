@@ -1,0 +1,117 @@
+<?php
+/**
+ * SVG star row: Magento summary 0–100 → fractional /5 stars (Lucide-style path + partial gradient).
+ *
+ * Expected $block data: escaper, product, ratingSummary (int|float 0–100),
+ * optional: ratingRowId (string), wrapperClass (string), includeSchema (bool).
+ *
+ * @var \Magento\Framework\View\Element\Template $block
+ */
+$escaper = $block->getData('escaper');
+$product = $block->getData('product');
+$ratingPct = (float) $block->getData('ratingSummary');
+$includeSchema = (bool) $block->getData('includeSchema');
+$wrapperClass = trim((string) $block->getData('wrapperClass'));
+$ratingRowId = (string) $block->getData('ratingRowId');
+
+if (!$escaper instanceof \Magento\Framework\Escaper
+    || !$product instanceof \Magento\Catalog\Api\Data\ProductInterface
+) {
+    return;
+}
+
+$productId = (int) $product->getId();
+$ratingStars = min(5.0, max(0.0, $ratingPct / 20.0));
+$fullStars = (int) floor($ratingStars + 1e-9);
+$remainder = $ratingStars - $fullStars;
+$showPartial = $remainder >= 0.02;
+$partialPct = $showPartial ? max(1, min(99, (int) round($remainder * 100))) : 0;
+$emptyCount = max(0, 5 - $fullStars - ($showPartial ? 1 : 0));
+
+$starPath = 'M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.12 2.12 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.12 2.12 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.12 2.12 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.12 2.12 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.12 2.12 0 0 0 1.597-1.16z';
+
+$ariaLabel = (string) __(
+    '%1 rating. %2 out of 5 stars',
+    $product->getName(),
+    number_format($ratingStars, 2, '.', '')
+);
+$partialGradientId = 'partialFill-' . $productId;
+
+$classes = 'rating-summary inline-flex flex-wrap items-center gap-0.5 !text-amber-500 ' . $wrapperClass;
+?>
+<div<?php if ($ratingRowId !== ''): ?> id="<?= $escaper->escapeHtmlAttr($ratingRowId) ?>"<?php endif; ?>
+     class="<?= $escaper->escapeHtmlAttr(trim($classes)) ?>"
+     role="img"
+     aria-label="<?= $escaper->escapeHtmlAttr($ariaLabel) ?>">
+    <?php if ($includeSchema): ?>
+    <span class="sr-only">
+        <span itemprop="ratingValue"><?= $escaper->escapeHtml((string) (int) round($ratingPct)) ?></span>
+        <?= $escaper->escapeHtml(__('of')) ?>
+        <span itemprop="bestRating">100</span>
+    </span>
+    <?php endif; ?>
+    <?php for ($i = 0; $i < $fullStars; $i++): ?>
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="20"
+             height="20"
+             fill="none"
+             stroke="currentColor"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             stroke-width="1.5"
+             viewBox="0 0 24 24"
+             class="fill-current shrink-0"
+             aria-hidden="true">
+            <path d="<?= $escaper->escapeHtmlAttr($starPath) ?>"></path>
+        </svg>
+    <?php endfor; ?>
+    <?php if ($showPartial): ?>
+    <span class="relative inline-flex shrink-0">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             viewBox="0 0 24 24"
+             width="0"
+             height="0"
+             class="pointer-events-none absolute h-0 w-0 overflow-hidden"
+             aria-hidden="true"
+             focusable="false">
+            <defs>
+                <linearGradient id="<?= $escaper->escapeHtmlAttr($partialGradientId) ?>">
+                    <stop offset="0%" stop-color="currentColor"></stop>
+                    <stop offset="<?= (int) $partialPct ?>%" stop-color="currentColor"></stop>
+                    <stop offset="<?= (int) $partialPct ?>%" stop-color="transparent"></stop>
+                    <stop offset="100%" stop-color="transparent"></stop>
+                </linearGradient>
+            </defs>
+        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="20"
+             height="20"
+             fill="none"
+             stroke="currentColor"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             stroke-width="1.5"
+             viewBox="0 0 24 24"
+             class="shrink-0"
+             style="<?= $escaper->escapeHtmlAttr('fill: url(#' . $partialGradientId . ')') ?>"
+             aria-hidden="true">
+            <path d="<?= $escaper->escapeHtmlAttr($starPath) ?>"></path>
+        </svg>
+    </span>
+    <?php endif; ?>
+    <?php for ($i = 0; $i < $emptyCount; $i++): ?>
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="20"
+             height="20"
+             fill="none"
+             stroke="currentColor"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             stroke-width="1.5"
+             viewBox="0 0 24 24"
+             class="shrink-0 text-neutral-300"
+             aria-hidden="true">
+            <path d="<?= $escaper->escapeHtmlAttr($starPath) ?>"></path>
+        </svg>
+    <?php endfor; ?>
+</div>

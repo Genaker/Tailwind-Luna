@@ -1,0 +1,96 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+/** @var \Magento\Sales\Block\Order\PrintOrder\Creditmemo $block */
+$_order = $block->getOrder();
+$_creditmemo = $block->getCreditmemo();
+if ($_creditmemo) {
+    $_creditmemos = [$_creditmemo];
+} else {
+    $_creditmemos = $_order->getCreditmemosCollection();
+}
+?>
+<?php foreach ($_creditmemos as $_creditmemo) : ?>
+<div class="order-details-items creditmemo">
+    <div class="order-title mb-4">
+        <strong class="text-lg font-semibold text-neutral-900"><?= $block->escapeHtml(__('Refund #%1', $_creditmemo->getIncrementId())) ?></strong>
+    </div>
+    <div class="overflow-x-auto rounded-lg border border-neutral-200 order-items-creditmemo">
+        <table class="table data table-order-items creditmemo w-full border-collapse text-sm" id="my-refund-table-<?= (int) $_creditmemo->getId() ?>">
+            <caption class="sr-only"><?= $block->escapeHtml(__('Items Refunded')) ?></caption>
+            <thead>
+                <tr class="border-b border-neutral-200 bg-neutral-50">
+                    <th class="name px-4 py-3 text-left text-sm font-semibold text-neutral-800" scope="col"><?= $block->escapeHtml(__('Product Name')) ?></th>
+                    <th class="sku px-4 py-3 text-left text-sm font-semibold text-neutral-800" scope="col"><?= $block->escapeHtml(__('SKU')) ?></th>
+                    <th class="px-4 py-3 text-left text-sm font-semibold text-neutral-800" scope="col"><?= $block->escapeHtml(__('Price')) ?></th>
+                    <th class="px-4 py-3 text-center text-sm font-semibold text-neutral-800" scope="col"><?= $block->escapeHtml(__('Qty')) ?></th>
+                    <th class="subtotal px-4 py-3 text-left text-sm font-semibold text-neutral-800" scope="col"><?= $block->escapeHtml(__('Subtotal')) ?></th>
+                    <th class="discount px-4 py-3 text-left text-sm font-semibold text-neutral-800" scope="col"><?= $block->escapeHtml(__('Discount Amount')) ?></th>
+                    <th class="rowtotal px-4 py-3 text-left text-sm font-semibold text-neutral-800" scope="col"><?= $block->escapeHtml(__('Row Total')) ?></th>
+                </tr>
+            </thead>
+            <?php $_items = $_creditmemo->getAllItems(); ?>
+            <?php foreach ($_items as $_item) : ?>
+                <?php if (!$_item->getOrderItem()->getParentItem()) : ?>
+                    <tbody>
+                        <?= $block->getItemHtml($_item) ?>
+                    </tbody>
+                <?php endif; ?>
+            <?php endforeach; ?>
+            <tfoot>
+                <?= $block->getTotalsHtml($_creditmemo) ?>
+            </tfoot>
+        </table>
+    </div>
+    <div class="mb-8 mt-8">
+        <div class="text-lg font-semibold text-neutral-900 mb-3 pb-2 border-b border-neutral-200">
+            <strong><?= $block->escapeHtml(__('Order Information')) ?></strong>
+        </div>
+        <div class="text-sm text-neutral-700 [&_address]:not-italic">
+        <?php if (!$_order->getIsVirtual()) : ?>
+            <div class="mb-6 rounded-lg border border-neutral-200 bg-white box-order-shipping-address">
+                <div class="px-4 py-3 text-base font-semibold border-b border-neutral-200 bg-neutral-50">
+                    <strong><?= $block->escapeHtml(__('Shipping Address')) ?></strong>
+                </div>
+                <div class="p-4">
+                    <?php $_shipping = $_creditmemo->getShippingAddress() ?>
+                    <address><?= /* @noEscape */ $block->formatAddress($_shipping, 'html') ?></address>
+                </div>
+            </div>
+            <div class="mb-6 rounded-lg border border-neutral-200 bg-white box-order-shipping-method">
+                <div class="px-4 py-3 text-base font-semibold border-b border-neutral-200 bg-neutral-50">
+                    <strong><?= $block->escapeHtml(__('Shipping Method')) ?></strong>
+                </div>
+                <div class="p-4">
+                    <?php if ($_order->getShippingDescription()) : ?>
+                        <?= $block->escapeHtml($_order->getShippingDescription()) ?>
+                    <?php else : ?>
+                        <?= $block->escapeHtml(__('No shipping information available')) ?>
+                    <?php endif; ?>
+                </div>
+            </div>
+        <?php endif; ?>
+            <div class="mb-6 rounded-lg border border-neutral-200 bg-white box-order-billing-address">
+                <div class="px-4 py-3 text-base font-semibold border-b border-neutral-200 bg-neutral-50">
+                    <strong><?= $block->escapeHtml(__('Billing Address')) ?></strong>
+                </div>
+                <div class="p-4">
+                    <address><?= /* @noEscape */ $block->formatAddress($_order->getBillingAddress(), 'html') ?></address>
+                </div>
+            </div>
+            <div class="mb-6 rounded-lg border border-neutral-200 bg-white box-order-billing-method">
+                <div class="px-4 py-3 text-base font-semibold border-b border-neutral-200 bg-neutral-50">
+                    <strong><?= $block->escapeHtml(__('Payment Method')) ?></strong>
+                </div>
+                <div class="p-4">
+                    <?= $block->getPaymentInfoHtml() ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php endforeach; ?>

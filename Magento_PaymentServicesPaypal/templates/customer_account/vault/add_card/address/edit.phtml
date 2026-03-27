@@ -1,0 +1,163 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+/** @var \Magento\Customer\Block\Address\Edit $block */
+/** @var \Magento\Customer\ViewModel\Address $viewModel */
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/** @var \Magento\Customer\ViewModel\Address\RegionProvider $regionProvider */
+$viewModel = $block->getViewModel();
+$regionProvider = $block->getRegionProvider();
+?>
+<?php $_street = $block->getAttributeData()->getFrontendLabel('street'); ?>
+<?php $_region = $block->getAttributeData()->getFrontendLabel('region'); ?>
+<?php $_selectRegion = 'Please select a region, state or province.'; ?>
+<?php $_displayAll = $block->getConfig('general/region/display_all'); ?>
+
+<?php $_cityValidationClass = $viewModel->addressGetAttributeValidationClass('city'); ?>
+<?php $_postcodeValidationClass_value = $viewModel->addressGetAttributeValidationClass('postcode'); ?>
+<?php $_postcodeValidationClass = $_postcodeValidationClass_value; ?>
+<?php $_streetValidationClass = $viewModel->addressGetAttributeValidationClass('street'); ?>
+<?php $_streetValidationClassNotRequired = $_streetValidationClass !== null ?
+    trim(str_replace('required-entry', '', $_streetValidationClass)) : ''; ?>
+<?php $_regionValidationClass = $viewModel->addressGetAttributeValidationClass('region'); ?>
+<form class="form-address-edit"
+      action="<?= $escaper->escapeUrl($block->getSaveUrl()) ?>"
+      method="post"
+      id="form-address-edit"
+      enctype="multipart/form-data"
+      data-hasrequired="<?= $escaper->escapeHtmlAttr(__('* Required Fields')) ?>">
+    <fieldset class="min-w-0 border-0 p-0 m-0">
+        <legend class="mb-3 text-base font-semibold text-neutral-900"><span><?= $escaper->escapeHtml(__('Billing Information')) ?></span></legend><br>
+        <?= $block->getBlockHtml('formkey') ?>
+        <input type="hidden" name="success_url" value="<?= $escaper->escapeUrl($block->getSuccessUrl()) ?>">
+        <input type="hidden" name="error_url" value="<?= $escaper->escapeUrl($block->getErrorUrl()) ?>">
+        <?= $block->getNameBlockHtml() ?>
+
+    </fieldset>
+    <fieldset class="min-w-0 border-0 p-0 m-0">
+        <legend class="mb-3 text-base font-semibold text-neutral-900"><span><?= $escaper->escapeHtml(__('Address')) ?></span></legend><br>
+        <div class="mb-4 street required">
+            <label for="street_1" class="block text-sm font-medium text-neutral-800 mb-1"><span><?= /* @noEscape */ $_street ?></span></label>
+            <div class="mt-1">
+                <div class="mb-2">
+                    <label for="street_1" class="block text-sm font-medium text-neutral-800 mb-1">
+                        <span>
+                            <?= $escaper->escapeHtml(__('Street Address: Line %1', 1)) ?>
+                        </span>
+                    </label>
+                </div>
+                <input type="text"
+                       name="street[0]"
+                       value="<?= $escaper->escapeHtmlAttr($block->getStreetLine(1)) ?>"
+                       title="<?= /* @noEscape */ $_street ?>"
+                       id="street_1"
+                       class="input-text <?= $escaper->escapeHtmlAttr($_streetValidationClass) ?>"/>
+                <div class="pl-4 border-l border-neutral-200">
+                    <?php for ($_i = 1, $_n = $viewModel->addressGetStreetLines(); $_i < $_n; $_i++): ?>
+                        <div class="mb-4 additional">
+                            <label class="block text-sm font-medium text-neutral-800 mb-1" for="street_<?= /* @noEscape */ $_i + 1 ?>">
+                                <span><?= $escaper->escapeHtml(__('Street Address: Line %1', $_i + 1)) ?></span>
+                            </label>
+                            <div class="mt-1">
+                                <input type="text" name="street[<?= /* @noEscape */ $_i ?>]"
+                                       value="<?= $escaper->escapeHtmlAttr($block->getStreetLine($_i + 1)) ?>"
+                                       title="<?= $escaper->escapeHtmlAttr(__('Street Address %1', $_i + 1)) ?>"
+                                       id="street_<?= /* @noEscape */ $_i + 1 ?>"
+                                       class="input-text
+                                        <?= $escaper->escapeHtmlAttr($_streetValidationClassNotRequired) ?>">
+                            </div>
+                        </div>
+                    <?php endfor; ?>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-4 country required">
+            <label class="block text-sm font-medium text-neutral-800 mb-1" for="country">
+                <span><?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('country_id') ?></span>
+            </label>
+            <div class="mt-1">
+                <?= $block->getCountryHtmlSelect() ?>
+            </div>
+        </div>
+        <div class="mb-4 region required">
+            <label class="block text-sm font-medium text-neutral-800 mb-1" for="region_id">
+                <span><?= /* @noEscape */ $_region ?></span>
+            </label>
+            <div class="mt-1">
+                <select id="region_id" name="region_id"
+                        title="<?= /* @noEscape */ $_region ?>"
+                        class="validate-select region_id"
+                        <?= /* @noEscape */ !$_displayAll ? ' disabled="disabled"' : '' ?>>
+                    <option value=""><?= $escaper->escapeHtml(__($_selectRegion)) ?></option>
+                </select>
+                <input type="text"
+                       id="region"
+                       name="region"
+                       value="<?= $escaper->escapeHtmlAttr($block->getRegion()) ?>"
+                       title="<?= /* @noEscape */ $_region ?>"
+                       class="input-text validate-not-number-first
+                        <?= $escaper->escapeHtmlAttr($_regionValidationClass) ?>"
+                        <?= !$_displayAll ? ' disabled="disabled"' : '' ?>/>
+            </div>
+        </div>
+        <div class="mb-4 city required">
+            <label class="block text-sm font-medium text-neutral-800 mb-1" for="city">
+                <span><?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('city') ?></span>
+            </label>
+            <div class="mt-1">
+                <input type="text"
+                       name="city"
+                       value="<?= $escaper->escapeHtmlAttr($block->getAddress()->getCity()) ?>"
+                       title="<?= $escaper->escapeHtmlAttr(__('City')) ?>"
+                       class="input-text <?= $escaper->escapeHtmlAttr($_cityValidationClass) ?>"
+                       id="city">
+            </div>
+        </div>
+        <div class="mb-4 zip required">
+            <label class="block text-sm font-medium text-neutral-800 mb-1" for="zip">
+                <span><?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('postcode') ?></span>
+            </label>
+            <div class="mt-1">
+                <input type="text"
+                       name="postcode"
+                       value="<?= $escaper->escapeHtmlAttr($block->getAddress()->getPostcode()) ?>"
+                       title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('postcode') ?>"
+                       id="zip"
+                       class="input-text validate-zip-international
+                        <?= $escaper->escapeHtmlAttr($_postcodeValidationClass) ?>">
+                <div role="alert" class="mb-4 rounded-md border text-sm border-amber-200 bg-amber-50 text-amber-900">
+                    <span></span>
+                </div>
+                <?= /* @noEscape */ $secureRenderer->renderStyleAsTag("display: none;", 'div.message.warning') ?>
+            </div>
+        </div>
+
+    </fieldset>
+</form>
+<script type="text/x-magento-init">
+    {
+        "#form-address-edit": {
+            "addressValidation": {
+                "postCodes": <?= /* @noEscape */ $block->getPostCodeConfig()->getSerializedPostCodes() ?>
+            }
+        },
+        "#country": {
+            "directoryRegionUpdater": {
+                "optionalRegionAllowed": <?= /* @noEscape */ $_displayAll ? 'true' : 'false' ?>,
+                "regionListId": "#region_id",
+                "regionInputId": "#region",
+                "postcodeId": "#zip",
+                "form": "#form-address-edit",
+                "regionJson": <?= /* @noEscape */ $regionProvider->getRegionJson(); ?>,
+                "defaultRegion": "<?= (int) $block->getRegionId() ?>",
+                "countriesWithOptionalZip": <?= /* @noEscape */ $viewModel->dataGetCountriesWithOptionalZip(true) ?>
+            }
+        }
+    }
+</script>

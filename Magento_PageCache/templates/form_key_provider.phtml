@@ -1,0 +1,19 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+if ($block->getFormKeyProvider()->isFullPageCacheEnabled()): ?>
+    <script type="text/x-magento-init">
+        {
+            "*": {
+                "Magento_PageCache/js/form-key-provider": {
+                    "isPaginationCacheEnabled":
+                        <?= /* @noEscape */ (int)$block->getFormKeyProvider()->isPaginationCacheEnabled() ?>
+                }
+            }
+        }
+    </script>
+<?php endif; ?>

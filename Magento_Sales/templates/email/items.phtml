@@ -1,0 +1,59 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\Sales\Block\Order\Email\Items $block */
+/** @var \Magento\Framework\Escaper $escaper */
+?>
+<?php $_order = $block->getOrder() ?>
+<?php if ($_order) : ?>
+    <?php $_items = $_order->getAllItems(); ?>
+    <table class="email-items">
+        <thead>
+            <tr>
+                <th class="item-info" scope="col">
+                    <?= $escaper->escapeHtml(__('Items')) ?>
+                </th>
+                <th class="item-qty" scope="col">
+                    <?= $escaper->escapeHtml(__('Qty')) ?>
+                </th>
+                <th class="item-price" scope="col">
+                    <?= $escaper->escapeHtml(__('Price')) ?>
+                </th>
+            </tr>
+        </thead>
+        <?php foreach ($_items as $_item) : ?>
+            <?php if (!$_item->getParentItem()) : ?>
+                <tbody>
+                    <?= $block->getItemHtml($_item) ?>
+                </tbody>
+            <?php endif; ?>
+        <?php endforeach; ?>
+        <tfoot class="order-totals">
+            <?= $block->getChildHtml('order_totals') ?>
+        </tfoot>
+    </table>
+    <?php
+    $giftMessageHelper = $this->helper(\Magento\GiftMessage\Helper\Message::class);
+    if ($giftMessageHelper->isMessagesAllowed('order', $_order, $_order->getStore())
+        && $_order->getGiftMessageId()
+    ) : ?>
+        <?php $_giftMessage = $giftMessageHelper->getGiftMessage($_order->getGiftMessageId()); ?>
+        <?php if ($_giftMessage) : ?>
+            <br />
+            <table class="message-gift">
+                <tr>
+                    <td>
+                        <h3><?= $escaper->escapeHtml(__('Gift Message for this Order')) ?></h3>
+                        <strong><?= $escaper->escapeHtml(__('From:')) ?></strong> <?= $escaper->escapeHtml($_giftMessage->getSender()) ?>
+                        <br /><strong><?= $escaper->escapeHtml(__('To:')) ?></strong> <?= $escaper->escapeHtml($_giftMessage->getRecipient()) ?>
+                        <br /><strong><?= $escaper->escapeHtml(__('Message:')) ?></strong>
+                        <br /><?= $escaper->escapeHtml($_giftMessage->getMessage()) ?>
+                    </td>
+                </tr>
+            </table>
+        <?php endif; ?>
+    <?php endif; ?>
+<?php endif; ?>

@@ -1,0 +1,45 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+/**
+ * @var \Magento\Weee\Block\Item\Price\Renderer $block
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
+
+$_item = $block->getItem();
+/** @var \Magento\Weee\Helper\Data $weeeHelper */
+$weeeHelper = $block->getData('weeeHelper');
+?>
+<?php if ($block->displayPriceWithWeeeDetails()): ?>
+    <span class="cart-tax-total text-sm tabular-nums text-neutral-900"
+          data-mage-init='{"taxToggle": {"itemTaxId" : "#subtotal-item-tax-details<?= (int) $_item->getId() ?>"}}'>
+<?php else: ?>
+    <span class="cart-price text-sm tabular-nums text-neutral-900">
+<?php endif; ?>
+<?= /* @noEscape */ $block->formatPrice($block->getRowDisplayPriceInclTax()) ?>
+    </span>
+
+<?php if ($weeeHelper->getApplied($_item)): ?>
+    <span class="hidden cart-tax-info" id="subtotal-item-tax-details<?= (int) $_item->getId() ?>">
+        <?php if ($block->displayPriceWithWeeeDetails()): ?>
+            <?php foreach ($weeeHelper->getApplied($_item) as $tax): ?>
+                <span class="weee" data-label="<?= $block->escapeHtmlAttr($tax['title']) ?>">
+                    <?= /* @noEscape */ $block->formatPrice($tax['row_amount_incl_tax'], true, true) ?>
+                </span>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </span>
+
+    <?php if ($block->displayFinalPrice()): ?>
+        <span class="cart-tax-total text-sm tabular-nums text-neutral-900"
+              data-mage-init='{"taxToggle": {"itemTaxId" : "#subtotal-item-tax-details<?= (int) $_item->getId() ?>"}}'>
+            <span class="weee" data-label="<?= $block->escapeHtmlAttr(__('Total Incl. Tax')) ?>">
+                <?= /* @noEscape */ $block->formatPrice($block->getFinalRowDisplayPriceInclTax()) ?>
+            </span>
+        </span>
+    <?php endif; ?>
+<?php endif; ?>

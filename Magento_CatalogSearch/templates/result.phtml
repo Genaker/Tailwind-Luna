@@ -1,0 +1,42 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+use Magento\CatalogSearch\Block\Result;
+
+/** These changes need to valid applying filters and configuration before search process is started. */
+
+/** @var $block  Result*/
+$productList = $block->getProductListHtml();
+?>
+<?php if ($block->getResultCount()) : ?>
+    <?= /* @noEscape */ $block->getChildHtml('tagged_product_list_rss_link') ?>
+<div class="search results space-y-4">
+    <?php if ($messages = $block->getNoteMessages()) : ?>
+    <div class="mb-4 rounded-md border text-sm border-blue-200 bg-blue-50 text-blue-900">
+        <div>
+            <?php foreach ($messages as $message) : ?>
+                <?= /* @noEscape */ $message ?><br />
+            <?php endforeach; ?>
+        </div>
+    </div>
+    <?php endif; ?>
+    <?= /* @noEscape */ $productList ?>
+</div>
+<?php else : ?>
+
+<div class="mb-4 rounded-md border text-sm border-blue-200 bg-blue-50 text-blue-900">
+    <div>
+        <?= $block->escapeHtml($block->getNoResultText() ? $block->getNoResultText() : __('Your search returned no results.')) ?>
+        <?= /* @noEscape */ $block->getAdditionalHtml() ?>
+        <?php if ($messages = $block->getNoteMessages()) : ?>
+            <?php foreach ($messages as $message) : ?>
+                <br /><?= /* @noEscape */ $message ?>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </div>
+</div>
+<?php endif; ?>

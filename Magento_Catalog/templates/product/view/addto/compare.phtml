@@ -1,0 +1,20 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var $block \Magento\Catalog\Block\Product\View\Addto\Compare */
+?>
+
+<?php $viewModel = $block->getData('addToCompareViewModel'); ?>
+<?php if ($viewModel->isAvailableForCompare($block->getProduct())) :?>
+<a href="#"
+   data-post='<?= /* @noEscape */ $block->getPostDataParams() ?>'
+   class="action tocompare"
+   title="<?= $block->escapeHtmlAttr(__('Add to Compare')) ?>"
+   aria-label="<?= $block->escapeHtmlAttr(__('Add to Compare')) ?>"
+   role="button">
+    <span><?= $block->escapeHtml(__('Add to Compare')) ?></span>
+</a>
+<?php endif; ?>

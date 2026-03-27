@@ -1,0 +1,90 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * @var \Magento\Review\Block\Customer\ListCustomer $block
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
+
+/** @var \Magento\Review\Helper\Data $reviewHelper */
+$reviewHelper = $block->getData('reviewHelper');
+?>
+<?php if ($block->getReviews() && count($block->getReviews())): ?>
+    <div class="reviews overflow-x-auto rounded-lg border border-neutral-200">
+        <table class="table data table-reviews w-full border-collapse text-sm" id="my-reviews-table">
+            <caption class="sr-only"><?= $escaper->escapeHtml(__('Product Reviews')) ?></caption>
+            <thead>
+                <tr class="border-b border-neutral-200 bg-neutral-50">
+                    <th scope="col" class="date px-4 py-3 text-left text-sm font-semibold text-neutral-800"><?= $escaper->escapeHtml(__('Created')) ?></th>
+                    <th scope="col" class="px-4 py-3 text-left text-sm font-semibold text-neutral-800"><?= $escaper->escapeHtml(__('Product Name')) ?></th>
+                    <th scope="col" class="summary px-4 py-3 text-left text-sm font-semibold text-neutral-800"><?= $escaper->escapeHtml(__('Rating')) ?></th>
+                    <th scope="col" class="px-4 py-3 text-left text-sm font-semibold text-neutral-800"><?= $escaper->escapeHtml(__('Review')) ?></th>
+                    <th scope="col" class="px-4 py-3 text-right text-sm font-semibold text-neutral-800">&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($block->getReviews() as $review): ?>
+                <tr class="border-b border-neutral-200 last:border-b-0">
+                    <td data-th="<?= $escaper->escapeHtml(__('Created')) ?>"
+                        class="date px-4 py-3 align-top text-neutral-700"><?= $escaper->escapeHtml($block->dateFormat($review->getReviewCreatedAt())) ?>
+                    </td>
+                    <td data-th="<?= $escaper->escapeHtml(__('Product Name')) ?>" class="px-4 py-3 align-top">
+                        <strong class="product-name font-medium text-neutral-900">
+                            <a class="text-blue-600 hover:text-blue-800 hover:underline" href="<?= $escaper->escapeUrl($block->getProductUrl($review)) ?>">
+                                <?= $escaper->escapeHtml($review->getName()) ?>
+                            </a>
+                        </strong>
+                    </td>
+                    <td data-th="<?= $escaper->escapeHtml(__('Rating')) ?>" class="summary px-4 py-3 align-top">
+                    <?php if ($review->getSum()): ?>
+                        <div class="rating-summary flex flex-wrap items-center gap-2">
+                            <span class="sr-only"><?= $escaper->escapeHtml(__('Rating')) ?>:</span>
+                            <div class="rating-result"
+                                 id="rating-result_<?= /* @noEscape */ $block->escapeHtml($review->getId()) ?>"
+                                 title="<?= /* @noEscape */ ((int)$review->getSum() / (int)$review->getCount()) ?>%">
+                                <span class="rating_<?= $escaper->escapeUrl($review->getReviewId())?>">
+                                    <span>
+                                        <?= /* @noEscape */ ((int)$review->getSum() / (int)$review->getCount()) ?>%
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <?= /* @noEscape */
+                        $secureRenderer->renderStyleAsTag(
+                            "width:" . /* @noEscape */ ((int)$review->getSum() / (int)$review->getCount()) . "%;",
+                            'div.rating-summary div.rating-result>span.rating_' .
+                                            $escaper->escapeUrl($review->getReviewId())
+                        ) ?>
+                    <?php endif; ?>
+                    </td>
+                    <td data-th="<?= $escaper->escapeHtmlAttr(__('Review')) ?>" class="max-w-md px-4 py-3 align-top text-sm text-neutral-700">
+                        <?= $reviewHelper->getDetailHtml($review->getDetail()) ?>
+                    </td>
+                    <td data-th="<?= $escaper->escapeHtmlAttr(__('Actions')) ?>" class="px-4 py-3 align-top text-right">
+                        <a href="<?= $escaper->escapeUrl($block->getReviewUrl($review)) ?>" class="more inline-flex items-center justify-center rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-semibold text-neutral-900 transition-colors hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600">
+                            <span><?= $escaper->escapeHtml(__('See Details')) ?></span>
+                        </a>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+    <?php if ($block->getToolbarHtml()): ?>
+        <div class="flex flex-wrap items-center justify-between gap-3 py-2 products-reviews-toolbar bottom">
+            <?= $block->getToolbarHtml() ?>
+        </div>
+    <?php endif; ?>
+<?php else: ?>
+    <div class="empty mb-4 rounded-md border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm text-neutral-800"><span><?= $escaper->escapeHtml(__('You have submitted no reviews.')) ?></span></div>
+<?php endif; ?>
+<div class="clear-both flex flex-wrap border-t border-neutral-200 pt-6">
+    <a class="back inline-flex items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-semibold text-neutral-900 transition-colors hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"
+       href="<?= $escaper->escapeUrl($block->getBackUrl()) ?>">
+        <span><?= $escaper->escapeHtml(__('Back')) ?></span>
+    </a>
+</div>

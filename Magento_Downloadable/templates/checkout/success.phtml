@@ -1,0 +1,14 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php if ($block->getOrderHasDownloadable()) : ?>
+    <p class="text-sm text-neutral-700">
+        <?= $block->escapeHtml(
+            __('Go to <a href="%1">My Downloadable Products</a>', $block->escapeUrl($block->getDownloadableProductsUrl())),
+            ['a']
+        ) ?>
+    </p>
+<?php endif; ?>

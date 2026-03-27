@@ -1,0 +1,97 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+// phpcs:disable Generic.Files.LineLength
+
+/** @var $block \Magento\Downloadable\Block\Sales\Order\Item\Renderer\Downloadable */
+/** @var \Magento\Framework\Locale\LocaleFormatter $localeFormatter */
+?>
+<?php $_item = $block->getItem() ?>
+<tr id="order-item-row-<?= (int) $_item->getId() ?>" class="border-b border-neutral-200 last:border-b-0">
+    <td class="name px-4 py-3 align-top text-neutral-800" data-th="<?= $block->escapeHtmlAttr(__('Product Name')) ?>">
+        <strong class="product name text-base font-semibold leading-snug text-neutral-900"><?= $block->escapeHtml($_item->getName()) ?></strong>
+        <?php if ($_options = $block->getItemOptions()) : ?>
+            <dl class="item-options mt-2 space-y-1 text-xs text-neutral-600">
+                <?php foreach ($_options as $_option) : ?>
+                    <dt class="font-medium text-neutral-800"><?= $block->escapeHtml($_option['label']) ?></dt>
+                    <?php if (!$block->getPrintStatus()) : ?>
+                        <?php $_formatedOptionValue = $block->getFormatedOptionValue($_option) ?>
+                        <dd<?php if (isset($_formatedOptionValue['full_view'])) : ?> class="inline-block w-full"<?php endif; ?>>
+                            <?= $block->escapeHtml($_formatedOptionValue['value'], ['a']) ?>
+                            <?php if (isset($_formatedOptionValue['full_view'])) : ?>
+                                <div class="inline-block content">
+                                    <dl class="flex flex-col overflow-hidden rounded-lg border border-neutral-200 bg-white options">
+                                        <dt><?= $block->escapeHtml($_option['label']) ?></dt>
+                                        <dd><?= $block->escapeHtml($_formatedOptionValue['full_view']) ?></dd>
+                                    </dl>
+                                </div>
+                            <?php endif; ?>
+                        </dd>
+                    <?php else : ?>
+                        <dd><?= /* @noEscape */ nl2br($block->escapeHtml((string) (isset($_option['print_value']) ? $_option['print_value'] : $_option['value']))) ?></dd>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </dl>
+        <?php endif; ?>
+        <?php if ($links = $block->getLinks()) : ?>
+            <dl class="item-options links mt-2 space-y-1 text-xs text-neutral-600">
+                <dt class="font-medium text-neutral-800"><?= $block->escapeHtml($block->getLinksTitle()) ?></dt>
+                <?php foreach ($links->getPurchasedItems() as $link) : ?>
+                    <dd><?= $block->escapeHtml($link->getLinkTitle()) ?></dd>
+                <?php endforeach; ?>
+            </dl>
+        <?php endif; ?>
+        <?php $addtInfoBlock = $block->getProductAdditionalInformationBlock(); ?>
+        <?php if ($addtInfoBlock) : ?>
+            <?= $addtInfoBlock->setItem($_item)->toHtml() ?>
+        <?php endif; ?>
+        <?= $block->escapeHtml($_item->getDescription()) ?>
+    </td>
+    <td class="sku px-4 py-3 align-top text-sm text-neutral-700" data-th="<?= $block->escapeHtmlAttr(__('SKU')) ?>">
+        <?= /* @noEscape */ $block->prepareSku($block->getSku()) ?>
+    </td>
+    <td class="px-4 py-3 align-top text-sm font-medium text-neutral-900" data-th="<?= $block->escapeHtmlAttr(__('Price')) ?>">
+        <?= $block->getItemPriceHtml() ?>
+    </td>
+    <td class="px-4 py-3 align-top text-center text-sm text-neutral-800" data-th="<?= $block->escapeHtmlAttr(__('Qty')) ?>">
+        <ul class="items-qty space-y-2 text-left">
+            <?php if ($block->getItem()->getQtyOrdered() > 0) : ?>
+                <li>
+                    <span class="block text-xs font-medium text-neutral-600"><?= $block->escapeHtml(__('Ordered')) ?></span>
+                    <span class="content tabular-nums">
+                        <?= $block->escapeHtml($localeFormatter->formatNumber((float) $block->getItem()->getQtyOrdered())) ?>
+                    </span>
+                </li>
+            <?php endif; ?>
+            <?php if ($block->getItem()->getQtyShipped() > 0) : ?>
+                <li>
+                    <span class="block text-xs font-medium text-neutral-600"><?= $block->escapeHtml(__('Shipped')) ?></span>
+                    <span class="content tabular-nums">
+                        <?= $block->escapeHtml($localeFormatter->formatNumber((float) $block->getItem()->getQtyShipped())) ?>
+                    </span>
+                </li>
+            <?php endif; ?>
+            <?php if ($block->getItem()->getQtyCanceled() > 0) : ?>
+                <li>
+                    <span class="block text-xs font-medium text-neutral-600"><?= $block->escapeHtml(__('Canceled')) ?></span>
+                    <span class="content tabular-nums">
+                        <?= $block->escapeHtml($localeFormatter->formatNumber((float) $block->getItem()->getQtyCanceled())) ?>
+                    </span>
+                </li>
+            <?php endif; ?>
+            <?php if ($block->getItem()->getQtyRefunded() > 0) : ?>
+                <li>
+                    <span class="block text-xs font-medium text-neutral-600"><?= $block->escapeHtml(__('Refunded')) ?></span>
+                    <span class="content tabular-nums">
+                        <?= $block->escapeHtml($localeFormatter->formatNumber((float) $block->getItem()->getQtyRefunded())) ?>
+                    </span>
+                </li>
+            <?php endif; ?>
+        </ul>
+    </td>
+    <td class="subtotal px-4 py-3 align-top text-sm font-medium text-neutral-900" data-th="<?= $block->escapeHtmlAttr(__('Subtotal')) ?>">
+        <?= $block->getItemRowTotalHtml() ?>
+    </td>
+</tr>

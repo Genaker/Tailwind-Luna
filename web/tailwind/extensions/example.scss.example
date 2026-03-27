@@ -1,0 +1,7 @@
+/*
+ * Rename to *.scss (remove .example) to try a local extension build.
+ * Safe to delete.
+ */
+@layer components {
+  /* .my-pdp-badge { @apply inline-flex rounded px-2 py-0.5 text-xs font-semibold; } */
+}

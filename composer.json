@@ -1,0 +1,25 @@
+{
+    "name": "genaker/theme-frontend-tailwind-luna",
+    "description": "Tailwind Luna — Genaker frontend child theme of Magento Luma (Composer-installable)",
+    "type": "magento2-theme",
+    "license": ["OSL-3.0", "AFL-3.0"],
+    "version": "1.0.0",
+    "config": {
+        "sort-packages": true
+    },
+    "require": {
+        "php": "~8.2.0||~8.3.0||~8.4.0",
+        "magento/framework": "103.0.*",
+        "magento/theme-frontend-luma": "100.4.*",
+        "genaker/module-tailwind-luna-widgets": "^1.0"
+    },
+    "autoload": {
+        "files": [
+            "registration.php",
+            "Module/ThemeModule/registration.php"
+        ],
+        "psr-4": {
+            "Genaker\\ThemeTileWindLuna\\": "Module/ThemeModule/"
+        }
+    }
+}

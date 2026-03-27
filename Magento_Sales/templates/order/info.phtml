@@ -1,0 +1,55 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+/** @var \Magento\Sales\Block\Order\Info $block */
+$_order = $block->getOrder();
+?>
+<div class="mb-8">
+    <div class="text-lg font-semibold text-neutral-900 mb-3 pb-2 border-b border-neutral-200">
+        <strong><?= $block->escapeHtml(__('Order Information')) ?></strong>
+    </div>
+    <div class="text-sm text-neutral-700 [&_address]:not-italic">
+        <?php if (!$_order->getIsVirtual()) : ?>
+            <div class="mb-6 rounded-lg border border-neutral-200 bg-white box-order-shipping-address">
+                <strong class="block px-4 py-3 text-base font-semibold border-b border-neutral-200 bg-neutral-50"><span><?= $block->escapeHtml(__('Shipping Address')) ?></span></strong>
+                <div class="p-4">
+                    <address><?= /* @noEscape */ $block->getFormattedAddress($_order->getShippingAddress()) ?></address>
+                </div>
+            </div>
+
+            <div class="mb-6 rounded-lg border border-neutral-200 bg-white box-order-shipping-method">
+                <strong class="block px-4 py-3 text-base font-semibold border-b border-neutral-200 bg-neutral-50">
+                    <span><?= $block->escapeHtml(__('Shipping Method')) ?></span>
+                </strong>
+                <div class="p-4">
+                <?php if ($_order->getShippingDescription()) : ?>
+                    <?= $block->escapeHtml($_order->getShippingDescription()) ?>
+                <?php else : ?>
+                    <?= $block->escapeHtml(__('No shipping information available')) ?>
+                <?php endif; ?>
+                </div>
+            </div>
+        <?php endif; ?>
+
+        <div class="mb-6 rounded-lg border border-neutral-200 bg-white box-order-billing-address">
+            <strong class="block px-4 py-3 text-base font-semibold border-b border-neutral-200 bg-neutral-50">
+                <span><?= $block->escapeHtml(__('Billing Address')) ?></span>
+            </strong>
+            <div class="p-4">
+                <address><?= /* @noEscape */ $block->getFormattedAddress($_order->getBillingAddress()) ?></address>
+            </div>
+        </div>
+        <div class="mb-6 rounded-lg border border-neutral-200 bg-white box-order-billing-method">
+            <strong class="block px-4 py-3 text-base font-semibold border-b border-neutral-200 bg-neutral-50">
+                <span><?= $block->escapeHtml(__('Payment Method')) ?></span>
+            </strong>
+            <div class="p-4">
+                <?= $block->getPaymentInfoHtml() ?>
+            </div>
+        </div>
+    </div>
+</div>

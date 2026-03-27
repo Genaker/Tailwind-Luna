@@ -1,0 +1,519 @@
+/* Navigation look: Tailwind in topmenu.phtml + getHtml() + sections.phtml + web/tailwind/css-safelist.html */
+.navigation ul {
+  margin: 0;
+  list-style: none;
+  padding: 0;
+}
+
+.navigation li.level0,
+.navigation li.level1 {
+  position: relative;
+}
+
+@media (max-width: 1023px) {
+  /* One full-width row per root category (Luma/Topmenu float columns otherwise sit beside expanded submenus) */
+  .navigation .nav-primary {
+    display: flex !important;
+    flex-direction: column !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+  }
+
+  .navigation .nav-primary > li.level0 {
+    float: none !important;
+    clear: both !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: 0 0 auto;
+    /* Topmenu may reuse link utilities on <li>; row + justify-between would sit <ul> beside <a>. */
+    flex-direction: column !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+  }
+
+  .navigation .submenu > li.parent {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+  }
+
+  .navigation li.ui-menu-item {
+    float: none !important;
+    clear: both;
+  }
+
+  /*
+   * Markup order is [chevron][label]. Nested <a> get [&_a]:block from topmenu.phtml — without
+   * display:flex, flex-direction/order are ignored and the chevron overlaps the first letter.
+   * Row + order (not flex-row-reverse) keeps rows left-aligned in the drawer.
+   * Chevron is a border-only ::before (no text / icon-font content) to avoid â€º mojibake.
+   */
+  .navigation .nav-primary > li.level0 > a.level-top,
+  .navigation .submenu > li > a.ui-menu-item-wrapper {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  /* One chevron only: mage/menu prepends .ui-menu-icon; stray Luma .level-top:after causes doubles/mojibake */
+  .navigation .parent .level-top.ui-menu-item-wrapper:after,
+  .navigation .parent .level-top:after {
+    content: none !important;
+    display: none !important;
+  }
+
+  .navigation a.level-top .ui-menu-icon:first-child,
+  .navigation a.ui-menu-item-wrapper .ui-menu-icon:first-child {
+    order: 2;
+    margin-inline-start: auto;
+  }
+
+  .navigation a.level-top > .ui-menu-icon:first-child ~ *,
+  .navigation a.ui-menu-item-wrapper > .ui-menu-icon:first-child ~ * {
+    order: 1;
+  }
+
+  /* columnsLimit / legacy mega submenu: single column in drawer */
+  .navigation .submenu li {
+    float: none !important;
+    clear: both;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .navigation .submenu,
+  .navigation .submenu.ui-menu,
+  .navigation li .ui-menu.submenu {
+    position: static !important;
+    left: auto !important;
+    top: auto !important;
+    right: auto !important;
+    transform: none !important;
+    height: auto !important;
+    max-height: none !important;
+  }
+
+  /*
+   * Visibility must follow jQuery UI Menu (.hide/.show + aria). It never adds .expanded on tap;
+   * :not(.expanded){display:none!important} made .show() ineffective and broke submenu + drawer UX.
+   */
+
+  .navigation .ui-menu-icon.ui-icon {
+    flex-shrink: 0;
+    text-indent: 0;
+    overflow: visible;
+    background: none;
+    /* No icon font / no Unicode in content — avoids â€º mojibake if charset or cascade is wrong */
+    font-family: inherit;
+    font-size: 0;
+    line-height: 0;
+    speak: none;
+  }
+
+  .navigation .ui-menu-icon.ui-icon::before {
+    content: '' !important;
+    display: inline-block;
+    box-sizing: border-box;
+    width: 0.35rem;
+    height: 0.35rem;
+    margin-inline-end: 0.125rem;
+    vertical-align: middle;
+    border-style: solid;
+    border-width: 0 2px 2px 0;
+    border-color: #737373;
+    transform: rotate(-45deg);
+  }
+}
+
+@media (min-width: 1024px) {
+  .navigation .submenu {
+    display: none;
+  }
+
+  .navigation li.parent:hover > .submenu {
+    display: block;
+  }
+
+  .navigation .submenu .submenu {
+    left: 100%;
+    top: 0;
+  }
+
+  /*
+   * Desktop bar: don’t let the level-0 <li> or <a> stretch to the flyout height.
+   * If the first submenu stays in normal flow, hover:bg on .level-top covers a huge area.
+   * Matches topmenu.phtml side flyout (lg:left-full lg:top-0); mobile uses position:static in max-width:1023px rules.
+   */
+  .navigation .nav-primary > li.level0 {
+    align-self: flex-start;
+  }
+
+  .navigation .nav-primary > li.level0 > a.level-top {
+    height: auto;
+    min-height: 0;
+    flex-grow: 0;
+    align-self: flex-start;
+  }
+
+  .navigation .nav-primary > li.level0 > ul.submenu {
+    position: absolute !important;
+    left: 100%;
+    top: 0;
+    z-index: 50;
+  }
+
+  .navigation .ui-menu-icon {
+    display: none;
+  }
+
+  .navigation .all-category {
+    display: none;
+  }
+}
+
+/* Open tab (native <details>); replaces .active from mage.tabs */
+.sections.nav-sections .nav-section-detail[open] > summary.section-item-title.nav-sections-item-title {
+  border-bottom-color: transparent !important;
+  background-color: #fff;
+  color: #1979c3;
+  font-weight: 700;
+}
+
+.sections.nav-sections {
+  border-bottom: 1px solid #e5e7eb;
+  background-color: #fff;
+}
+
+/* Inner .section-items: grid of <details name> (exclusive accordion). */
+.sections.nav-sections .nav-sections-nav {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+}
+
+/*
+ * Mobile / tablet off-canvas nav (mage/menu toggles html.nav-open / nav-before-open).
+ * Breakpoint aligned with .nav-toggle visibility (max 1023px).
+ */
+@media (max-width: 1023px) {
+  .header.content .action.nav-toggle {
+    position: relative;
+    z-index: 101;
+  }
+
+  .sections.nav-sections {
+    position: fixed;
+    top: 0;
+    left: calc(-1 * (100% - 54px));
+    z-index: 90;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    margin: 0;
+    width: calc(100% - 54px);
+    max-width: calc(100vw - 54px);
+    height: 100%;
+    max-height: 100vh;
+    min-height: 0;
+    /* Scroll the whole drawer; avoids row 2 collapsing when 1fr height is indefinite on first open */
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    transition: left 0.3s ease;
+    border-bottom: none;
+    box-shadow: none;
+  }
+
+  html.nav-before-open {
+    overflow-x: hidden;
+    width: 100%;
+    height: 100%;
+  }
+
+  html.nav-before-open body {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  html.nav-before-open .page-wrapper {
+    position: relative;
+    left: 0;
+    height: 100%;
+    overflow: hidden;
+    transition: left 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  html.nav-open .page-wrapper {
+    left: calc(100% - 3.5rem);
+  }
+
+  html.nav-open .sections.nav-sections {
+    left: 0;
+    box-shadow: 2px 0 16px rgba(0, 0, 0, 0.15);
+    z-index: 99;
+  }
+
+  html.nav-open::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 85;
+    background-color: rgba(0, 0, 0, 0.3);
+    transition: opacity 0.25s ease;
+  }
+
+  /* Menu / Account / Settings: CSS Grid — tab row + panel row (content-sized; drawer scrolls) */
+  .sections.nav-sections .section-items.nav-sections-items {
+    box-sizing: border-box;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(var(--nav-sections-tab-count, 3), minmax(0, 1fr));
+    grid-template-rows: auto auto;
+    flex: 1 1 auto;
+    min-height: min-content;
+    align-content: start;
+  }
+
+  @for $i from 1 through 6 {
+    .sections.nav-sections .section-items.nav-sections-items > .nav-section-detail:nth-child(#{$i}) > summary {
+      grid-column: #{$i};
+      grid-row: 1;
+    }
+
+    .sections.nav-sections .section-items.nav-sections-items > .nav-section-detail:nth-child(#{$i}) > .section-item-content {
+      grid-column: 1 / -1;
+      grid-row: 2;
+    }
+  }
+
+  /* Native <details> hides closed panels; no mage.collapsible display hacks. */
+
+  .sections.nav-sections .section-item-content.nav-sections-item-content#store\.menu .navigation {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /*
+   * Account tab: cloned markup uses <details> + absolute dropdown (for the header only).
+   * Scoped to the drawer panel — header .panel.header is unaffected. theme.js sets [open] on the clone.
+   */
+  .sections.nav-sections .section-item-content.nav-sections-item-content[id='store.links'] {
+    .authorization-link details > div[role='menu'] {
+      position: static;
+      inset: auto;
+      right: auto;
+      top: auto;
+      z-index: auto;
+      margin-top: 0;
+      width: 100%;
+      min-width: 0;
+      border-radius: 0;
+      border: 0;
+      box-shadow: none;
+      background: transparent;
+      padding: 0;
+    }
+
+    .authorization-link details > div[role='menu'] a {
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .authorization-link details summary {
+      display: none;
+    }
+  }
+}
+
+@media (max-width: 1023px) {
+  .columns .sidebar.sidebar-main,
+  .columns .sidebar.sidebar-additional {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 639px) {
+  .toolbar.toolbar-products {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .toolbar.toolbar-products .toolbar-amount {
+    width: 100%;
+    margin: 0;
+    text-align: center;
+    font-size: 0.875rem;
+  }
+
+  .toolbar.toolbar-products .modes {
+    display: none;
+  }
+
+  .toolbar.toolbar-products .toolbar-sorter.sorter {
+    width: 100%;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .toolbar.toolbar-products .sorter-label {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 0.25rem;
+  }
+
+  .toolbar.toolbar-products select.sorter-options {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+}
+
+/* Desktop: drop tab chrome; show catalog menu only (Account/Settings stay in header). */
+@media (min-width: 1024px) {
+  /* sections.phtml: drawer chrome; keep hidden from 1024px (belt-and-suspenders with .lg:hidden). */
+  .sections.nav-sections .nav-drawer-header {
+    display: none !important;
+  }
+
+  /* Hide tab chrome; show one panel (store.menu when present, else first section). */
+  .sections.nav-sections .section-items > details:not(.nav-section-detail--desktop-visible) {
+    display: none !important;
+  }
+
+  .sections.nav-sections .nav-section-detail--desktop-visible > summary.section-item-title {
+    display: none !important;
+  }
+
+  .sections.nav-sections .nav-section-detail--desktop-visible > .section-item-content {
+    display: block !important;
+    padding: 0;
+  }
+
+  .sections.nav-sections .section-item-content.nav-sections-item-content#store\.menu {
+    display: block !important;
+  }
+
+  .sections.nav-sections .section-items.nav-sections-items {
+    display: block;
+    grid-template-columns: unset;
+    grid-template-rows: unset;
+    flex: none;
+    min-height: 0;
+    max-width: 1280px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .sections.nav-sections .section-items.nav-sections-items > .nav-section-detail > summary,
+  .sections.nav-sections .section-items.nav-sections-items > .nav-section-detail > .section-item-content {
+    grid-column: unset;
+    grid-row: unset;
+    min-height: unset;
+    overflow-y: visible;
+  }
+
+  @media (min-width: 1280px) {
+    .sections.nav-sections .section-items.nav-sections-items {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+}
+
+/* Product PDP: exclusive <details name="product-detail-tabs"> — grid row 1 = summaries, row 2 = panel */
+.product.data.items.product-detail-details {
+  display: grid;
+  grid-template-rows: auto auto;
+  align-content: start;
+}
+
+@for $i from 1 through 6 {
+  .product.data.items.product-detail-details > .product-detail-tab:nth-child(#{$i}) > summary {
+    grid-column: #{$i};
+    grid-row: 1;
+  }
+
+  .product.data.items.product-detail-details > .product-detail-tab:nth-child(#{$i}) > .data.item.content {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+}
+
+.product.data.items.product-detail-details > .product-detail-tab[open] > summary.product-detail-tab-summary {
+  border-bottom-color: #1979c3;
+  color: #1979c3;
+}
+
+/* Mini search: submit lives inside .control (see form.mini.phtml) so input + icon button stay one row */
+form#search_mini_form.form.minisearch,
+form.form.minisearch#search_mini_form {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+}
+
+form#search_mini_form.form.minisearch .field.search,
+form.form.minisearch#search_mini_form .field.search {
+  width: 100%;
+  min-width: 0;
+}
+
+form#search_mini_form.form.minisearch .field.search .control .actions,
+form.form.minisearch#search_mini_form .field.search .control .actions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+}
+
+.block-search .field.search .control .search-autocomplete {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  z-index: 20;
+}
+
+.navigation .level0.parent > .level-top {
+  display: flex;
+  align-items: center;
+}
+
+.nav-sections .section-item-title {
+  border-bottom: 1px solid #f5f5f5;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #171717;
+}
+
+.nav-sections .section-item-content {
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+}
+
+.nav-sections-items .item.title a {
+  color: #262626;
+}
+.nav-sections-items .item.title a:hover {
+  color: #1979c3;
+}

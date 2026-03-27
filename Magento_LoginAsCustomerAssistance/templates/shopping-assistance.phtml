@@ -1,0 +1,52 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+use Magento\Framework\Escaper;
+use Magento\LoginAsCustomerAssistance\Api\IsAssistanceEnabledInterface;
+use Magento\LoginAsCustomerAssistance\ViewModel\ShoppingAssistanceViewModel;
+
+/** @var Escaper $escaper */
+/** @var ShoppingAssistanceViewModel $viewModel */
+$viewModel = $block->getViewModel();
+
+if ($viewModel->isLoginAsCustomerEnabled()) : ?>
+    <script type="text/x-magento-init">
+    {
+        ".form-create-account, .form-edit-account": {
+            "Magento_LoginAsCustomerAssistance/js/opt-in": {
+                "allowAccess": "<?= $escaper->escapeJs(IsAssistanceEnabledInterface::ALLOWED) ?>",
+                "denyAccess": "<?= $escaper->escapeJs(IsAssistanceEnabledInterface::DENIED) ?>"
+            }
+        }
+    }
+    </script>
+    <div class="mb-4 flex flex-wrap items-start gap-3">
+        <input type="checkbox"
+               name="assistance_allowed_checkbox"
+               title="<?= $escaper->escapeHtmlAttr(__($viewModel->getAssistanceCheckboxTitle())) ?>"
+               value="1"
+               id="assistance_allowed_checkbox"
+               <?php if ($viewModel->isAssistanceAllowed()) : ?>checked="checked"<?php endif; ?>
+               class="accent-blue-600 mt-1 h-4 w-4 shrink-0 rounded border-neutral-300 text-blue-600">
+        <label for="assistance_allowed_checkbox" class="mb-0 block flex-1 text-sm font-medium text-neutral-800">
+            <span><?= $escaper->escapeHtml(__($viewModel->getAssistanceCheckboxTitle())) ?></span>
+        </label>
+
+        <input type="hidden" name="assistance_allowed" value=""/>
+
+        <div class="field-tooltip toggle relative w-full basis-full sm:basis-auto sm:ml-0">
+            <span id="tooltip-label" class="sr-only"><?= $escaper->escapeHtml(__('Help')) ?></span>
+            <span id="tooltip" class="field-tooltip-action action-help text-sm font-medium text-blue-600 hover:text-blue-800" tabindex="0" data-toggle="dropdown"
+                  data-bind="mageInit: {'dropdown':{'activeClass': '_active', 'parent': '.field-tooltip.toggle'}}"
+                  aria-labelledby="tooltip-label" aria-haspopup="true" aria-expanded="false" role="button">
+         </span>
+            <div class="field-tooltip-content z-10 rounded-md border border-neutral-200 bg-white p-3 text-sm text-neutral-700 shadow-sm" data-target="dropdown"
+                 hidden>
+                <?= $escaper->escapeHtml(__($viewModel->getAssistanceCheckboxTooltip())) ?>
+            </div>
+        </div>
+    </div>
+<?php endif ?>

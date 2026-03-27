@@ -1,0 +1,47 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\Review\Block\Product\ReviewRenderer $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/** @var \Magento\Framework\Escaper $escaper */
+
+$url = $block->getReviewsUrl() . '#reviews';
+$urlForm = $block->getReviewsUrl() . '#review-form';
+?>
+<?php if ($block->isReviewEnabled() && $block->getReviewsCount()): ?>
+    <?php $rating = (float) $block->getRatingSummary(); ?>
+    <div class="product-reviews-summary short flex flex-wrap items-center gap-x-3 gap-y-1<?= !$rating ? ' no-rating' : '' ?>">
+        <?php if ($rating): ?>
+            <?= $block->getLayout()->createBlock(\Magento\Framework\View\Element\Template::class)
+                ->setTemplate('Magento_Review::helper/summary_star_row.phtml')
+                ->setData([
+                    'escaper' => $escaper,
+                    'product' => $block->getProduct(),
+                    'ratingSummary' => $rating,
+                    'ratingRowId' => 'rating-result_' . $block->getProduct()->getId(),
+                    'wrapperClass' => 'py-1 mx-auto',
+                    'includeSchema' => false,
+                ])->toHtml() ?>
+        <?php endif; ?>
+        <div class="reviews-actions">
+            <a class="view inline-flex items-baseline gap-1 border-0 bg-transparent p-0 text-sm font-normal text-neutral-600 no-underline hover:text-primary hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"
+               href="<?= $escaper->escapeUrl($url) ?>">
+                <span><?= $escaper->escapeHtml($block->getReviewsCount()) ?></span>
+                <span><?= ($block->getReviewsCount() == 1) ?
+                        $escaper->escapeHtml(__('Review')) : $escaper->escapeHtml(__('Reviews')) ?>
+                </span>
+            </a>
+        </div>
+    </div>
+<?php elseif ($block->isReviewEnabled() && $block->getDisplayIfEmpty()): ?>
+    <div class="product-reviews-summary short empty">
+        <div class="reviews-actions">
+            <a class="add inline-flex items-baseline border-0 bg-transparent p-0 text-sm font-medium text-primary no-underline hover:text-primary-hover hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary/40" href="<?= $escaper->escapeUrl($urlForm) ?>">
+                <?= $escaper->escapeHtml(__('Be the first to review this product')) ?>
+            </a>
+        </div>
+    </div>
+<?php endif; ?>

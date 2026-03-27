@@ -1,0 +1,15 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+/** @var \Magento\Sales\Block\Order\Info\Buttons\Rss $block */
+?>
+<?php if ($block->isRssAllowed() && $block->getLink()) : ?>
+    <a href="<?= $block->escapeUrl($block->getLink()) ?>"
+       class="inline-flex items-center justify-center gap-2 rounded-md text-sm font-semibold border border-neutral-300 px-4 py-2 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-orange-600 disabled:opacity-50 disabled:pointer-events-none text-neutral-800 hover:bg-orange-50 rss">
+        <span><?= $block->escapeHtml($block->getLabel()) ?></span>
+    </a>
+<?php endif; ?>

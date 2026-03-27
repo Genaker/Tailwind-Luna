@@ -1,0 +1,102 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+/** @var \Magento\Wishlist\Block\Share\Wishlist $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+?>
+
+<?php if ($block->hasWishlistItems()): ?>
+    <form class="form shared wishlist" action="<?= $block->escapeUrl($block->getUrl('wishlist/index/update')) ?>"
+          method="post">
+        <div class="overflow-x-auto wishlist">
+            <table class="table data wishlist w-full border-collapse text-sm" id="wishlist-table">
+                <caption class="sr-only"><?= $block->escapeHtml(__('Wish List')) ?></caption>
+                <thead>
+                <tr class="border-b border-neutral-200 bg-neutral-50">
+                    <th class="w-full sm:w-auto px-4 py-3 text-left text-sm font-semibold text-neutral-800 product" scope="col"><?= $block->escapeHtml(__('Product')) ?></th>
+                    <th class="w-full sm:w-auto px-4 py-3 text-left text-sm font-semibold text-neutral-800 comment" scope="col"><?= $block->escapeHtml(__('Comment')) ?></th>
+                    <th class="w-full sm:w-auto px-4 py-3 text-left text-sm font-semibold text-neutral-800" scope="col"><span class="inline-flex flex-wrap gap-2"><?= $block->escapeHtml(__('Add to Cart')) ?></span></th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($block->getWishlistItems() as $item): ?>
+                    <?php
+                    $product = $item->getProduct();
+                    $isVisibleProduct = $product->isVisibleInSiteVisibility();
+                    ?>
+                    <tr class="border-b border-neutral-200 last:border-b-0">
+                        <td data-th="<?= $block->escapeHtmlAttr(__('Product')) ?>" class="w-full sm:w-auto px-4 py-3 align-top product">
+                            <a class="product photo block mb-2" href="<?= $block->escapeUrl($block->getProductUrl($item)) ?>"
+                               title="<?= $block->escapeHtmlAttr($product->getName()) ?>">
+                                <?= $block->getImage($product, 'customer_shared_wishlist')->toHtml() ?>
+                            </a>
+                            <strong class="product name">
+                                <a class="text-blue-600 hover:text-blue-800 hover:underline" href="<?= $block->escapeUrl($block->getProductUrl($item)) ?>">
+                                    <?= $block->escapeHtml($product->getName()) ?>
+                                </a>
+                            </strong>
+                            <?=
+                                $block->getProductPriceHtml(
+                                    $product,
+                                    'wishlist_configured_price',
+                                    \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
+                                    ['item' => $item]
+                                );
+                            ?>
+                            <?= $block->getDetailsHtml($item) ?>
+                        </td>
+                        <td data-th="<?= $block->escapeHtmlAttr(__('Comment')) ?>"
+                            class="w-full sm:w-auto px-4 py-3 align-top comment"><?= /* @noEscape */ $block->getEscapedDescription($item) ?>
+                        </td>
+                        <td data-th="<?= $block->escapeHtmlAttr(__('Add to Cart')) ?>" class="w-full sm:w-auto px-4 py-3 align-top"
+                            data-role="add-to-links">
+                            <div class="flex flex-wrap gap-2">
+                            <?php if ($product->isSaleable()): ?>
+                                <?php if ($isVisibleProduct): ?>
+                                    <button type="button"
+                                            title="<?= $block->escapeHtmlAttr(__('Add to Cart')) ?>"
+                                            data-post='<?= /* @noEscape */ $block->getSharedItemAddToCartUrl($item) ?>'
+                                            class="inline-flex items-center justify-center gap-2 rounded-md text-sm font-semibold border border-neutral-300 px-4 py-2 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600 disabled:opacity-50 disabled:pointer-events-none tocart">
+                                        <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
+                                    </button>
+                                <?php endif ?>
+                            <?php endif; ?>
+                            <a href="#" data-post='<?= /* @noEscape */ $block->getAddToWishlistParams($item) ?>'
+                               id="wishlist-shared-item-<?= (int) $item->getId() ?>"
+                               class="inline-flex items-center justify-center gap-2 rounded-md text-sm font-semibold border border-neutral-300 px-4 py-2 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600 disabled:opacity-50 disabled:pointer-events-none towishlist" data-action="add-to-wishlist">
+                                <span><?= $block->escapeHtml(__('Add to Wish List')) ?></span>
+                            </a>
+                            <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                                'onclick',
+                                "location.assign(this.href); event.preventDefault();",
+                                'a#wishlist-shared-item-' . $item->getId()
+                            ) ?>
+                            </div>
+                        </td>
+                    </tr>
+                <?php endforeach ?>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-between gap-4 py-4 clear-both">
+            <?php if ($block->isSaleable()): ?>
+                <button type="button"
+                        title="<?= $block->escapeHtmlAttr(__('Add All to Cart')) ?>"
+                        data-post='<?= /* @noEscape */ $block->getSharedAddAllToCartUrl() ?>'
+                        class="inline-flex items-center justify-center gap-2 rounded-md text-sm font-semibold border px-4 py-2 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600 disabled:opacity-50 disabled:pointer-events-none bg-blue-600 text-white border-blue-600 hover:bg-blue-700 tocart">
+                    <span><?= $block->escapeHtml(__('Add All to Cart')) ?></span>
+                </button>
+            <?php endif;?>
+            <a href="<?= $block->escapeUrl($block->getBackUrl()) ?>" class="inline-flex items-center justify-center gap-2 rounded-md text-sm font-semibold border border-neutral-300 px-4 py-2 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600 disabled:opacity-50 disabled:pointer-events-none text-neutral-900 hover:bg-neutral-50 back">
+                <span><?= $block->escapeHtml(__('Back')) ?></span>
+            </a>
+        </div>
+    </form>
+<?php else: ?>
+    <div class="mb-4 rounded-md border text-sm border-blue-200 bg-blue-50 text-blue-900 empty"><div><?= $block->escapeHtml(__('Wish List is empty now.')) ?></div></div>
+<?php endif ?>

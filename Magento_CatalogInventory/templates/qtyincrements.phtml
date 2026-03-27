@@ -1,0 +1,15 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * @var $block \Magento\CatalogInventory\Block\Qtyincrements
+ */
+?>
+<?php if ($block->getProductQtyIncrements()) : ?>
+    <div class="product pricing mt-2 text-xs text-neutral-600">
+        <?= $block->escapeHtml(__('%1 is available to buy in increments of %2', $block->getProductName(), $block->getProductQtyIncrements())) ?>
+    </div>
+<?php endif ?>

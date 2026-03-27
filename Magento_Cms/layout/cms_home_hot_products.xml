@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!--
+  Hot Sellers grid on home.shell (see Magento_Cms::home.phtml).
+  Same product rule as Luma sample “Hot Sellers” widget (SKU list). Adjust conditions_encoded in Admin
+  by overriding this layout in a child theme if SKUs differ.
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="home.shell">
+            <block class="Magento\CatalogWidget\Block\Product\ProductsList"
+                   name="home.hot.products"
+                   template="Magento_CatalogWidget::product/widget/content/grid.phtml">
+                <arguments>
+                    <argument name="title" xsi:type="string"/>
+                    <argument name="show_pager" xsi:type="string">0</argument>
+                    <argument name="products_per_page" xsi:type="string">8</argument>
+                    <argument name="products_count" xsi:type="string">8</argument>
+                    <argument name="cache_lifetime" xsi:type="string">86400</argument>
+                    <!-- Luma sample-data SKUs (WS12, WT09, …) — matches default CMS widget -->
+                    <argument name="conditions_encoded" xsi:type="string"><![CDATA[^[`1`:^[`type`:`Magento||CatalogWidget||Model||Rule||Condition||Combine`,`aggregator`:`all`,`value`:`1`,`new_child`:``^],`1--1`:^[`type`:`Magento||CatalogWidget||Model||Rule||Condition||Product`,`attribute`:`sku`,`operator`:`()`,`value`:`WS12, WT09, MT07, MH07, 24-MB02, 24-WB04, 241-MB08, 240-LV05`^]^]]]></argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

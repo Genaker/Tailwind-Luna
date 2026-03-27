@@ -1,0 +1,32 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * @var \Magento\AdvancedSearch\Block\SearchData $block
+ * @var \Magento\Framework\Locale\LocaleFormatter $localeFormatter
+ */
+?>
+<?php
+/** @var \Magento\Search\Model\QueryResult[] $data */
+$data = $block->getItems();
+if (count($data)): ?>
+    <dl class="mb-6 space-y-2">
+        <dt class="text-base font-semibold text-neutral-900"><?= $block->escapeHtml(__($block->getTitle())) ?></dt>
+        <?php foreach ($data as $additionalInfo): ?>
+            <dd class="flex flex-row flex-wrap items-center justify-between gap-2 border border-neutral-200 rounded-lg bg-white p-3 text-sm">
+                <a href="<?= $block->escapeUrl($block->getLink($additionalInfo->getQueryText())) ?>"
+                   class="font-medium text-blue-600 hover:text-blue-800 hover:underline">
+                    <?= $block->escapeHtml($additionalInfo->getQueryText()) ?>
+                </a>
+                <?php if ($block->isShowResultsCount()): ?>
+                    <span class="tabular-nums text-neutral-600">
+                        <?= /* @noEscape */ $localeFormatter->formatNumber((int) $additionalInfo->getResultsCount()) ?>
+                    </span>
+                <?php endif; ?>
+            </dd>
+        <?php endforeach; ?>
+    </dl>
+<?php endif; ?>

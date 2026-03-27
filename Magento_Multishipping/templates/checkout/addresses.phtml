@@ -1,0 +1,136 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// phpcs:disable Generic.Files.LineLength
+?>
+<?php
+/**
+ * Ship to multiple address template
+ *
+ * @var $block \Magento\Multishipping\Block\Checkout\Addresses
+ */
+?>
+<form id="checkout_multishipping_form"
+      data-mage-init='{
+          "multiShipping": {"itemsQty": <?= /* @noEscape */ (int)$block->getCheckout()->getQuote()->getItemsSummaryQty() ?>},
+          "cartUpdate": {
+               "validationURL": "<?= $block->escapeUrl($block->getUrl('multishipping/checkout/checkItems')) ?>",
+               "eventName": "updateMulticartItemQty"
+          }}'
+      action="<?= $block->escapeUrl($block->getPostActionUrl()) ?>"
+      method="post"
+      class="address form space-y-6">
+    <div class="text-base font-semibold text-neutral-900">
+        <strong><?= $block->escapeHtml(__('Please select a shipping address for applicable items.')) ?></strong>
+    </div>
+    <input type="hidden" name="continue" value="0" id="can_continue_flag"/>
+    <input type="hidden" name="new_address" value="0" id="add_new_address_flag"/>
+    <div class="overflow-x-auto">
+        <table class="table data w-full border-collapse text-sm text-neutral-800" id="multiship-addresses-table">
+            <caption class="sr-only">
+                <?= $block->escapeHtml(__('Please select a shipping address for applicable items.')) ?>
+            </caption>
+            <thead>
+            <tr>
+                <th class="border border-neutral-200 bg-neutral-50 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-neutral-700" scope="col"><?= $block->escapeHtml(__('Product')) ?></th>
+                <th class="w-32 border border-neutral-200 bg-neutral-50 px-3 py-2 text-center text-xs font-semibold uppercase tracking-wide text-neutral-700" scope="col"><?= $block->escapeHtml(__('Qty')) ?></th>
+                <th class="min-w-[12rem] border border-neutral-200 bg-neutral-50 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-neutral-700" scope="col"><?= $block->escapeHtml(__('Send To')) ?></th>
+                <th class="w-36 border border-neutral-200 bg-neutral-50 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-neutral-700" scope="col"><?= $block->escapeHtml(__('Actions')) ?></th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($block->getItems() as $_index => $_item): ?>
+                <?php if ($_item->getQuoteItem()): ?>
+                    <tr class="border-b border-neutral-200 last:border-b-0">
+                        <td class="product border border-neutral-200 px-3 py-3 align-top" data-th="<?= $block->escapeHtmlAttr(__('Product')) ?>">
+                            <?= $block->getItemHtml($_item->getQuoteItem()) ?>
+                        </td>
+                        <td class="border border-neutral-200 px-3 py-3 align-top text-center" data-th="<?= $block->escapeHtmlAttr(__('Qty')) ?>">
+                            <div class="qty-holder mx-auto inline-block min-w-[5.5rem] rounded-md border border-neutral-200 bg-neutral-50 p-2 text-center text-sm">
+                                <label for="ship-<?= $block->escapeHtmlAttr($_index) ?>-<?= $block->escapeHtmlAttr($_item->getQuoteItemId()) ?>-qty"
+                                       class="mb-1 block text-xs font-medium text-neutral-800">
+                                    <span><?= $block->escapeHtml(__('Qty')) ?></span>
+                                </label>
+                                <input type="number"
+                                       data-multiship-item-id="<?= $block->escapeHtmlAttr($_item->getSku()) ?>"
+                                       id="ship-<?= $block->escapeHtmlAttr($_index) ?>-<?= $block->escapeHtmlAttr($_item->getQuoteItemId()) ?>-qty"
+                                       name="ship[<?= $block->escapeHtmlAttr($_index) ?>][<?= $block->escapeHtmlAttr($_item->getQuoteItemId()) ?>][qty]"
+                                       value="<?= $block->escapeHtmlAttr($_item->getQty()) ?>"
+                                       size="2"
+                                       min="0"
+                                       class="w-full rounded-md border border-neutral-300 px-2 py-2 text-center text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                       data-validate="{number: true, required:true, 'validate-greater-than-zero':true}"
+                                       autocomplete="off"
+                                />
+                            </div>
+                        </td>
+                        <td class="address border border-neutral-200 px-3 py-3 align-top" data-th="<?= $block->escapeHtmlAttr(__('Send To')) ?>">
+                            <?php if ($_item->getProduct()->getIsVirtual()): ?>
+                                <div class="applicable text-sm text-neutral-600">
+                                    <?= $block->escapeHtml(__('A shipping selection is not applicable.')) ?>
+                                </div>
+                            <?php else: ?>
+                                <div class="address">
+                                    <label for="ship_<?= $block->escapeHtmlAttr($_index) ?>_<?= $block->escapeHtmlAttr($_item->getQuoteItemId()) ?>_address"
+                                           class="mb-1 block text-xs font-medium text-neutral-800">
+                                        <span><?= $block->escapeHtml(__('Send To')) ?></span>
+                                    </label>
+                                    <div class="mt-1 max-w-xl">
+                                        <?= $block->getAddressesHtmlSelect($_item, $_index) ?>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                        </td>
+                        <td class="border border-neutral-200 px-3 py-3 align-top" data-th="<?= $block->escapeHtmlAttr(__('Actions')) ?>">
+                            <a href="#"
+                               title="<?= $block->escapeHtmlAttr(__('Remove Item')) ?>"
+                               data-post='<?= /* @noEscape */
+                                $this->helper(\Magento\Framework\Data\Helper\PostHelper::class)
+                                   ->getPostData($block->getItemDeleteUrl($_item))
+                                ?>'
+                               class="delete inline-flex items-center justify-center rounded-md border border-red-200 bg-white px-3 py-2 text-sm font-semibold text-red-700 transition-colors hover:bg-red-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-red-600"
+                               data-multiship-item-remove="">
+                                <span><?= $block->escapeHtml(__('Remove item')) ?></span>
+                            </a>
+                        </td>
+                    </tr>
+                <?php endif; ?>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+    <div class="flex flex-col gap-4 border-t border-neutral-200 pt-6 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+        <button type="submit"
+                title="<?= $block->escapeHtmlAttr(__('Go to Shipping Information')) ?>"
+                class="action continue primary inline-flex items-center justify-center gap-2 rounded-md border border-blue-600 bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600 disabled:pointer-events-none disabled:opacity-50<?= $block->isContinueDisabled() ? ' disabled' : '' ?>"
+                data-role="can-continue"
+                data-flag="1"
+            <?php if ($block->isContinueDisabled()): ?>
+                disabled="disabled"
+            <?php endif; ?>>
+            <span><?= $block->escapeHtml(__('Go to Shipping Information')) ?></span>
+        </button>
+        <div class="flex flex-wrap items-center gap-2">
+            <button type="submit"
+                    data-multiship-item-update=""
+                    class="update inline-flex items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-semibold text-neutral-900 transition-colors hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"
+                    data-role="can-continue"
+                    data-flag="0">
+                <span><?= $block->escapeHtml(__('Update Qty &amp; Addresses')) ?></span>
+            </button>
+            <button type="button"
+                    title="<?= $block->escapeHtmlAttr(__('Enter a New Address')) ?>"
+                    class="add inline-flex items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-semibold text-neutral-900 transition-colors hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"
+                    data-role="add-new-address">
+                <span><?= $block->escapeHtml(__('Enter a New Address')) ?></span>
+            </button>
+            <a href="<?= $block->escapeUrl($block->getBackUrl()) ?>"
+               class="back inline-flex items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-semibold text-neutral-900 transition-colors hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600">
+                <span><?= $block->escapeHtml(__('Back to Shopping Cart')) ?></span>
+            </a>
+        </div>
+    </div>
+</form>

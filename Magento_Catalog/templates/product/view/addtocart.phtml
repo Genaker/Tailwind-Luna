@@ -1,0 +1,63 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var $block \Magento\Catalog\Block\Product\View */
+?>
+<?php $_product = $block->getProduct(); ?>
+<?php $buttonTitle = __('Add to Cart'); ?>
+<?php if ($_product->isSaleable()) :?>
+<div class="box-tocart">
+    <div class="fieldset w-full">
+        <?php if ($block->shouldRenderQuantity()) :?>
+        <!-- One row: Qty label + input + Add to Cart; PayPal / instant-purchase wrap in the same flex row (items-center avoids misalign when .actions is tall) -->
+        <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
+            <div class="flex shrink-0 items-center gap-2">
+                <label class="label mb-0 whitespace-nowrap text-sm font-medium text-neutral-600" for="qty">
+                    <span><?= $block->escapeHtml(__('Qty')) ?></span>
+                </label>
+                <div class="field qty control shrink-0">
+                    <input type="number"
+                           name="qty"
+                           id="qty"
+                           min="0"
+                           value="<?= $block->getProductDefaultQty() * 1 ?>"
+                           title="<?= $block->escapeHtmlAttr(__('Qty')) ?>"
+                           class="input-text qty !h-9 !w-[3.25rem] !min-w-0 !max-w-[4rem] !px-2 !py-1 text-center text-sm tabular-nums"
+                           data-validate="<?= $block->escapeHtml(json_encode($block->getQuantityValidators())) ?>"
+                           />
+                </div>
+            </div>
+            <div class="actions flex min-w-0 flex-1 flex-wrap items-center gap-2">
+                <button type="submit"
+                        title="<?= $block->escapeHtmlAttr($buttonTitle) ?>"
+                        class="action primary tocart !inline-flex !min-h-10 !w-auto !max-w-[14rem] !items-center !justify-center !rounded-lg !border-transparent !bg-primary !px-5 !py-2.5 !text-sm !font-semibold !text-white !shadow-sm !transition-colors hover:!bg-primary-hover focus-visible:!outline focus-visible:!outline-2 focus-visible:!outline-offset-2 focus-visible:!outline-primary disabled:!pointer-events-none disabled:!opacity-50 sm:!max-w-[16rem]"
+                        id="product-addtocart-button" disabled>
+                    <span><?= $block->escapeHtml($buttonTitle) ?></span>
+                </button>
+                <?= $block->getChildHtml('', true) ?>
+            </div>
+        </div>
+        <?php else : ?>
+        <div class="actions flex flex-col gap-2">
+            <button type="submit"
+                    title="<?= $block->escapeHtmlAttr($buttonTitle) ?>"
+                    class="action primary tocart !inline-flex !min-h-10 !w-auto !max-w-[14rem] !items-center !justify-center !rounded-lg !border-transparent !bg-primary !px-5 !py-2.5 !text-sm !font-semibold !text-white !shadow-sm !transition-colors hover:!bg-primary-hover focus-visible:!outline focus-visible:!outline-2 focus-visible:!outline-offset-2 focus-visible:!outline-primary disabled:!pointer-events-none disabled:!opacity-50 sm:!max-w-[16rem]"
+                    id="product-addtocart-button" disabled>
+                <span><?= $block->escapeHtml($buttonTitle) ?></span>
+            </button>
+            <?= $block->getChildHtml('', true) ?>
+        </div>
+        <?php endif; ?>
+    </div>
+</div>
+<?php endif; ?>
+<script type="text/x-magento-init">
+    {
+        "#product_addtocart_form": {
+            "Magento_Catalog/js/validate-product": {}
+        }
+    }
+</script>

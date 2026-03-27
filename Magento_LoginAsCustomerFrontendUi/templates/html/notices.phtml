@@ -1,0 +1,48 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+
+/**
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+if ($block->getConfig()->isB2bEnabled()) {
+    $adobeFileUrl = $block->getViewFileUrl('Magento_LoginAsCustomerFrontendUi::images/adobe-icon.svg');
+} else {
+    $adobeFileUrl = $block->getViewFileUrl('Magento_LoginAsCustomerFrontendUi::images/magento-icon.svg');
+}
+?>
+<?php if ($block->getConfig()->isEnabled()): ?>
+    <div class="lac-notification-sticky"
+         data-mage-init='{"sticky":{"container": "body"}}'
+         data-bind="scope: 'loginAsCustomer'">
+        <div class="after:clear-both after:block after:content-[''] after:leading-[0] lac-notification rounded-b-md border-b border-amber-200 bg-amber-50 text-amber-950 shadow-sm" data-bind="visible: isVisible" style="display: none">
+            <div class="top-container flex flex-wrap items-center gap-3 px-4 py-3">
+                <div class="lac-notification-icon w-auto shrink-0">
+                    <img class="logo-img max-h-8 w-auto" src="<?= $escaper->escapeUrl($adobeFileUrl) ?>" alt="<?= $escaper->escapeHtmlAttr(__('Merchant logo')) ?>"/>
+                </div>
+                <div class="min-w-0 flex-1 lac-notification-text text-sm leading-snug">
+                    <span data-bind="html: notificationText"></span>
+                </div>
+                <div class="lac-notification-links flex w-full shrink-0 flex-wrap items-center justify-end gap-2 sm:w-auto">
+                   <?= $block->getChildHtml('login-as-customer-notice-links') ?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "loginAsCustomer": {
+                        "component": "Magento_LoginAsCustomerFrontendUi/js/view/loginAsCustomer"
+                    }
+                }
+            }
+        }
+    }
+    </script>
+<?php endif; ?>

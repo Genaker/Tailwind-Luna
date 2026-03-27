@@ -1,0 +1,48 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+
+<?php
+/** @var $block \Magento\ConfigurableProduct\Block\Product\View\Type\Configurable*/
+$_product    = $block->getProduct();
+$_attributes = $block->decorateArray($block->getAllowAttributes());
+?>
+<?php if ($_product->isSaleable() && count($_attributes)) :?>
+    <div class="configurable-options space-y-4">
+    <?php foreach ($_attributes as $_attribute) : ?>
+        <div class="field configurable required">
+            <label class="mb-1 block text-sm font-medium text-neutral-800" for="attribute<?= $block->escapeHtmlAttr($_attribute->getAttributeId()) ?>">
+                <span><?= $block->escapeHtml($_attribute->getProductAttribute()->getStoreLabel()) ?></span>
+            </label>
+            <div class="mt-1 max-w-xl">
+                <select name="super_attribute[<?= $block->escapeHtmlAttr($_attribute->getAttributeId()) ?>]"
+                        data-selector="super_attribute[<?= $block->escapeHtmlAttr($_attribute->getAttributeId()) ?>]"
+                        data-validate="{required:true}"
+                        id="attribute<?= $block->escapeHtmlAttr($_attribute->getAttributeId()) ?>"
+                        class="super-attribute-select w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                    <option value=""><?= $block->escapeHtml(__('Choose an Option...')) ?></option>
+                </select>
+            </div>
+        </div>
+    <?php endforeach; ?>
+    </div>
+    <script type="text/x-magento-init">
+        {
+            "#product_addtocart_form": {
+                "configurable": {
+                    "spConfig": <?= /* @noEscape */ $block->getJsonConfig() ?>,
+                    "gallerySwitchStrategy": "<?= $block->escapeJs($block->getVar(
+                        'gallery_switch_strategy',
+                        'Magento_ConfigurableProduct'
+                    ) ?: 'replace'); ?>"
+                }
+            },
+            "*" : {
+                "Magento_ConfigurableProduct/js/catalog-add-to-cart": {}
+            }
+        }
+    </script>
+<?php endif;?>

@@ -1,0 +1,31 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/* @var \Magento\Wishlist\Block\Link $block */
+?>
+<li class="link wishlist [&_a]:inline-flex [&_a]:items-center [&_a]:gap-2 [&_a]:rounded-md [&_a]:px-2 [&_a]:py-1.5 [&_a]:text-sm [&_a]:font-medium [&_a]:text-neutral-800 [&_a]:no-underline hover:[&_a]:bg-neutral-100"
+    data-bind="scope: 'wishlist'">
+    <a <?= /* @noEscape */ $block->getLinkAttributes() ?>><?= $block->escapeHtml($block->getLabel()) ?>
+        <!-- ko if: wishlist().counter -->
+        <span data-bind="text: wishlist().counter"
+              class="counter ml-0.5 inline-flex shrink-0 items-center justify-center rounded-full bg-primary px-2 py-0.5 text-xs font-bold tabular-nums leading-none text-white shadow-sm ring-1 ring-white/25"></span>
+        <!-- /ko -->
+    </a>
+</li>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "wishlist": {
+                        "component": "Magento_Wishlist/js/view/wishlist"
+                    }
+                }
+            }
+        }
+    }
+
+</script>

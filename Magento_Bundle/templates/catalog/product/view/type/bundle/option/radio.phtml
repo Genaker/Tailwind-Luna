@@ -1,0 +1,92 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+use Magento\Bundle\ViewModel\ValidateQuantity;
+
+// phpcs:disable Generic.Files.LineLength.TooLong
+?>
+<?php /* @var $block \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Radio */ ?>
+<?php $_option = $block->getOption(); ?>
+<?php $_selections  = $_option->getSelections(); ?>
+<?php $_default     = $_option->getDefaultSelection(); ?>
+<?php list($_defaultQty, $_canChangeQty) = $block->getDefaultValues(); ?>
+<?php
+/** @var ValidateQuantity $viewModel */
+$viewModel = $block->getData('validateQuantityViewModel');
+?>
+<div class="field option <?= ($_option->getRequired()) ? ' required': '' ?>">
+    <label class="block text-sm font-medium text-neutral-800 mb-1">
+        <span><?= $block->escapeHtml($_option->getTitle()) ?></span>
+    </label>
+    <div class="mt-1">
+        <div class="options-list border-l border-neutral-200 pl-4">
+            <?php if ($block->showSingle()): ?>
+                <?= /* @noEscape */ $block->getSelectionTitlePrice($_selections[0]) ?>
+                <?= /* @noEscape */ $block->getTierPriceRenderer()->renderTierPrice($_selections[0]) ?>
+                <input type="hidden"
+                       class="bundle-option-<?= (int)$_option->getId() ?>  product bundle option"
+                       name="bundle_option[<?= (int)$_option->getId() ?>]"
+                       value="<?= (int)$_selections[0]->getSelectionId() ?>"
+                       id="bundle-option-<?= (int)$_option->getId() ?>-<?= (int)$_selections[0]->getSelectionId() ?>"
+                       checked="checked"
+                />
+            <?php else: ?>
+                <?php if (!$_option->getRequired()): ?>
+                    <div class="mb-3 flex items-start gap-2">
+                        <input type="radio"
+                               class="product bundle option mt-0.5 h-4 w-4 shrink-0 rounded-full border-neutral-300 text-blue-600 accent-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-0"
+                               id="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>"
+                               name="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
+                               data-selector="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
+                            <?= ($_default && $_default->isSalable())?'':' checked="checked" ' ?>
+                               value=""/>
+                        <label class="block text-sm font-medium text-neutral-800 mb-1" for="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>">
+                            <span><?= $block->escapeHtml(__('None')) ?></span>
+                        </label>
+                    </div>
+                <?php endif; ?>
+                <?php foreach ($_selections as $_selection): ?>
+                    <div class="mb-3 flex items-start gap-2">
+                        <input type="radio"
+                               class="change-container-classname product bundle option mt-0.5 h-4 w-4 shrink-0 rounded-full border-neutral-300 text-blue-600 accent-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-0"
+                               id="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>"
+                            <?php if ($_option->getRequired()) {
+                                echo 'data-validate="{\'validate-one-required-by-name\':true}"';
+                            } ?>
+                               name="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
+                               data-selector="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
+                            <?php if ($block->isSelected($_selection)) { echo ' checked="checked"'; } ?>
+                            <?php if (!$_selection->isSaleable()) { echo ' disabled="disabled"'; } ?>
+                               value="<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>"
+                               data-errors-message-box="#validation-message-box-radio"/>
+                        <label class="mb-1 block min-w-0 flex-1 text-sm font-medium text-neutral-800"
+                               for="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>">
+                            <span class="block"><?= /* @noEscape */ $block->getSelectionTitlePrice($_selection) ?></span>
+                            <span class="mt-1 block font-normal text-neutral-700"><?= /* @noEscape */ $block->getTierPriceRenderer()->renderTierPrice($_selection) ?></span>
+                        </label>
+                    </div>
+                <?php endforeach; ?>
+                <div id="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-container"></div>
+                <div id="validation-message-box-radio"></div>
+            <?php endif; ?>
+            <div class="qty-holder mt-3 inline-block min-w-[5.5rem] rounded-md border border-neutral-200 bg-neutral-50 p-2 text-center text-sm">
+                <label class="mb-1 block text-xs font-medium text-neutral-800" for="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-qty-input">
+                    <span><?= $block->escapeHtml(__('Quantity')) ?></span>
+                </label>
+                <div class="mt-1">
+                    <input <?php if (!$_canChangeQty) { echo ' disabled="disabled"'; } ?>
+                        id="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-qty-input"
+                        class="input-text qty w-full rounded-md border border-neutral-300 px-2 py-2 text-center text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500<?php if (!$_canChangeQty) { echo ' qty-disabled opacity-60'; } ?>"
+                        type="number"
+                        min="0"
+                        data-validate="<?= $block->escapeHtmlAttr($viewModel->getQuantityValidators()) ?>"
+                        name="bundle_option_qty[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
+                        data-selector="bundle_option_qty[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
+                        value="<?= $block->escapeHtmlAttr($_defaultQty) ?>"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

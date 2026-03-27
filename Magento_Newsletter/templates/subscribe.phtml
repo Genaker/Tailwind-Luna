@@ -1,0 +1,64 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\Newsletter\Block\Subscribe $block */
+if (!$block->getButtonLockManager()) {
+    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+    $block->setButtonLockManager(
+        $objectManager->get(\Magento\Framework\View\Element\ButtonLockManager::class)
+    );
+}
+/** @var $escaper \Magento\Framework\Escaper */
+?>
+<div class="block newsletter flex h-full min-h-0 w-full max-w-full flex-col rounded-lg border border-neutral-200 bg-white p-3 shadow-sm sm:p-4">
+    <div class="title mb-2 border-0 p-0 pb-0">
+        <strong class="text-sm font-semibold tracking-tight text-neutral-900"><?= $escaper->escapeHtml(__('Newsletter')) ?></strong>
+    </div>
+    <div class="content">
+        <form class="form subscribe flex flex-col gap-2 sm:flex-row sm:items-end sm:gap-2"
+            novalidate
+            action="<?= $escaper->escapeUrl($block->getFormActionUrl()) ?>"
+            method="post"
+            data-mage-init='{"validation": {"errorClass": "mage-error"}}'
+            id="newsletter-validate-detail">
+            <div class="field newsletter min-w-0 flex-1">
+                <div class="control">
+                    <label class="mb-0 block" for="newsletter">
+                        <span class="label mb-0.5 block text-xs font-medium text-neutral-600">
+                            <?= $escaper->escapeHtml(__('Sign Up for Our Newsletter:')) ?>
+                        </span>
+                        <input name="email" type="email" id="newsletter"
+                               class="input-text !mt-0 w-full min-w-0 py-1.5 text-sm"
+                               placeholder="<?= $escaper->escapeHtml(__('Enter your email address')) ?>"
+                               data-mage-init='{"mage/trim-input":{}}'
+                               data-validate="{required:true, 'validate-email':true}"
+                        />
+                    </label>
+                </div>
+            </div>
+            <div class="actions m-0 shrink-0">
+                <button class="action subscribe primary whitespace-nowrap px-3 py-1.5 text-sm"
+                        title="<?= $escaper->escapeHtmlAttr(__('Subscribe')) ?>"
+                        type="submit"
+                        aria-label="Subscribe"
+                    <?php if ($block->getButtonLockManager()->isDisabled('newsletter_form_submit')): ?>
+                        disabled="disabled"
+                    <?php endif; ?>>
+                    <span><?= $escaper->escapeHtml(__('Subscribe')) ?></span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Customer/js/block-submit-on-send": {
+                "formId": "newsletter-validate-detail"
+            }
+        }
+    }
+</script>

@@ -1,0 +1,42 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\Vault\Block\Customer\CreditCards $block */
+/** @var \Magento\Framework\Escaper $escaper */
+
+$tokens = $block->getPaymentTokens();
+?>
+
+<div data-bind="scope: 'messages'">
+    <!-- ko template: getTemplate() --><!-- /ko -->
+</div>
+
+<?php if (count($tokens) !== 0) : ?>
+    <div class="my-credit-cards overflow-x-auto rounded-lg border border-neutral-200">
+        <table class="table data table-credit-cards w-full border-collapse text-sm" id="my-orders-table">
+            <caption class="sr-only"><?= $escaper->escapeHtml(__('Stored Payment Methods')) ?></caption>
+            <thead>
+            <tr class="border-b border-neutral-200 bg-neutral-50">
+                <th scope="col" class="card-number px-4 py-3 text-left text-sm font-semibold text-neutral-800"><?= $escaper->escapeHtml(__('Card Number')) ?></th>
+                <th scope="col" class="expire px-4 py-3 text-left text-sm font-semibold text-neutral-800"><?= $escaper->escapeHtml(__('Expiration Date')) ?></th>
+                <th scope="col" class="card-type px-4 py-3 text-left text-sm font-semibold text-neutral-800"><?= $escaper->escapeHtml(__('Type')) ?></th>
+                <th scope="col" class="card-description px-4 py-3 text-left text-sm font-semibold text-neutral-800"><?= $escaper->escapeHtml(__('Description')) ?></th>
+                <th scope="col" class="px-4 py-3 text-right text-sm font-semibold text-neutral-800"><?= $escaper->escapeHtml(__('Action')) ?></th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php
+            foreach ($tokens as $token) {
+                echo $block->renderTokenHtml($token);
+            }
+            ?>
+            </tbody>
+        </table>
+    </div>
+
+<?php elseif (!$block->isExistsCustomerTokens()) : ?>
+    <div class="empty mb-4 rounded-lg border border-neutral-200 bg-neutral-50 p-4 text-sm text-neutral-700"><span><?= $escaper->escapeHtml(__('You have no stored payment methods.')) ?></span></div>
+<?php endif ?>

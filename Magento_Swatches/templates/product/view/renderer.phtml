@@ -1,0 +1,89 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php
+/** @var $block \Magento\Swatches\Block\Product\Renderer\Configurable */
+/** @var \Magento\Swatches\ViewModel\Product\Renderer\Configurable $configurableViewModel */
+$configurableViewModel = $block->getConfigurableViewModel();
+
+/*
+ * Pre-generate gallery stage HTML per child simple product (full variant).
+ * Shape: confGallery[childProductId] = { html, items, mainIndex }
+ *
+ * Single-option keys (e.g. color-only) are wrong when size also matters — Orange+S vs Orange+XS
+ * can be different simples. JS resolves the active child from jsonConfig.index + all selected
+ * super attributes (see #gphp-config-index + gallery-swatch-bridge.js).
+ */
+$_jsonCfg   = json_decode($block->getJsonConfig(), true) ?: [];
+$_cfgImages = $_jsonCfg['images'] ?? []; /* childProductId → [{img,full,thumb,isMain,caption}...] */
+$_cfgIndex  = $_jsonCfg['index']  ?? []; /* childProductId → {attrId → optionValueId} */
+
+/* Shared snippet path (Magento_Catalog theme override). */
+$_snippetFile = dirname(__FILE__, 5) . '/Magento_Catalog/templates/product/view/gallery-stage.phtml';
+
+$_confGallery = [];
+foreach ($_cfgImages as $_childId => $_imgs) {
+    if (empty($_imgs)) {
+        continue;
+    }
+    /* Convert jsonConfig format → gallery-stage format: {medium,full,thumb,mobile,label}. */
+    $_stageItems   = [];
+    $_stageMainIdx = 0;
+    foreach ($_imgs as $_ci => $_img) {
+        $_m = $_img['img'] ?? '';
+        $_t = ($_img['thumb'] ?? '') !== '' ? $_img['thumb'] : $_m;
+        $_stageItems[] = [
+            'medium' => $_m,
+            'full'   => $_img['full']    ?? '',
+            'thumb'  => $_t,
+            'small'  => $_t,
+            'mobile' => '',
+            'label'  => $_img['caption'] ?? '',
+        ];
+        if (!empty($_img['isMain'])) {
+            $_stageMainIdx = $_ci;
+        }
+    }
+
+    /* Default dimensions (jsonConfig img URLs are already resized to 540px medium). */
+    $_wMobile = 400; $_wMedium = 540; $_wFull = 540; $_width = 540; $_height = 540;
+    /* Main PDP only: full <picture> + mobile source. Swatch swap uses a single <img> + srcset. */
+    $_gphpSimpleStage = true;
+
+    ob_start();
+    include $_snippetFile;
+    $_html = ob_get_clean();
+
+    $_confGallery[(string) $_childId] = [
+        'html'      => $_html,
+        'items'     => $_stageItems,
+        'mainIndex' => $_stageMainIdx,
+    ];
+}
+?>
+<div class="swatch-opt mb-4 flex flex-col gap-6 pt-2" data-role="swatch-options"></div>
+<?php if (!empty($_confGallery)): ?>
+<script type="application/json" id="conf-gallery"><?= /* @noEscape */ json_encode($_confGallery, JSON_HEX_TAG | JSON_HEX_AMP | JSON_THROW_ON_ERROR) ?></script>
+<script type="application/json" id="gphp-config-index"><?= /* @noEscape */ json_encode(['index' => $_cfgIndex], JSON_HEX_TAG | JSON_HEX_AMP | JSON_THROW_ON_ERROR) ?></script>
+<?php endif; ?>
+
+<script type="text/x-magento-init">
+    {
+        "[data-role=swatch-options]": {
+            "Magento_Swatches/js/swatch-renderer": {
+                "jsonConfig": <?= /* @noEscape */ $block->getJsonConfig() ?>,
+                "jsonSwatchConfig": <?= /* @noEscape */ $block->getJsonSwatchConfig() ?>,
+                "mediaCallback": "<?= $block->escapeJs($block->escapeUrl($block->getMediaCallback())) ?>",
+                "gallerySwitchStrategy": "<?= $block->escapeJs($block->getVar('gallery_switch_strategy', 'Magento_ConfigurableProduct')) ?: 'replace'; ?>",
+                "jsonSwatchImageSizeConfig": <?= /* @noEscape */ $block->getJsonSwatchSizeConfig() ?>,
+                "showTooltip": <?= $block->escapeJs($configurableViewModel->getShowSwatchTooltip()) ?>
+            }
+        },
+        "*" : {
+            "Magento_Swatches/js/catalog-add-to-cart": {}
+        }
+    }
+</script>

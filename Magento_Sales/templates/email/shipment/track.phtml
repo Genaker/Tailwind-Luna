@@ -1,0 +1,40 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\Framework\View\Element\Template $block */
+/** @var \Magento\Framework\Escaper $escaper */
+
+?>
+<?php $_shipment = $block->getShipment() ?>
+<?php
+/** @var \Magento\Sales\Model\Order $_order */
+$_order = $block->getOrder() ?>
+<?php if ($_shipment && $_order) : ?>
+    <?php $trackCollection = $_shipment->getTracksCollection() ?>
+    <?php if ($trackCollection) : ?>
+        <br />
+        <table class="shipment-track">
+            <thead>
+            <tr>
+                <th><?= $escaper->escapeHtml(__('Shipped By')) ?></th>
+                <th><?= $escaper->escapeHtml(__('Tracking Number')) ?></th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($trackCollection as $_item) : ?>
+                <tr>
+                    <td><?= $escaper->escapeHtml($_item->getTitle()) ?>:</td>
+                    <td>
+                        <a href="<?= $escaper->escapeUrl($block->getTrackingUrl()->getUrl($_item)) ?>" target="_blank">
+                            <?= $escaper->escapeHtml($_item->getNumber()) ?>
+                        </a>
+                    </td>
+                </tr>
+            <?php endforeach ?>
+            </tbody>
+        </table>
+    <?php endif; ?>
+<?php endif; ?>

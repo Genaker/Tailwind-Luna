@@ -1,0 +1,37 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php
+/** @var $block \Magento\Catalog\Block\Product\Image */
+/** @var $escaper \Magento\Framework\Escaper */
+$width = max(1, (int) $block->getWidth());
+$height = max(1, (int) $block->getHeight());
+/** @var bool $eagerHighPriority Set on category/search grid first rows (list.phtml) for LCP */
+$eagerHighPriority = (bool) $block->getData('eager_high_priority');
+/* Fill parent; aspect ratio from view config. Category grid parents cap width at 240px (category_page_grid). */
+$aspectStyle = sprintf(
+    'aspect-ratio:%d / %d;width:100%%;max-width:100%%;display:block;',
+    $width,
+    $height
+);
+?>
+<span
+    class="product-image-container product-image-container-<?= /* @noEscape */ $block->getProductId() ?> relative block w-full overflow-hidden rounded-md"
+    style="<?= $escaper->escapeHtmlAttr($aspectStyle) ?>"
+>
+    <img
+        class="block h-full w-full object-cover object-center <?= $escaper->escapeHtmlAttr($block->getClass()) ?>"
+        <?php foreach ($block->getCustomAttributes() as $name => $value): ?>
+            <?= $escaper->escapeHtmlAttr($name) ?>="<?= $escaper->escapeHtmlAttr($value) ?>"
+        <?php endforeach; ?>
+        src="<?= $escaper->escapeUrl($block->getImageUrl()) ?>"
+        loading="<?= $eagerHighPriority ? 'eager' : 'lazy' ?>"
+        fetchpriority="<?= $eagerHighPriority ? 'high' : 'auto' ?>"
+        width="<?= $escaper->escapeHtmlAttr((string) $block->getWidth()) ?>"
+        height="<?= $escaper->escapeHtmlAttr((string) $block->getHeight()) ?>"
+        alt="<?= $escaper->escapeHtmlAttr($block->getLabel()) ?>"
+    />
+</span>

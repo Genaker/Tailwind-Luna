@@ -1,0 +1,14 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php /* @var $block \Magento\ProductAlert\Block\Product\View */?>
+<div class="product alert mt-2 text-sm <?= $block->escapeHtmlAttr($block->getHtmlClass()) ?>">
+    <a href="<?= $block->escapeUrl($block->getSignupUrl()) ?>"
+       title="<?= $block->escapeHtmlAttr(__($block->getSignupLabel())) ?>"
+       class="alert inline-flex items-center justify-center gap-1 rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-xs font-medium text-neutral-800 transition-colors hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600 sm:text-sm">
+        <?= $block->escapeHtml(__($block->getSignupLabel())) ?>
+    </a>
+</div>

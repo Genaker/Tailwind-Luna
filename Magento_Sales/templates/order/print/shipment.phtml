@@ -1,0 +1,102 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+/**
+ * @var \Magento\Sales\Block\Order\PrintOrder\Shipment $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+$order = $block->getOrder();
+?>
+<?php if (!$block->getObjectData($order, 'is_virtual')): ?>
+    <?php foreach ($block->getShipmentsCollection() as $shipment): ?>
+        <div class="order-details-items shipments">
+            <div class="order-title mb-4">
+                <strong class="text-lg font-semibold text-neutral-900">
+                    <?= $escaper->escapeHtml(
+                        __(
+                            'Shipment #%1',
+                            $block->getObjectData($shipment, 'increment_id')
+                        )
+                    ) ?>
+                </strong>
+            </div>
+            <div class="overflow-x-auto rounded-lg border border-neutral-200 order-items-shipment">
+                <table class="table data table-order-items shipment w-full border-collapse text-sm"
+                        id="my-shipment-table-<?= (int) $block->getObjectData($shipment, 'id') ?>">
+                    <caption class="sr-only"><?= $escaper->escapeHtml(__('Items Shipped')) ?></caption>
+                    <thead>
+                        <tr class="border-b border-neutral-200 bg-neutral-50">
+                            <th class="name px-4 py-3 text-left text-sm font-semibold text-neutral-800" scope="col"><?= $escaper->escapeHtml(__('Product Name')) ?></th>
+                            <th class="sku px-4 py-3 text-left text-sm font-semibold text-neutral-800" scope="col"><?= $escaper->escapeHtml(__('SKU')) ?></th>
+                            <th class="px-4 py-3 text-center text-sm font-semibold text-neutral-800" scope="col"><?= $escaper->escapeHtml(__('Qty Shipped')) ?></th>
+                        </tr>
+                    </thead>
+                    <?php foreach ($block->getShipmentItems($shipment) as $item): ?>
+                        <tbody>
+                            <?= $block->getItemHtml($item) ?>
+                        </tbody>
+                    <?php endforeach; ?>
+                </table>
+            </div>
+            <div class="mb-8 mt-8">
+                <div class="text-lg font-semibold text-neutral-900 mb-3 pb-2 border-b border-neutral-200">
+                    <strong><?= $escaper->escapeHtml(__('Order Information')) ?></strong>
+                </div>
+                <div class="text-sm text-neutral-700 [&_address]:not-italic">
+                    <div class="mb-6 rounded-lg border border-neutral-200 bg-white box-order-shipping-address">
+                        <div class="px-4 py-3 text-base font-semibold border-b border-neutral-200 bg-neutral-50">
+                            <strong><?= $escaper->escapeHtml(__('Shipping Address')) ?></strong>
+                        </div>
+                        <div class="p-4">
+                            <address><?= $block->getShipmentAddressFormattedHtml($shipment) ?></address>
+                        </div>
+                    </div>
+
+                    <div class="mb-6 rounded-lg border border-neutral-200 bg-white box-order-shipping-method">
+                        <div class="px-4 py-3 text-base font-semibold border-b border-neutral-200 bg-neutral-50">
+                            <strong><?= $escaper->escapeHtml(__('Shipping Method')) ?></strong>
+                        </div>
+                        <div class="p-4">
+                        <?= $escaper->escapeHtml($block->getObjectData($order, 'shipping_description')) ?>
+                        <?php $tracks = $block->getShipmentTracks($shipment);
+                        if ($tracks): ?>
+                            <dl class="order-tracking mt-3 space-y-1">
+                            <?php foreach ($tracks as $track): ?>
+                                <dt class="tracking-title text-xs font-medium text-neutral-500">
+                                    <?= $escaper->escapeHtml($block->getObjectData($track, 'title')) ?>
+                                </dt>
+                                <dd class="tracking-content tabular-nums text-neutral-800">
+                                    <?= $escaper->escapeHtml($block->getObjectData($track, 'number')) ?>
+                                </dd>
+                            <?php endforeach; ?>
+                            </dl>
+                        <?php endif; ?>
+                        </div>
+                    </div>
+
+                    <div class="mb-6 rounded-lg border border-neutral-200 bg-white box-order-billing-address">
+                        <div class="px-4 py-3 text-base font-semibold border-b border-neutral-200 bg-neutral-50">
+                            <strong><?= $escaper->escapeHtml(__('Billing Address')) ?></strong>
+                        </div>
+                        <div class="p-4">
+                            <address><?= $block->getBillingAddressFormattedHtml($order) ?></address>
+                        </div>
+                    </div>
+
+                    <div class="mb-6 rounded-lg border border-neutral-200 bg-white box-order-billing-method">
+                        <div class="px-4 py-3 text-base font-semibold border-b border-neutral-200 bg-neutral-50">
+                            <strong><?= $escaper->escapeHtml(__('Payment Method')) ?></strong>
+                        </div>
+                        <div class="p-4">
+                            <?= $block->getPaymentInfoHtml() ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php endforeach; ?>
+<?php endif; ?>

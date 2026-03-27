@@ -1,0 +1,31 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// phpcs:disable Magento2.Files.LineLength
+?>
+<div class="product text-sm text-neutral-800">
+    <strong class="product name text-base font-semibold text-neutral-900"><a class="text-blue-600 hover:text-blue-800 hover:underline" href="<?= $block->escapeUrl($block->getProductUrl()) ?>"><?= $block->escapeHtml($block->getProductName()) ?></a></strong>
+    <?php if ($_options = $block->getOptionList()) : ?>
+        <dl class="item-options mt-2 space-y-1 text-xs text-neutral-600">
+            <?php foreach ($_options as $_option) : ?>
+                <?php $_formatedOptionValue = $block->getFormatedOptionValue($_option) ?>
+                <dt class="font-medium text-neutral-800"><?= $block->escapeHtml($_option['label']) ?></dt>
+                <dd<?= isset($_formatedOptionValue['full_view']) ? ' class="inline-block w-full"' : '' ?>>
+                    <?= $block->escapeHtml($_formatedOptionValue['value']) ?>
+                    <?php if (isset($_formatedOptionValue['full_view'])) : ?>
+                        <dl class="options content mt-2 inline-block rounded-lg border border-neutral-200 bg-white p-3">
+                            <dt class="font-medium text-neutral-800"><?= $block->escapeHtml($_option['label']) ?></dt>
+                            <dd class="mt-1"><?= $block->escapeHtml($_formatedOptionValue['full_view']) ?></dd>
+                        </dl>
+                    <?php endif; ?>
+                </dd>
+            <?php endforeach; ?>
+        </dl>
+    <?php endif; ?>
+    <?php if ($addtInfoBlock = $block->getProductAdditionalInformationBlock()) : ?>
+        <?= $addtInfoBlock->setItem($block->getItem())->toHtml() ?>
+    <?php endif; ?>
+</div>

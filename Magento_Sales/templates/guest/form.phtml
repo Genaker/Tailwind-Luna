@@ -1,0 +1,71 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+?>
+<form class="form form-orders-search"
+      id="oar-widget-orders-and-returns-form"
+      data-mage-init='{"ordersReturns":{}, "validation":{}}'
+      action="<?= $block->escapeUrl($block->getActionUrl()) ?>"
+      method="post" name="guest_post">
+    <fieldset class="min-w-0 border-0 p-0 m-0">
+        <legend class="mb-3 text-base font-semibold text-neutral-900"><span><?= $block->escapeHtml(__('Order Information')) ?></span></legend>
+        <br>
+
+        <div class="mb-4 id required">
+            <label class="block text-sm font-medium text-neutral-800 mb-1" for="oar-order-id"><span><?= $block->escapeHtml(__('Order ID')) ?></span></label>
+
+            <div class="mt-1">
+                <input type="text" class="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500" id="oar-order-id" name="oar_order_id"
+                       data-validate="{required:true}"/>
+            </div>
+        </div>
+        <div class="mb-4 lastname required">
+            <label class="block text-sm font-medium text-neutral-800 mb-1" for="oar-billing-lastname">
+                <span><?= $block->escapeHtml(__('Billing Last Name')) ?></span>
+            </label>
+
+            <div class="mt-1">
+                <input type="text" class="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500" id="oar-billing-lastname" name="oar_billing_lastname"
+                       data-validate="{required:true}"/>
+            </div>
+        </div>
+        <div class="mb-4 find required">
+            <label class="block text-sm font-medium text-neutral-800 mb-1" for="quick-search-type-id">
+                <span><?= $block->escapeHtml(__('Find Order By')) ?></span>
+            </label>
+
+            <div class="mt-1">
+                <select name="oar_type" id="quick-search-type-id" class="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm bg-white">
+                    <option value="email"><?= $block->escapeHtml(__('Email')) ?></option>
+                    <option value="zip"><?= $block->escapeHtml(__('ZIP Code')) ?></option>
+                </select>
+            </div>
+        </div>
+        <div id="oar-email" class="mb-4 email required">
+            <label class="block text-sm font-medium text-neutral-800 mb-1" for="oar_email"><span><?= $block->escapeHtml(__('Email')) ?></span></label>
+
+            <div class="mt-1">
+                <input type="email" class="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500" id="oar_email" name="oar_email"
+                       data-validate="{required:true, 'validate-email':true}"/>
+            </div>
+        </div>
+        <div id="oar-zip" class="mb-4 zip required">
+            <label class="block text-sm font-medium text-neutral-800 mb-1" for="oar_zip"><span><?= $block->escapeHtml(__('Billing ZIP Code')) ?></span></label>
+
+            <div class="mt-1">
+                <input type="text" class="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500" id="oar_zip" name="oar_zip" data-validate="{required:true}"/>
+            </div>
+        </div>
+        <?= /* @noEscape */ $secureRenderer->renderStyleAsTag('display: none;', 'div#oar-zip') ?>
+    </fieldset>
+    <div class="flex flex-wrap items-center justify-between gap-4 py-4 clear-both">
+        <button type="submit" title="<?= $block->escapeHtmlAttr(__('Continue')) ?>" class="inline-flex items-center justify-center gap-2 rounded-md text-sm font-semibold border px-4 py-2 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600 disabled:opacity-50 disabled:pointer-events-none bg-blue-600 text-white border-blue-600 hover:bg-blue-700 submit">
+            <span><?= $block->escapeHtml(__('Continue')) ?></span>
+        </button>
+    </div>
+</form>

@@ -1,0 +1,14 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+/** @var \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer $block */
+$_item = $block->getItem();
+?>
+<?php
+/** @var \Magento\Sales\Model\Order $_order */
+$_order = $block->getItem()->getOrderItem()->getOrder() ?>
+<?= /* @noEscape */ $_order->formatPrice($block->getTotalAmount($_item)) ?>

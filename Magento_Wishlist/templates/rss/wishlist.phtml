@@ -1,0 +1,15 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+/** @var \Magento\Wishlist\Block\Rss\Link $block */
+$wishlistHelper = $this->helper(\Magento\Wishlist\Helper\Data::class);
+?>
+<?php if ($block->isRssAllowed() && $block->getLink() && $wishlistHelper->getWishlist()->getItemsCount()) : ?>
+    <a href="<?= $block->escapeUrl($block->getLink()) ?>" class="inline-flex items-center justify-center gap-2 rounded-md text-sm font-semibold border border-neutral-300 px-4 py-2 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600 disabled:opacity-50 disabled:pointer-events-none rss wishlist">
+        <span><?= $block->escapeHtml(__('RSS Feed')) ?></span>
+    </a>
+<?php endif; ?>

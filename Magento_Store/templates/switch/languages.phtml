@@ -1,0 +1,39 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+/** @var \Magento\Store\Block\Switcher $block */
+?>
+<?php if (count($block->getStores()) > 1) : ?>
+    <?php $id = $block->getIdModifier() ? '-' . $block->getIdModifier() : '' ?>
+    <div class="switcher language switcher-language" data-ui-id="language-switcher" id="switcher-language<?= $block->escapeHtmlAttr($id) ?>">
+        <strong class="block text-sm font-medium text-neutral-800 mb-1 switcher-label"><span><?= $block->escapeHtml(__('Language')) ?></span></strong>
+        <div class="flex flex-wrap gap-2 dropdown options switcher-options">
+            <div class="toggle switcher-trigger inline-flex min-h-[2.5rem] min-w-0 max-w-full cursor-pointer select-none items-center justify-center gap-2 rounded-lg border border-neutral-200 bg-white px-4 py-2 text-sm font-semibold tracking-tight text-neutral-800 shadow-sm ring-1 ring-neutral-900/5 transition-all duration-150 hover:border-neutral-300 hover:bg-neutral-50 hover:shadow active:bg-neutral-100 aria-expanded:border-primary/35 aria-expanded:bg-sky-50/60 aria-expanded:text-primary aria-expanded:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+                 id="switcher-language-trigger<?= $block->escapeHtmlAttr($id) ?>"
+                 data-mage-init='{"dropdown":{}}'
+                 data-toggle="dropdown"
+                 data-trigger-keypress-button="true">
+                <strong class="view-<?= $block->escapeHtmlAttr($block->getCurrentStoreCode()) ?>">
+                    <span><?= $block->escapeHtml($block->getStoreName()) ?></span>
+                </strong>
+            </div>
+            <ul class="dropdown switcher-dropdown"
+                data-target="dropdown"
+                hidden>
+                <?php foreach ($block->getStores() as $_lang) : ?>
+                    <?php if ($_lang->getId() != $block->getCurrentStoreId()) : ?>
+                        <li class="view-<?= $block->escapeHtmlAttr($_lang->getCode()) ?> switcher-option">
+                            <a href="<?= $block->escapeUrl($block->getViewModel()->getTargetStoreRedirectUrl($_lang)) ?>" class="text-blue-600 hover:text-blue-800 hover:underline">
+                                <?= $block->escapeHtml($_lang->getName()) ?>
+                            </a>
+                        </li>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    </div>
+<?php endif; ?>

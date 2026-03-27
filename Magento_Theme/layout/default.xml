@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Default storefront logo: compact asset + intrinsic dimensions (scaled down in CSS).
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="head.additional">
+            <block class="Genaker\ThemeTileWindLuna\Block\ResolveCss" name="genaker.resolve_css.tailwind" before="-">
+                <arguments>
+                    <argument name="css_path" xsi:type="string">css/tailwind.css</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+        <referenceBlock name="logo">
+            <arguments>
+                <argument name="logo_file" xsi:type="string">Magento_Theme::images/luna-logo-small.jpg</argument>
+                <argument name="logo_width" xsi:type="number">160</argument>
+                <argument name="logo_height" xsi:type="number">46</argument>
+            </arguments>
+        </referenceBlock>
+    </body>
+</page>

@@ -1,0 +1,16 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+/**
+ * @var $block \Magento\OfflinePayments\Block\Info\Purchaseorder
+ */
+?>
+<dl class="payment-method purchase order space-y-1 text-sm text-neutral-800">
+    <dt class="text-base font-semibold text-neutral-900"><?= $block->escapeHtml($block->getMethod()->getTitle()) ?></dt>
+    <dd class="content text-neutral-700">
+        <strong class="font-medium text-neutral-900"><?= $block->escapeHtml(__('Purchase Order Number')) ?></strong>
+        <span class="number tabular-nums"><?= $block->escapeHtml($block->getInfo()->getPoNumber()) ?></span>
+    </dd>
+</dl>

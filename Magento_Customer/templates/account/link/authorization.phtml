@@ -1,0 +1,75 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * @var \Magento\Customer\Block\Account\AuthorizationLink $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+$dataPostParam = '';
+if ($block->isLoggedIn()) {
+    $dataPostParam = sprintf(" data-post='%s'", $block->getPostParams());
+}
+$label = $block->getLabel();
+$linkClass = 'action header-account-link inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-white text-neutral-700 shadow-sm touch-manipulation transition-colors duration-150 hover:border-neutral-300 hover:bg-neutral-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/25 focus-visible:ring-offset-1';
+$summaryClass = $linkClass . ' list-none cursor-pointer marker:hidden [&::-webkit-details-marker]:hidden';
+$loginHref = $block->getHref();
+$registerHref = $block->getUrl('customer/account/create');
+?>
+<li class="link authorization-link relative" data-label="<?= $escaper->escapeHtml(__('or')) ?>">
+    <?php if ($block->isLoggedIn()): ?>
+        <a href="<?= $escaper->escapeUrl($loginHref) ?>"
+           class="<?= $escaper->escapeHtmlAttr($linkClass) ?>"
+           title="<?= $escaper->escapeHtmlAttr($label) ?>"
+           aria-label="<?= $escaper->escapeHtmlAttr($label) ?>"
+            <?= /* @noEscape */ $dataPostParam ?>>
+            <span class="sr-only"><?= $escaper->escapeHtml($label) ?></span>
+            <svg class="pointer-events-none h-5 w-5 shrink-0"
+                 width="20"
+                 height="20"
+                 viewBox="0 0 24 24"
+                 fill="none"
+                 xmlns="http://www.w3.org/2000/svg"
+                 aria-hidden="true">
+                <path stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M18 9l3 3m0 0l-3 3m3-3H9"/>
+            </svg>
+        </a>
+    <?php else: ?>
+        <details class="relative open:[&_summary]:border-neutral-300 open:[&_summary]:bg-neutral-50">
+            <summary
+                class="<?= $escaper->escapeHtmlAttr($summaryClass) ?>"
+                aria-label="<?= $escaper->escapeHtmlAttr(__('Account menu')) ?>"
+                aria-haspopup="menu">
+                <span class="sr-only"><?= $escaper->escapeHtml(__('Account menu')) ?></span>
+                <svg class="pointer-events-none h-5 w-5 shrink-0"
+                     width="20"
+                     height="20"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     xmlns="http://www.w3.org/2000/svg"
+                     aria-hidden="true">
+                    <path stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.25a7.5 7.5 0 0115 0"/>
+                </svg>
+            </summary>
+            <div class="absolute right-0 top-full z-50 mt-2 min-w-[12rem] rounded-lg border border-neutral-200 bg-white py-2 shadow-lg"
+                 role="menu">
+                <a href="<?= $escaper->escapeUrl($loginHref) ?>"
+                   class="block px-4 py-2.5 text-sm font-semibold text-primary no-underline transition-colors hover:bg-neutral-50 focus:outline-none focus-visible:bg-neutral-50"
+                   role="menuitem"><?= $escaper->escapeHtml(__('Sign In')) ?></a>
+                <a href="<?= $escaper->escapeUrl($registerHref) ?>"
+                   class="block px-4 py-2.5 text-sm font-semibold text-primary no-underline transition-colors hover:bg-neutral-50 focus:outline-none focus-visible:bg-neutral-50"
+                   role="menuitem"><?= $escaper->escapeHtml(__('Create an Account')) ?></a>
+            </div>
+        </details>
+    <?php endif; ?>
+</li>

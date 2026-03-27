@@ -1,0 +1,45 @@
+<?php
+/**
+ * Toolbar sorter - Sort By dropdown
+ *
+ * @var $block \Magento\Catalog\Block\Product\ProductList\Toolbar
+ */
+?>
+<?php if ($block->isEnabledViewSwitcher()): ?>
+    <div class="toolbar-sorter sorter flex items-center gap-2">
+        <label class="sorter-label text-xs font-medium text-neutral-700 sm:text-sm" for="sorter">
+            <span><?= $block->escapeHtml(__('Sort By')) ?></span>
+        </label>
+        <select id="sorter" 
+                data-role="sorter" 
+                class="sorter-options min-w-[7rem] max-w-[11rem] rounded-md border border-neutral-300 bg-white px-2 py-1 text-xs focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-0 sm:min-w-[8rem] sm:text-sm">
+            <?php foreach ($block->getAvailableOrders() as $_key => $_order): ?>
+                <option value="<?= $block->escapeHtmlAttr($_key) ?>"
+                    <?php if ($block->isOrderCurrent($_key)): ?>
+                        selected="selected"
+                    <?php endif; ?>>
+                    <?= $block->escapeHtml(__($_order)) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+        <?php if ($block->getCurrentDirection() == 'desc'): ?>
+            <a class="action sorter-action sort-desc inline-flex items-center justify-center w-9 h-9 rounded-lg border border-neutral-300 bg-white text-neutral-600 hover:border-primary hover:text-primary transition-colors"
+               href="<?= $block->escapeUrl($block->getOrderUrl(null, 'asc')) ?>"
+               data-role="direction-switcher"
+               data-value="asc"
+               title="<?= $block->escapeHtmlAttr(__('Set Ascending Direction')) ?>">
+                <span class="sr-only"><?= $block->escapeHtml(__('Set Ascending Direction')) ?></span>
+                <span aria-hidden="true">↑</span>
+            </a>
+        <?php else: ?>
+            <a class="action sorter-action sort-asc inline-flex items-center justify-center w-9 h-9 rounded-lg border border-neutral-300 bg-white text-neutral-600 hover:border-primary hover:text-primary transition-colors"
+               href="<?= $block->escapeUrl($block->getOrderUrl(null, 'desc')) ?>"
+               data-role="direction-switcher"
+               data-value="desc"
+               title="<?= $block->escapeHtmlAttr(__('Set Descending Direction')) ?>">
+                <span class="sr-only"><?= $block->escapeHtml(__('Set Descending Direction')) ?></span>
+                <span aria-hidden="true">↓</span>
+            </a>
+        <?php endif; ?>
+    </div>
+<?php endif; ?>

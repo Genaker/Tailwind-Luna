@@ -1,0 +1,22 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * @var \Magento\Payment\Block\Transparent\Info $block
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @see \Magento\Payment\Block\Transparent\Info
+ */
+?>
+<?php $_methodCode = $block->escapeHtmlAttr($block->getMethodCode()); ?>
+<fieldset id="payment_form_<?= /* @noEscape */ $_methodCode ?>" class="redirect m-0 min-w-0 list-none border-0 p-0">
+    <div class="text-sm text-neutral-700">
+        <?= $block->escapeHtml(__('We\'ll ask for your payment details before you place an order.')) ?>
+    </div>
+</fieldset>
+<?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+    'display:none',
+    'fieldset#payment_form_' . /* @noEscape */ $_methodCode
+) ?>

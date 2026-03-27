@@ -1,0 +1,294 @@
+<?php
+/**
+ * PHP-only PDP gallery (Tailwind).
+ *
+ * Tailwind: $css class strings are not scanned by the JIT (see tailwind.config.js phtml transform).
+ * Keep the same utilities in web/tailwind/css-safelist.html and run `npm run build:tailwind`.
+ *
+ * @var \Magento\Catalog\Block\Product\View\Gallery $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+
+/* ── CSS classes ─────────────────────────────────────────────────────────── */
+$css = [
+    'root'       => 'relative w-full max-w-xl mx-auto px-2 sm:px-4',
+    'stage'      => 'flex flex-col items-center',
+    'mainWrap'   => 'relative w-full max-h-[min(85vh,40rem)] overflow-hidden rounded-xl bg-neutral-100 ring-1 ring-neutral-200/80',
+    'mainImg'    => 'block h-auto max-h-[min(85vh,40rem)] w-full cursor-zoom-in object-contain object-center',
+    'thumbs'     => 'mt-3 flex flex-wrap items-center justify-center gap-2 sm:mt-4',
+    'thumb'      => 'gphp-thumb h-16 w-16 shrink-0 cursor-pointer overflow-hidden rounded-lg border border-neutral-200 bg-white object-cover p-0 ring-2 ring-transparent transition hover:ring-primary/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:h-[4.5rem] sm:w-[4.5rem] [.is-active]:border-primary [.is-active]:ring-primary',
+    'popup'      => 'gphp-popup fixed inset-0 z-[9999] hidden items-center justify-center bg-black/85 p-4',
+    'popupInner' => 'relative flex max-h-full max-w-full flex-col items-center',
+    'popupImg'   => 'max-h-[90vh] max-w-full rounded-lg object-contain shadow-2xl',
+    'close'      => 'absolute -right-1 -top-10 z-50 rounded-md bg-white/10 px-3 py-1.5 text-sm font-medium text-white hover:bg-white/20 focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-white sm:right-0 sm:top-0',
+];
+
+/* ── Data ────────────────────────────────────────────────────────────────── */
+$product = $block->getProduct();
+
+/** @var \Genaker\ThemeTileWindLuna\Service\ProductGalleryImageService $galleryImageService */
+$galleryImageService = $block->getData('gallery_image_service');
+if (!$galleryImageService instanceof \Genaker\ThemeTileWindLuna\Service\ProductGalleryImageService) {
+    /* Layout merge (e.g. Genaker_FastProductGallery) may not pass this argument; service is stateless. */
+    $galleryImageService = \Magento\Framework\App\ObjectManager::getInstance()->get(
+        \Genaker\ThemeTileWindLuna\Service\ProductGalleryImageService::class
+    );
+}
+$g = $galleryImageService->build($block);
+
+$galleryItems   = $g['items'];
+$mainIndex      = $g['mainIndex'];
+$mediumWidth    = $g['mediumWidth'];
+$mediumHeight   = $g['mediumHeight'];
+$mobileWidth    = $g['mobileWidth'];
+$fullWidth      = $g['fullWidth'];
+$canonicalUrl   = $g['canonicalUrl'];
+$galleryConfig  = $g['galleryConfig'];
+
+$productId = (int) $product->getId();
+$popupId   = 'gphp-popup-' . $productId;
+?>
+<div class="<?= $escaper->escapeHtmlAttr($css['root']) ?>"
+     data-gphp-gallery="1"
+     data-gphp-popup="<?= $escaper->escapeHtmlAttr($popupId) ?>"
+     id="product-gallery-<?= $productId ?>">
+
+    <link itemprop="image" href="<?= $escaper->escapeUrl($canonicalUrl) ?>"/>
+
+    <div class="<?= $escaper->escapeHtmlAttr($css['stage']) ?>" data-gphp-stage="1">
+        <?php
+        $stageBlock = $block->getChildBlock('product.gallery.stage');
+        if ($stageBlock) {
+            $stageBlock->setData([
+                'stage_items'       => $galleryItems,
+                'stage_main_idx'    => $mainIndex,
+                'w_mobile'          => $mobileWidth,
+                'w_medium'          => $mediumWidth,
+                'w_full'            => $fullWidth,
+                'width'             => $mediumWidth,
+                'height'            => $mediumHeight,
+                'gphp_simple_stage' => false,
+            ]);
+            echo $stageBlock->toHtml();
+        } else {
+            echo "<p class='error'>Layout missing child (stale merge): same markup via include</p>";
+        }
+        ?>
+    </div>
+
+    <div id="<?= $escaper->escapeHtmlAttr($popupId) ?>"
+         class="<?= $escaper->escapeHtmlAttr($css['popup']) ?>"
+         data-gphp-lightbox="1"
+         role="dialog"
+         aria-modal="true"
+         aria-label="<?= $escaper->escapeHtmlAttr(__('Full product image')) ?>"
+         hidden>
+        <div class="<?= $escaper->escapeHtmlAttr($css['popupInner']) ?>">
+            <button type="button"
+                    class="<?= $escaper->escapeHtmlAttr($css['close']) ?>"
+                    data-gphp-close="1"
+                    aria-label="<?= $escaper->escapeHtmlAttr(__('Close image')) ?>">
+                <span style="font-size:1.375rem;line-height:1;opacity:0.95" aria-hidden="true">×</span>
+                <span style="margin-inline-start:0.375rem"><?= $escaper->escapeHtml(__('Close')) ?></span>
+            </button>
+            <img src="" alt="" class="<?= $escaper->escapeHtmlAttr($css['popupImg']) ?>" data-gphp-popup-img="1"/>
+        </div>
+    </div>
+</div>
+
+<script type="application/json" id="gphp-json-<?= $productId ?>"><?= /* @noEscape */ $galleryConfig ?></script>
+
+<script>
+(function () {
+    'use strict';
+
+    var root = document.getElementById('product-gallery-<?= $productId ?>');
+    if (!root) { return; }
+
+    var data;
+    try {
+        data = JSON.parse(document.getElementById('gphp-json-<?= $productId ?>').textContent || '{}');
+    } catch (e) { return; }
+
+    var items        = data.items || [];
+    var currentIndex = typeof data.mainIndex === 'number' ? data.mainIndex : 0;
+    var widths       = data.widths || { mobile: 400, medium: 540, full: 540 };
+
+    var popupEl      = document.getElementById(root.getAttribute('data-gphp-popup') || '');
+    var popupImgEl   = popupEl ? popupEl.querySelector('[data-gphp-popup-img]') : null;
+    var schemaLink   = root.querySelector('link[itemprop=image]');
+
+    /* position:fixed can be clipped by transformed ancestors — move popup to <body>. */
+    if (popupEl && popupEl.parentNode !== document.body) {
+        document.body.appendChild(popupEl);
+    }
+
+    var initialStageHtml = '';
+    var mainImgEl        = null;
+
+    function stage() { return root.querySelector('[data-gphp-stage]'); }
+
+    function initRefs() {
+        var st = stage();
+        mainImgEl        = st ? st.querySelector('[data-gphp-main]') : null;
+        initialStageHtml = initialStageHtml || (st ? st.innerHTML : '');
+    }
+    initRefs();
+
+    /* ── Thumbnail highlight ─────────────────────────────────────────────── */
+    function highlightThumb(activeIndex) {
+        var st = stage();
+        if (!st) { return; }
+        st.querySelectorAll('[data-gphp-thumb]').forEach(function (btn) {
+            var isActive = parseInt(btn.getAttribute('data-gphp-thumb'), 10) === activeIndex;
+            btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+            btn.classList.toggle('is-active', isActive);
+        });
+    }
+
+    /* ── Update <picture> sources after item change ───────────────────────── */
+    function syncPictureSources(item) {
+        if (!mainImgEl) { return; }
+        var st          = stage();
+        var mobileSource = st ? st.querySelector('[data-gphp-mobile-source]') : null;
+        var tabletSource = st ? st.querySelector('[data-gphp-tablet-source]') : null;
+
+        if (mobileSource && tabletSource) {
+            /* Full <picture> mode (main PDP): plain URL on each <source>. */
+            var mobileSrc = item.mobile || item.medium || '';
+            if (mobileSrc) { mobileSource.setAttribute('srcset', mobileSrc); }
+            if (item.medium) { tabletSource.setAttribute('srcset', item.medium); }
+            mainImgEl.removeAttribute('srcset');
+            mainImgEl.removeAttribute('sizes');
+        } else {
+            /* Simple <img> mode (swatch variant): build a srcset on the element. */
+            var srcsetParts = [];
+            if (item.medium) { srcsetParts.push(item.medium + ' ' + (widths.medium || 540) + 'w'); }
+            if (item.full && item.full !== item.medium) { srcsetParts.push(item.full + ' ' + (widths.full || 540) + 'w'); }
+            if (srcsetParts.length) {
+                mainImgEl.srcset = srcsetParts.join(', ');
+                mainImgEl.setAttribute('sizes', '(min-width: 768px) min(' + (widths.medium || 540) + 'px, 55vw), 100vw');
+            } else {
+                mainImgEl.removeAttribute('srcset');
+                mainImgEl.removeAttribute('sizes');
+            }
+        }
+
+        if (item.mobile) {
+            mainImgEl.setAttribute('data-gphp-mobile', item.mobile);
+        } else {
+            mainImgEl.removeAttribute('data-gphp-mobile');
+        }
+    }
+
+    /* ── Show a gallery item ─────────────────────────────────────────────── */
+    function showItem(index) {
+        if (!items[index] || !mainImgEl) { return; }
+        currentIndex = index;
+        var item = items[index];
+        mainImgEl.src = item.medium || item.full;
+        mainImgEl.alt = item.label || '';
+        mainImgEl.setAttribute('data-gphp-full', item.full || item.medium);
+        syncPictureSources(item);
+        if (schemaLink) { schemaLink.setAttribute('href', item.medium || item.full); }
+        highlightThumb(index);
+    }
+
+    /* ── Click: thumbnail or main image (lightbox) ───────────────────────── */
+    root.addEventListener('click', function (ev) {
+        var target = ev.target;
+
+        var thumbBtn = target.closest ? target.closest('[data-gphp-thumb]') : null;
+        if (thumbBtn && root.contains(thumbBtn)) {
+            ev.preventDefault();
+            var thumbIndex = parseInt(thumbBtn.getAttribute('data-gphp-thumb'), 10);
+            if (!isNaN(thumbIndex)) { showItem(thumbIndex); }
+            return;
+        }
+
+        if (mainImgEl && (target === mainImgEl || (target.closest && target.closest('[data-gphp-main]')))) {
+            var fullSrc = mainImgEl.getAttribute('data-gphp-full');
+            if (fullSrc && popupEl && popupImgEl) {
+                popupImgEl.src = fullSrc;
+                popupImgEl.alt = mainImgEl.alt || '';
+                openLightbox();
+                var closeBtn = popupEl.querySelector('[data-gphp-close]');
+                if (closeBtn) { closeBtn.focus(); }
+            }
+        }
+    });
+
+    /* ── Lightbox open / close ───────────────────────────────────────────── */
+    function openLightbox() {
+        if (!popupEl) { return; }
+        popupEl.hidden = false;
+        popupEl.classList.remove('hidden');
+        /* Use setProperty('…', '…', 'important') so stacking contexts / .hidden don't override. */
+        var s = popupEl.style;
+        s.setProperty('position',         'fixed',              'important');
+        s.setProperty('inset',            '0',                  'important');
+        s.setProperty('width',            '100%',               'important');
+        s.setProperty('min-height',       '100vh',              'important');
+        s.setProperty('box-sizing',       'border-box',         'important');
+        s.setProperty('margin',           '0',                  'important');
+        s.setProperty('z-index',          '2147483000',         'important');
+        s.setProperty('display',          'flex',               'important');
+        s.setProperty('align-items',      'center',             'important');
+        s.setProperty('justify-content',  'center',             'important');
+        s.setProperty('padding',          '1rem',               'important');
+        s.setProperty('background-color', 'rgba(0,0,0,0.85)',   'important');
+        s.setProperty('overflow',         'auto',               'important');
+    }
+
+    function closeLightbox() {
+        if (!popupEl) { return; }
+        popupEl.hidden = true;
+        popupEl.classList.add('hidden');
+        popupEl.style.cssText = '';
+        if (popupImgEl) { popupImgEl.src = ''; }
+    }
+
+    if (popupEl) {
+        popupEl.addEventListener('click', function (ev) {
+            if (ev.target === popupEl) { closeLightbox(); }
+        });
+        popupEl.querySelectorAll('[data-gphp-close]').forEach(function (btn) {
+            btn.addEventListener('click', closeLightbox);
+        });
+    }
+
+    document.addEventListener('keydown', function (ev) {
+        if (ev.key === 'Escape' && popupEl && !popupEl.hidden) { closeLightbox(); }
+    });
+
+    /* ── Public API (consumed by gallery-swatch-bridge.js) ──────────────── */
+    (window.gphpGalleries = window.gphpGalleries || {})[<?= $productId ?>] = {
+        showItem: showItem,
+
+        /** Called by bridge.js after it replaces [data-gphp-stage] innerHTML with a variant. */
+        refreshState: function (newItems, newMainIdx) {
+            initRefs();
+            if (newItems && newItems.length) {
+                items        = newItems;
+                currentIndex = typeof newMainIdx === 'number' ? newMainIdx : 0;
+            }
+            if (schemaLink) { schemaLink.setAttribute('href', (items[currentIndex] || {}).medium || ''); }
+            if (mainImgEl) { showItem(currentIndex); }
+        },
+
+        /** Called by bridge.js when swatch selection becomes incomplete → restore parent gallery. */
+        reset: function () {
+            items        = (data.items || []).slice();
+            currentIndex = typeof data.mainIndex === 'number' ? data.mainIndex : 0;
+            var st = stage();
+            if (st && initialStageHtml) { st.innerHTML = initialStageHtml; }
+            initRefs();
+            if (mainImgEl) { showItem(currentIndex); }
+        },
+
+        syncPictureSources: syncPictureSources,
+        get main() { return mainImgEl; },
+        items: items,
+    };
+}());
+</script>

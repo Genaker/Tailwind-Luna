@@ -1,0 +1,31 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * @var \Magento\Paypal\Block\Payment\Form\Billing\Agreement $block
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
+$methodCode = $block->getMethodCode();
+$methodCodeAttr = $block->escapeHtmlAttr($methodCode);
+?>
+<div class="required m-0 mb-4 list-none p-0" id="payment_form_<?= $methodCodeAttr ?>">
+    <label for="<?= $methodCodeAttr ?>_ba_agreement_id" class="mb-1 block text-sm font-medium text-neutral-800">
+        <span><?= $block->escapeHtml(__('Billing Agreement')) ?></span>
+    </label>
+    <div class="mt-1">
+        <select id="<?= $methodCodeAttr ?>_ba_agreement_id"
+                name="payment[<?= $block->escapeHtmlAttr($block->getTransportName()) ?>]"
+                class="w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
+            <option value=""><?= $block->escapeHtml(__('-- Please Select Billing Agreement--')) ?></option>
+            <?php foreach ($block->getBillingAgreements() as $id => $referenceId): ?>
+                <option value="<?= $block->escapeHtmlAttr((string) $id) ?>">
+                    <?= $block->escapeHtml($referenceId) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+</div>
+<?= /* @noEscape */ $secureRenderer->renderStyleAsTag("display:none;", 'div#payment_form_' . $block->escapeHtml($methodCode)) ?>

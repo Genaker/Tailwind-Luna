@@ -1,0 +1,62 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\Wishlist\Block\Customer\Sharing $block */
+?>
+<form class="form wishlist share max-w-3xl"
+      action="<?= $block->escapeUrl($block->getSendUrl()) ?>"
+      id="form-validate"
+      method="post"
+      data-hasrequired="<?= $block->escapeHtmlAttr(__('* Required Fields')) ?>"
+      data-mage-init='{"validation":{}}'>
+    <fieldset class="m-0 min-w-0 space-y-4 border-0 p-0">
+        <?= $block->getBlockHtml('formkey') ?>
+        <legend class="mb-0 text-base font-semibold text-neutral-900"><span><?= $block->escapeHtml(__('Sharing Information')) ?></span></legend>
+        <div class="emails required mb-0">
+            <label class="mb-1 block text-sm font-medium text-neutral-800" for="email_address"><span><?= $block->escapeHtml(__('Email addresses, separated by commas')) ?></span></label>
+            <div class="mt-1">
+                <textarea name="emails"
+                          id="email_address"
+                          cols="60"
+                          rows="5"
+                          class="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                          data-validate="{required:true,'validate-emails':true}"><?= /* @noEscape */ $block->getEnteredData('emails') ?></textarea>
+            </div>
+        </div>
+        <div class="text mb-0">
+            <label class="mb-1 block text-sm font-medium text-neutral-800" for="message"><span><?= $block->escapeHtml(__('Message')) ?></span></label>
+            <div class="mt-1">
+                <textarea id="message"
+                          name="message"
+                          cols="60"
+                          rows="5"
+                          class="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"><?= /* @noEscape */ $block->getEnteredData('message') ?></textarea>
+            </div>
+        </div>
+        <?php if ($this->helper(\Magento\Wishlist\Helper\Rss::class)->isRssAllow()) : ?>
+            <div class="rss mb-0 flex items-start gap-2">
+                <input type="checkbox" name="rss_url" id="rss_url" value="1" title="<?= $block->escapeHtmlAttr(__('Check here to link an RSS feed to your Wish List.')) ?>" class="h-4 w-4 rounded border-neutral-300 text-blue-600">
+                <label class="block text-sm font-medium text-neutral-800 mb-1" for="rss_url">
+                    <span>
+                        <?= $block->escapeHtml(__('Check here to link an RSS feed to your Wish List.')) ?>
+                    </span>
+                </label>
+            </div>
+        <?php endif; ?>
+    </fieldset>
+    <?= $block->getChildHtml('captcha'); ?>
+    <div class="clear-both flex flex-wrap items-center justify-between gap-3 pt-6">
+        <button type="submit"
+                title="<?= $block->escapeHtmlAttr(__('Share Wish List')) ?>"
+                class="submit inline-flex items-center justify-center gap-2 rounded-md border border-blue-600 bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600 disabled:pointer-events-none disabled:opacity-50">
+            <span><?= $block->escapeHtml(__('Share Wish List')) ?></span>
+        </button>
+        <a class="back inline-flex items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-semibold text-neutral-900 transition-colors hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"
+           href="<?= $block->escapeUrl($block->getBackUrl()) ?>">
+            <span><?= $block->escapeHtml(__('Back')) ?></span>
+        </a>
+    </div>
+</form>

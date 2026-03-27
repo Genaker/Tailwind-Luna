@@ -1,0 +1,165 @@
+.cms-content a,
+.column.main .widget a {
+  color: #1979c3;
+  text-underline-offset: 2px;
+}
+.cms-content a:hover,
+.column.main .widget a:hover {
+  text-decoration: underline;
+}
+
+/* block-promo cards are full-card links; exclude from global .cms-content link styling. */
+.cms-content a.block-promo,
+.cms-content a.block-promo:hover,
+.cms-content a.block-promo:focus,
+.column.main .widget a.block-promo,
+.column.main .widget a.block-promo:hover,
+.column.main .widget a.block-promo:focus {
+  color: inherit;
+  text-decoration: none;
+}
+
+.cms-content img,
+.column.main .widget img {
+  height: auto;
+  max-width: 100%;
+}
+
+/*
+ * block-promo / blocks-promo: grid of linked promos; optional .blocks-promo wrapper.
+ * Bundled in web/css/tailwind.css via this file (single utility build; no second homepage CSS).
+ * .content.bg-white: panel over image. .content without bg-white: text on image.
+ */
+@layer components {
+  /* Sample grid: two columns from md; .home-main spans both columns. */
+  .blocks-promo {
+    @apply mb-10 grid grid-cols-1 gap-4 md:grid-cols-2;
+  }
+
+  .blocks-promo a.block-promo,
+  .cms-content:not(.cms-home) a.block-promo,
+  .column.main .widget a.block-promo {
+    @apply relative block min-h-[200px] overflow-hidden rounded-lg text-inherit no-underline;
+  }
+
+  .blocks-promo a.block-promo.home-main,
+  .cms-content:not(.cms-home) a.block-promo.home-main,
+  .column.main .widget a.block-promo.home-main {
+    @apply min-h-[320px] md:col-span-2;
+  }
+
+  /* `.cms-home` is the shell in Magento_Cms::home.phtml — include it so hero/promo imgs are not stuck on global `.cms-content img { height:auto }`. */
+  .blocks-promo a.block-promo > img,
+  .cms-home a.block-promo > img,
+  .cms-content:not(.cms-home) a.block-promo > img,
+  .column.main .widget a.block-promo > img {
+    @apply absolute inset-0 z-0 h-full w-full object-cover;
+  }
+
+  .blocks-promo a.block-promo > .image,
+  .cms-content:not(.cms-home) a.block-promo > .image,
+  .column.main .widget a.block-promo > .image {
+    @apply absolute inset-0 z-0;
+  }
+
+  .blocks-promo a.block-promo > .image img,
+  .cms-content:not(.cms-home) a.block-promo > .image img,
+  .column.main .widget a.block-promo > .image img {
+    @apply h-full w-full object-cover;
+  }
+
+  .blocks-promo a.block-promo:hover,
+  .blocks-promo a.block-promo:focus,
+  .cms-content:not(.cms-home) a.block-promo:hover,
+  .cms-content:not(.cms-home) a.block-promo:focus,
+  .column.main .widget a.block-promo:hover,
+  .column.main .widget a.block-promo:focus {
+    @apply no-underline;
+  }
+
+  .blocks-promo a.block-promo .content,
+  .blocks-promo a.block-promo .content *,
+  .cms-content:not(.cms-home) a.block-promo .content,
+  .cms-content:not(.cms-home) a.block-promo .content *,
+  .column.main .widget a.block-promo .content,
+  .column.main .widget a.block-promo .content * {
+    text-decoration: none !important;
+  }
+
+  .blocks-promo a.block-promo .content .action.more.icon:hover,
+  .cms-content:not(.cms-home) a.block-promo .content .action.more.icon:hover,
+  .column.main .widget a.block-promo .content .action.more.icon:hover {
+    text-decoration: underline !important;
+  }
+
+  /* White content panel (preferred): matches home-main / yoga block */
+  .blocks-promo a.block-promo .content[class~='bg-white'],
+  .cms-content:not(.cms-home) a.block-promo .content[class~='bg-white'],
+  .column.main .widget a.block-promo .content[class~='bg-white'] {
+    @apply relative z-10 m-4 flex max-w-md flex-col gap-2 rounded-xl border border-neutral-200/90 !bg-white p-5 text-neutral-800 shadow-xl;
+    text-shadow: none;
+  }
+
+  .blocks-promo a.block-promo .content[class~='bg-white'] .info,
+  .cms-content:not(.cms-home) a.block-promo .content[class~='bg-white'] .info,
+  .column.main .widget a.block-promo .content[class~='bg-white'] .info {
+    @apply text-xs font-semibold uppercase tracking-widest text-neutral-600;
+  }
+
+  .blocks-promo a.block-promo .content[class~='bg-white'] .title,
+  .cms-content:not(.cms-home) a.block-promo .content[class~='bg-white'] .title,
+  .column.main .widget a.block-promo .content[class~='bg-white'] .title {
+    @apply text-xl font-light leading-tight tracking-tight text-neutral-900 sm:text-2xl;
+  }
+
+  /* Text-on-image (no white panel) */
+  .blocks-promo a.block-promo .content:not([class~='bg-white']),
+  .cms-content:not(.cms-home) a.block-promo .content:not([class~='bg-white']),
+  .column.main .widget a.block-promo .content:not([class~='bg-white']) {
+    @apply relative z-10 m-4 flex max-w-md flex-col gap-2 rounded-xl border-0 bg-transparent p-5 text-white shadow-none;
+    text-shadow: 0 1px 3px rgb(0 0 0 / 45%);
+  }
+
+  .blocks-promo a.block-promo .content:not([class~='bg-white']) .info,
+  .cms-content:not(.cms-home) a.block-promo .content:not([class~='bg-white']) .info,
+  .column.main .widget a.block-promo .content:not([class~='bg-white']) .info {
+    @apply text-xs font-semibold uppercase tracking-widest text-white/90;
+  }
+
+  .blocks-promo a.block-promo .content:not([class~='bg-white']) .title,
+  .cms-content:not(.cms-home) a.block-promo .content:not([class~='bg-white']) .title,
+  .column.main .widget a.block-promo .content:not([class~='bg-white']) .title {
+    @apply text-xl font-semibold leading-tight tracking-tight text-white sm:text-3xl;
+  }
+
+  .blocks-promo a.block-promo .action.more.button,
+  .cms-content:not(.cms-home) a.block-promo .action.more.button,
+  .column.main .widget a.block-promo .action.more.button {
+    @apply mt-2.5 inline-flex min-h-[2.75rem] items-center justify-center self-start rounded-lg border border-transparent bg-primary px-6 py-2.5 text-sm font-semibold tracking-wide text-white no-underline shadow-md transition-[background-color,box-shadow] duration-150;
+  }
+
+  .blocks-promo a.block-promo .action.more.button:hover,
+  .blocks-promo a.block-promo .action.more.button:focus,
+  .cms-content:not(.cms-home) a.block-promo .action.more.button:hover,
+  .cms-content:not(.cms-home) a.block-promo .action.more.button:focus,
+  .column.main .widget a.block-promo .action.more.button:hover,
+  .column.main .widget a.block-promo .action.more.button:focus {
+    @apply bg-primary-hover text-white no-underline shadow-lg;
+  }
+
+  .blocks-promo a.block-promo .action.more.icon,
+  .cms-content:not(.cms-home) a.block-promo .action.more.icon,
+  .column.main .widget a.block-promo .action.more.icon {
+    @apply mt-2 inline-flex items-center gap-1 text-sm font-semibold text-inherit underline-offset-4;
+  }
+
+  .blocks-promo a.block-promo .action.more.icon:hover,
+  .cms-content:not(.cms-home) a.block-promo .action.more.icon:hover,
+  .column.main .widget a.block-promo .action.more.icon:hover {
+    @apply underline;
+  }
+
+  .block-promo-wrapper {
+    @apply grid grid-cols-1 gap-4 md:grid-cols-2;
+  }
+}

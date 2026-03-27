@@ -1,0 +1,17 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+
+<?php $_product = $block->getProduct() ?>
+<?php if ($_product->isSaleable() && $block->hasOptions()) :?>
+    <div class="bundle-actions">
+        <button id="bundle-slide"
+                class="customize inline-flex items-center justify-center gap-2 rounded-md border border-blue-600 bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600 disabled:pointer-events-none disabled:opacity-50"
+                type="button">
+            <span><?= $block->escapeHtml(__('Customize and Add to Cart')) ?></span>
+        </button>
+    </div>
+<?php endif;?>

@@ -1,0 +1,2865 @@
+@charset "UTF-8";
+/*
+ * AUTO-GENERATED — do not edit by hand.
+ * Source: scripts/merge-scss.cjs
+ * Files (14): web/tailwind/modules/actions-forms/actions-forms.scss, web/tailwind/modules/base/base.scss, web/tailwind/modules/catalog/10-plp-grids.scss, web/tailwind/modules/catalog/20-product-cards.scss, web/tailwind/modules/catalog/30-plp-toolbar.scss, web/tailwind/modules/catalog/40-swatches.scss, web/tailwind/modules/cms/cms.scss, web/tailwind/modules/footer/footer.scss, web/tailwind/modules/header/header.scss, web/tailwind/modules/layout/layout.scss, web/tailwind/modules/messages-tables/messages-tables.scss, web/tailwind/modules/modals/modals.scss, web/tailwind/modules/navigation/navigation.scss, web/tailwind/extensions/_load-order.scss
+ */
+/* ---- web/tailwind/modules/actions-forms/actions-forms.scss ---- */
+.action.primary,
+button.action.primary,
+.primary .action,
+.action-primary .action.primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  border: 1px solid transparent;
+  background-color: #1979c3;
+  padding: 0.625rem 1.5rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.5;
+  color: #fff;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.action.primary:hover,
+button.action.primary:hover {
+  background-color: #166aaf;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+.action.primary:active,
+button.action.primary:active {
+  background-color: #145a95;
+  transform: translateY(0);
+}
+
+.action.primary:disabled,
+button.action.primary:disabled {
+  pointer-events: none;
+  opacity: 0.5;
+  transform: none;
+}
+
+.action.secondary,
+button.action.secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.375rem;
+  border: 1px solid #d4d4d4;
+  background-color: #fff;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #262626;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.action.secondary:hover {
+  background-color: #fafafa;
+}
+
+.action.tocart,
+.action.tocart.primary,
+button.action.tocart.primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  border: 1px solid transparent;
+  background-color: #1979c3;
+  padding: 0.625rem 1.5rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.5;
+  color: #fff;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.action.tocart:hover {
+  background-color: #166aaf;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+.action.tocart:active {
+  background-color: #145a95;
+  transform: translateY(0);
+}
+
+.action.towishlist,
+.action.tocompare,
+.action.more {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 0.375rem;
+  border: 1px solid #d4d4d4;
+  background-color: #fff;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #262626;
+  text-decoration: none;
+}
+
+.action.towishlist:hover {
+  border-color: #a3a3a3;
+  background-color: #fafafa;
+}
+
+.input-text,
+input.input-text,
+select,
+textarea {
+  width: 100%;
+  max-width: 100%;
+  border-radius: 0.375rem;
+  border: 1px solid #d4d4d4;
+  background-color: #fff;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  color: #171717;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.input-text::placeholder {
+  color: #a3a3a3;
+}
+
+.input-text:focus {
+  border-color: #1979c3;
+  outline: none;
+  box-shadow: 0 0 0 1px #1979c3;
+}
+
+/* PDP qty width/padding: Tailwind on Magento_Catalog/.../addtocart.phtml (.input-text is full-width globally). */
+.label {
+  margin-bottom: 0.25rem;
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #404040;
+}
+
+/*
+ * jQuery validation / swatch required (e.g. super_attribute[id]-error) — nodes get class mage-error from JS.
+ * Tailwind-like: soft red panel + clear type (cannot add utilities on injected markup).
+ */
+.mage-error {
+  box-sizing: border-box;
+  display: block;
+  margin-top: 0.375rem;
+  max-width: 100%;
+  font-size: 0.875rem;
+  line-height: 1.375;
+  font-weight: 500;
+  color: #991b1b;
+}
+
+div.mage-error,
+p.mage-error {
+  width: fit-content;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.375rem;
+  border: 1px solid #fecaca;
+  background-color: #fef2f2;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+label.mage-error {
+  padding: 0;
+  border: none;
+  background: none;
+  box-shadow: none;
+  font-size: 0.8125rem;
+}
+
+/* ---- web/tailwind/modules/base/base.scss ---- */
+@layer base {
+  body {
+    font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    color: #262626;
+    background-color: #fff;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+/* Magento / Luma Knockout toggles (e.g. compare link when count is 0) */
+.no-display {
+  display: none !important;
+}
+
+.switcher .switcher-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.switcher-dropdown a {
+  display: block;
+  border-radius: 0.25rem;
+  padding: 0.5rem 0.75rem;
+  color: #262626;
+}
+
+.switcher-dropdown a:hover {
+  background-color: #fff;
+  color: #1979c3;
+}
+
+@media print {
+  .page-header,
+  .navigation,
+  .sidebar,
+  .block-search,
+  .footer.content .links {
+    display: none !important;
+  }
+  body {
+    background-color: #fff;
+    color: #000;
+  }
+}
+/* ---- web/tailwind/modules/catalog/10-plp-grids.scss ---- */
+.block-products-list > .block-title {
+  margin-bottom: 0;
+  border: 0;
+  text-align: center;
+}
+
+@media (min-width: 640px) {
+  .block-products-list > .block-title {
+    text-align: left;
+  }
+}
+.block-products-list > .block-title strong {
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: #171717;
+}
+
+/* Hyvä-style PLP / widget grid: responsive columns matching demo.hyva.io */
+.products-grid .product-items,
+.block-products-list.grid .product-items,
+ol.product-items.widget-product-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+@media (min-width: 640px) {
+  .products-grid .product-items,
+  .block-products-list.grid .product-items,
+  ol.product-items.widget-product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+/* 768–1023px: keep 2 columns (do not reset to 1 col — that broke ~900px tablets). */
+@media (min-width: 1024px) {
+  .products-grid .product-items,
+  .block-products-list.grid .product-items,
+  ol.product-items.widget-product-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+/* Related / upsell / cross-sell: horizontal snap track (Hyvä demo pattern, no JS) */
+/* --snap-cols: 1 on phone made each card full-width (huge); use 2+ cols like desktop density */
+.products-grid.products-related .product-items,
+.products-grid.products-upsell .product-items,
+.products-grid.products-crosssell .product-items {
+  --snap-cols: 2;
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 0.25rem;
+  -webkit-overflow-scrolling: touch;
+  gap: 1rem;
+  grid-template-columns: unset;
+}
+
+@media (min-width: 768px) {
+  .products-grid.products-related .product-items,
+  .products-grid.products-upsell .product-items,
+  .products-grid.products-crosssell .product-items {
+    --snap-cols: 3;
+  }
+}
+.products-grid.products-related .product-items > .product-item,
+.products-grid.products-upsell .product-items > .product-item,
+.products-grid.products-crosssell .product-items > .product-item {
+  flex: 0 0 calc((100% - (var(--snap-cols) - 1) * 1rem) / var(--snap-cols));
+  min-width: 0;
+  max-width: calc((100% - (var(--snap-cols) - 1) * 1rem) / var(--snap-cols));
+  scroll-snap-align: start;
+}
+
+.products-grid.products-related .product-items.snap-track:focus-visible,
+.products-grid.products-upsell .product-items.snap-track:focus-visible,
+.products-grid.products-crosssell .product-items.snap-track:focus-visible {
+  outline: 2px solid #1979c3;
+  outline-offset: 2px;
+  border-radius: 0.375rem;
+}
+
+.products-grid.products-related .product-item-actions,
+.products-grid.products-upsell .product-item-actions,
+.products-grid.products-crosssell .product-item-actions {
+  margin-top: auto;
+}
+
+.products-grid .product-item,
+.products-grid li.product-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.products-grid .product-item-inner {
+  margin-top: auto;
+}
+
+.products-grid .product-item-name,
+.products-grid .product-item-name .product-item-link {
+  text-align: center;
+  font-size: 1.125rem;
+  line-height: 1.375;
+}
+
+/* Match category_page_grid (view.xml): 240×300 — cap link so img is not upscaled on wide mobile columns */
+.products-grid .product-item-photo,
+div[class*=products-][class*=grid] .product-item-photo {
+  width: 100%;
+  max-width: 240px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 0.75rem;
+}
+
+.products-grid .rating-summary {
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.products-grid .product-item-actions {
+  margin-top: 0;
+  padding-top: 0.75rem;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 0.5rem;
+}
+
+.products-grid .product-item-actions .actions-primary {
+  width: auto;
+  flex: 1 1 auto;
+  min-width: min-content;
+}
+
+.products-grid .product-item-actions .actions-secondary {
+  justify-content: flex-end;
+  margin-left: auto;
+  padding-top: 0;
+  border-top: none;
+  gap: 0.5rem;
+}
+
+.products-list .product-items {
+  margin: 0;
+  display: flex;
+  list-style: none;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 0;
+}
+
+.products-list .product-item-info {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 1.5rem;
+}
+
+.products-list .product-item-photo {
+  flex-shrink: 0;
+  width: 12rem;
+  margin-bottom: 0;
+}
+
+@media (max-width: 639px) {
+  .products-list .product-item-photo {
+    width: 8rem;
+  }
+}
+.products-list .product-item-details {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.products-list .product-item-description {
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: #525252;
+}
+
+.products-list .product-item-actions {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+}
+
+.products-list .product-item-actions .actions-primary {
+  width: auto;
+}
+
+.products-list .product-item-actions .actions-secondary {
+  justify-content: flex-start;
+  padding-top: 0;
+  border-top: none;
+}
+
+/* ---- web/tailwind/modules/catalog/20-product-cards.scss ---- */
+.product-item,
+li.product-item {
+  margin: 0;
+  list-style: none;
+}
+
+.product-item-info {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+  background-color: #fff;
+  padding: 1.25rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.06), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
+}
+
+.product-item-info:hover {
+  border-color: #d4d4d4;
+  box-shadow: 0 6px 16px -4px rgba(0, 0, 0, 0.1), 0 4px 8px -2px rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px);
+}
+
+/* No site-wide width: 100% — listing/grid templates use Tailwind w-full on the photo link where needed */
+.product-item-photo {
+  margin-bottom: 1rem;
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  background-color: #fafafa;
+}
+
+/* Image wrapper link: not a text link */
+a.product-item-photo {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Flat <img> under .product-item-photo only (legacy); templated images use .product-image-container + absolute img */
+.product-item-photo > img {
+  max-width: 100%;
+  width: auto;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+.product-item-name,
+.product-item-name .product-item-link {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.375;
+  color: #171717;
+  text-decoration: none;
+}
+
+.product-item-name .product-item-link:hover {
+  color: #1979c3;
+}
+
+.product-item-details {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: #404040;
+}
+
+.price-box {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #171717;
+}
+
+.price-box .price-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.price-box .old-price .price,
+.price-box .old-price {
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: #a3a3a3;
+  text-decoration: line-through;
+}
+
+.price-box .special-price .price {
+  color: #1979c3;
+}
+
+.product-item .price-box {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.rating-summary {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+  color: #525252;
+}
+
+/* Bar chart (PDP review votes, etc.); listings use .rating-result--stars */
+.rating-summary .rating-result:not(.rating-result--stars) {
+  position: relative;
+  display: inline-block;
+  width: 5.75rem;
+  height: 0.375rem;
+  vertical-align: middle;
+  overflow: hidden;
+  border-radius: 9999px;
+  background-color: #e5e7eb;
+  font-size: 0;
+  line-height: 0;
+}
+
+.rating-summary .rating-result:not(.rating-result--stars)::before {
+  content: none;
+}
+
+.rating-summary .rating-result:not(.rating-result--stars) > span {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
+  display: block;
+  height: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.rating-summary .rating-result:not(.rating-result--stars) > span::before {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background-color: #f59e0b;
+}
+
+.rating-summary .rating-result:not(.rating-result--stars) > span > span {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.rating-summary .rating-result.rating-result--stars {
+  position: static;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.125rem;
+  width: auto;
+  height: auto;
+  vertical-align: middle;
+  overflow: visible;
+  border-radius: 0;
+  background-color: transparent;
+  font-size: 1.125rem;
+  line-height: 1;
+  color: #f59e0b;
+}
+
+.rating-summary .rating-result.rating-result--stars::before {
+  content: none;
+}
+
+.product-item-actions {
+  margin-top: auto;
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.product-item-actions .actions-primary {
+  width: 100%;
+}
+
+.product-item-actions .actions-secondary {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid #f5f5f5;
+}
+
+/* Circular icon wishlist / compare on product cards + PDP (single background-image; no inline SVG) */
+.product-item [data-role=add-to-links] a.towishlist:not(.updated),
+.product-item [data-role=add-to-links] a.tocompare,
+li.product [data-role=add-to-links] a.towishlist:not(.updated),
+li.product [data-role=add-to-links] a.tocompare,
+.product-addto-links a.towishlist:not(.updated),
+.product-addto-links a.tocompare {
+  position: relative;
+  box-sizing: border-box;
+  display: inline-flex;
+  width: 2.5rem;
+  height: 2.5rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 9999px;
+  border: 1px solid #e5e7eb;
+  background-color: #f5f3ff;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 1.25rem 1.25rem;
+  font-size: 0;
+  font-weight: 600;
+  line-height: 0;
+  color: #171717;
+  text-decoration: none;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.product-item [data-role=add-to-links] a.towishlist:not(.updated),
+li.product [data-role=add-to-links] a.towishlist:not(.updated),
+.product-addto-links a.towishlist:not(.updated) {
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2024%2024%22%20stroke%3D%22%23171717%22%20stroke-width%3D%221.5%22%3E%3Cpath%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20d%3D%22M2%209.5a5.5%205.5%200%200%201%209.591-3.676.56.56%200%200%200%20.818%200A5.49%205.49%200%200%201%2022%209.5c0%202.29-1.5%204-3%205.5l-5.492%205.313a2%202%200%200%201-3%20.019L5%2015c-1.5-1.5-3-3.2-3-5.5%22%2F%3E%3C%2Fsvg%3E");
+}
+
+.product-item [data-role=add-to-links] a.tocompare,
+li.product [data-role=add-to-links] a.tocompare,
+.product-addto-links a.tocompare {
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2024%2024%22%20stroke%3D%22%23171717%22%20stroke-width%3D%221.5%22%3E%3Cpath%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20d%3D%22M12%203v18M19%208l3%208a5%205%200%200%201-6%200V7%22%2F%3E%3Cpath%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20d%3D%22M3%207h1a17%2017%200%200%200%208-2%2017%2017%200%200%200%208%202h1M5%208l3%208a5%205%200%200%201-6%200V7M7%2021h10%22%2F%3E%3C%2Fsvg%3E");
+}
+
+.product-item [data-role=add-to-links] a.towishlist:not(.updated):hover,
+.product-item [data-role=add-to-links] a.tocompare:hover,
+li.product [data-role=add-to-links] a.towishlist:not(.updated):hover,
+li.product [data-role=add-to-links] a.tocompare:hover,
+.product-addto-links a.towishlist:not(.updated):hover,
+.product-addto-links a.tocompare:hover {
+  border-color: #ddd6fe;
+  background-color: #ede9fe;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+  text-decoration: none;
+  color: #171717;
+}
+
+.product-item [data-role=add-to-links] a.towishlist:not(.updated):focus-visible,
+.product-item [data-role=add-to-links] a.tocompare:focus-visible,
+li.product [data-role=add-to-links] a.towishlist:not(.updated):focus-visible,
+li.product [data-role=add-to-links] a.tocompare:focus-visible,
+.product-addto-links a.towishlist:not(.updated):focus-visible,
+.product-addto-links a.tocompare:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(25, 121, 195, 0.45);
+}
+
+.product-item [data-role=add-to-links] a.towishlist:not(.updated) > span,
+.product-item [data-role=add-to-links] a.tocompare > span,
+li.product [data-role=add-to-links] a.towishlist:not(.updated) > span,
+li.product [data-role=add-to-links] a.tocompare > span,
+.product-addto-links a.towishlist:not(.updated) > span,
+.product-addto-links a.tocompare > span {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.product-item-inner {
+  margin-top: 0.5rem;
+}
+
+.actions-primary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.actions-primary .action.tocart {
+  flex: 1 1 auto;
+  width: 100%;
+}
+
+.actions-secondary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.actions-secondary .action {
+  font-size: 0.8125rem;
+  color: #525252;
+  text-decoration: none;
+}
+
+.actions-secondary .action:hover {
+  color: #1979c3;
+  text-decoration: underline;
+}
+
+/* ---- web/tailwind/modules/catalog/30-plp-toolbar.scss ---- */
+.toolbar.toolbar-products {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 0.875rem;
+  color: #525252;
+}
+
+.toolbar.toolbar-products .toolbar-amount {
+  flex: 1 1 auto;
+  min-width: 10rem;
+  font-weight: 500;
+  color: #404040;
+}
+
+.toolbar.toolbar-products .toolbar-sorter {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.toolbar.toolbar-products .sorter-label {
+  font-weight: 500;
+  color: #404040;
+}
+
+.toolbar.toolbar-products select.sorter-options {
+  min-width: 7rem;
+}
+
+/* View modes (grid/list toggle) */
+.modes {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.modes strong.modes-label {
+  margin-right: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #404040;
+}
+
+.modes .modes-mode {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0.375rem;
+  border: 1px solid #d4d4d4;
+  border-radius: 0.375rem;
+  background-color: #fff;
+  color: #525252;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.modes .modes-mode:hover {
+  border-color: #1979c3;
+  color: #1979c3;
+}
+
+.modes .modes-mode.active {
+  border-color: #1979c3;
+  background-color: #1979c3;
+  color: #fff;
+  font-weight: 600;
+}
+
+.modes .modes-mode .icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Limiter (items per page) */
+.limiter {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.limiter-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #404040;
+}
+
+.limiter select.limiter-options {
+  min-width: 4rem;
+  padding: 0.375rem 2rem 0.375rem 0.75rem;
+}
+
+/* Layered navigation / filter UI: Tailwind utilities in
+   Magento_LayeredNavigation/templates/layer/view.phtml,
+   filter.phtml, state.phtml */
+/* ---- web/tailwind/modules/catalog/40-swatches.scss ---- */
+/*
+ * Swatch styles live in web/tailwind/input.css @layer components (Tailwind @apply).
+ * This stub stays in the merge bundle so layer order / file list is unchanged.
+ */
+/* ---- web/tailwind/modules/cms/cms.scss ---- */
+.cms-content a,
+.column.main .widget a {
+  color: #1979c3;
+  text-underline-offset: 2px;
+}
+
+.cms-content a:hover,
+.column.main .widget a:hover {
+  text-decoration: underline;
+}
+
+/* block-promo cards are full-card links; exclude from global .cms-content link styling. */
+.cms-content a.block-promo,
+.cms-content a.block-promo:hover,
+.cms-content a.block-promo:focus,
+.column.main .widget a.block-promo,
+.column.main .widget a.block-promo:hover,
+.column.main .widget a.block-promo:focus {
+  color: inherit;
+  text-decoration: none;
+}
+
+.cms-content img,
+.column.main .widget img {
+  height: auto;
+  max-width: 100%;
+}
+
+/*
+ * block-promo / blocks-promo: grid of linked promos; optional .blocks-promo wrapper.
+ * Bundled in web/css/tailwind.css via this file (single utility build; no second homepage CSS).
+ * .content.bg-white: panel over image. .content without bg-white: text on image.
+ */
+@layer components {
+  /* Sample grid: two columns from md; .home-main spans both columns. */
+  .blocks-promo {
+    @apply mb-10 grid grid-cols-1 gap-4 md:grid-cols-2;
+  }
+  .blocks-promo a.block-promo,
+  .cms-content:not(.cms-home) a.block-promo,
+  .column.main .widget a.block-promo {
+    @apply relative block min-h-[200px] overflow-hidden rounded-lg text-inherit no-underline;
+  }
+  .blocks-promo a.block-promo.home-main,
+  .cms-content:not(.cms-home) a.block-promo.home-main,
+  .column.main .widget a.block-promo.home-main {
+    @apply min-h-[320px] md:col-span-2;
+  }
+  /* `.cms-home` is the shell in Magento_Cms::home.phtml — include it so hero/promo imgs are not stuck on global `.cms-content img { height:auto }`. */
+  .blocks-promo a.block-promo > img,
+  .cms-home a.block-promo > img,
+  .cms-content:not(.cms-home) a.block-promo > img,
+  .column.main .widget a.block-promo > img {
+    @apply absolute inset-0 z-0 h-full w-full object-cover;
+  }
+  .blocks-promo a.block-promo > .image,
+  .cms-content:not(.cms-home) a.block-promo > .image,
+  .column.main .widget a.block-promo > .image {
+    @apply absolute inset-0 z-0;
+  }
+  .blocks-promo a.block-promo > .image img,
+  .cms-content:not(.cms-home) a.block-promo > .image img,
+  .column.main .widget a.block-promo > .image img {
+    @apply h-full w-full object-cover;
+  }
+  .blocks-promo a.block-promo:hover,
+  .blocks-promo a.block-promo:focus,
+  .cms-content:not(.cms-home) a.block-promo:hover,
+  .cms-content:not(.cms-home) a.block-promo:focus,
+  .column.main .widget a.block-promo:hover,
+  .column.main .widget a.block-promo:focus {
+    @apply no-underline;
+  }
+  .blocks-promo a.block-promo .content,
+  .blocks-promo a.block-promo .content *,
+  .cms-content:not(.cms-home) a.block-promo .content,
+  .cms-content:not(.cms-home) a.block-promo .content *,
+  .column.main .widget a.block-promo .content,
+  .column.main .widget a.block-promo .content * {
+    text-decoration: none !important;
+  }
+  .blocks-promo a.block-promo .content .action.more.icon:hover,
+  .cms-content:not(.cms-home) a.block-promo .content .action.more.icon:hover,
+  .column.main .widget a.block-promo .content .action.more.icon:hover {
+    text-decoration: underline !important;
+  }
+  /* White content panel (preferred): matches home-main / yoga block */
+  .blocks-promo a.block-promo .content[class~=bg-white],
+  .cms-content:not(.cms-home) a.block-promo .content[class~=bg-white],
+  .column.main .widget a.block-promo .content[class~=bg-white] {
+    @apply relative z-10 m-4 flex max-w-md flex-col gap-2 rounded-xl border border-neutral-200/90 !bg-white p-5 text-neutral-800 shadow-xl;
+    text-shadow: none;
+  }
+  .blocks-promo a.block-promo .content[class~=bg-white] .info,
+  .cms-content:not(.cms-home) a.block-promo .content[class~=bg-white] .info,
+  .column.main .widget a.block-promo .content[class~=bg-white] .info {
+    @apply text-xs font-semibold uppercase tracking-widest text-neutral-600;
+  }
+  .blocks-promo a.block-promo .content[class~=bg-white] .title,
+  .cms-content:not(.cms-home) a.block-promo .content[class~=bg-white] .title,
+  .column.main .widget a.block-promo .content[class~=bg-white] .title {
+    @apply text-xl font-light leading-tight tracking-tight text-neutral-900 sm:text-2xl;
+  }
+  /* Text-on-image (no white panel) */
+  .blocks-promo a.block-promo .content:not([class~=bg-white]),
+  .cms-content:not(.cms-home) a.block-promo .content:not([class~=bg-white]),
+  .column.main .widget a.block-promo .content:not([class~=bg-white]) {
+    @apply relative z-10 m-4 flex max-w-md flex-col gap-2 rounded-xl border-0 bg-transparent p-5 text-white shadow-none;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+  }
+  .blocks-promo a.block-promo .content:not([class~=bg-white]) .info,
+  .cms-content:not(.cms-home) a.block-promo .content:not([class~=bg-white]) .info,
+  .column.main .widget a.block-promo .content:not([class~=bg-white]) .info {
+    @apply text-xs font-semibold uppercase tracking-widest text-white/90;
+  }
+  .blocks-promo a.block-promo .content:not([class~=bg-white]) .title,
+  .cms-content:not(.cms-home) a.block-promo .content:not([class~=bg-white]) .title,
+  .column.main .widget a.block-promo .content:not([class~=bg-white]) .title {
+    @apply text-xl font-semibold leading-tight tracking-tight text-white sm:text-3xl;
+  }
+  .blocks-promo a.block-promo .action.more.button,
+  .cms-content:not(.cms-home) a.block-promo .action.more.button,
+  .column.main .widget a.block-promo .action.more.button {
+    @apply mt-2.5 inline-flex min-h-[2.75rem] items-center justify-center self-start rounded-lg border border-transparent bg-primary px-6 py-2.5 text-sm font-semibold tracking-wide text-white no-underline shadow-md transition-[background-color,box-shadow] duration-150;
+  }
+  .blocks-promo a.block-promo .action.more.button:hover,
+  .blocks-promo a.block-promo .action.more.button:focus,
+  .cms-content:not(.cms-home) a.block-promo .action.more.button:hover,
+  .cms-content:not(.cms-home) a.block-promo .action.more.button:focus,
+  .column.main .widget a.block-promo .action.more.button:hover,
+  .column.main .widget a.block-promo .action.more.button:focus {
+    @apply bg-primary-hover text-white no-underline shadow-lg;
+  }
+  .blocks-promo a.block-promo .action.more.icon,
+  .cms-content:not(.cms-home) a.block-promo .action.more.icon,
+  .column.main .widget a.block-promo .action.more.icon {
+    @apply mt-2 inline-flex items-center gap-1 text-sm font-semibold text-inherit underline-offset-4;
+  }
+  .blocks-promo a.block-promo .action.more.icon:hover,
+  .cms-content:not(.cms-home) a.block-promo .action.more.icon:hover,
+  .column.main .widget a.block-promo .action.more.icon:hover {
+    @apply underline;
+  }
+  .block-promo-wrapper {
+    @apply grid grid-cols-1 gap-4 md:grid-cols-2;
+  }
+}
+/* ---- web/tailwind/modules/footer/footer.scss ---- */
+.page-footer {
+  margin-top: auto;
+  border-top: 1px solid #e5e7eb;
+  background-color: #fafafa;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: #525252;
+}
+
+.footer.content {
+  box-sizing: border-box;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1280px;
+  padding: 2.5rem 1rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1.5rem 2rem;
+  align-items: start;
+}
+
+/* Left half: link blocks align to the start (LTR); tighten widget margin vs mb-8 utility */
+.footer.content > .links {
+  grid-column: 1;
+  grid-row: 1;
+  justify-self: start;
+  width: 100%;
+  max-width: 100%;
+  text-align: left;
+}
+
+.footer.content > .links .widget {
+  margin-bottom: 1rem;
+}
+
+.footer.content > ul.footer.links {
+  grid-column: 1;
+  grid-row: 2;
+  justify-self: start;
+  width: 100%;
+  max-width: 100%;
+  text-align: left;
+}
+
+/* Right half: newsletter fills that column (half of footer width) */
+.footer.content > .block.newsletter {
+  grid-column: 2;
+  grid-row: 1/-1;
+  justify-self: stretch;
+  align-self: stretch;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+}
+
+@media (max-width: 639px) {
+  .footer.content {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+  .footer.content > .links {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .footer.content > ul.footer.links {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .footer.content > .block.newsletter {
+    grid-column: 1;
+    grid-row: 3;
+    justify-self: stretch;
+    max-width: none;
+  }
+}
+@media (min-width: 640px) {
+  .footer.content {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+@media (min-width: 1024px) {
+  .footer.content {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+/* Footer inner blocks (outer .footer.content from layout XML) */
+.footer.content ul {
+  margin: 0;
+  list-style: none;
+  padding: 0;
+}
+
+.footer.content ul.footer.links {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+}
+
+.footer.content .footer.links .nav.item {
+  list-style: none;
+}
+
+.footer.content a {
+  color: #404040;
+}
+
+.footer.content a:hover {
+  color: #1979c3;
+}
+
+/* Footer newsletter: layout + chrome in Magento_Newsletter/templates/subscribe.phtml */
+.copyright {
+  border-top: 1px solid #e5e7eb;
+  background-color: #f5f5f5;
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.75rem;
+  /* WCAG AA: ~4.5:1+ on #f5f5f5 (was #737373 ~3.8:1) */
+  color: #404040;
+}
+
+/* ---- web/tailwind/modules/header/header.scss ---- */
+.page-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  border-bottom: 1px solid #e5e7eb;
+  background-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.panel.wrapper {
+  border-bottom: 1px solid #e5e7eb;
+  background-color: #f5f5f5;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: #404040;
+}
+
+.panel.header {
+  position: relative;
+  box-sizing: border-box;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1280px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 1.5rem;
+  row-gap: 0.5rem;
+  padding: 0.5rem 1rem;
+}
+
+@media (min-width: 640px) {
+  .panel.header {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+@media (min-width: 1024px) {
+  .panel.header {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+.header.content {
+  box-sizing: border-box;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1280px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+}
+
+@media (min-width: 640px) {
+  .header.content {
+    gap: 1rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+@media (min-width: 1024px) {
+  .header.content {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+/* ——— Layout child hooks (header row order, search, nav) ——— */
+.header.content .action.nav-toggle {
+  order: 1;
+}
+
+/* Hamburger: visuals in logo.phtml (Tailwind); bars morph when html.nav-open */
+@media (max-width: 1023px) {
+  .header.content .action.nav-toggle .nav-toggle__bar {
+    transform-origin: center;
+    transition: transform 0.2s ease, opacity 0.15s ease;
+  }
+  html.nav-open .header.content .action.nav-toggle .nav-toggle__bar:nth-child(1) {
+    transform: translateY(0.5rem) rotate(45deg);
+  }
+  html.nav-open .header.content .action.nav-toggle .nav-toggle__bar:nth-child(2) {
+    opacity: 0;
+  }
+  html.nav-open .header.content .action.nav-toggle .nav-toggle__bar:nth-child(3) {
+    transform: translateY(-0.5rem) rotate(-45deg);
+  }
+}
+@media (max-width: 1023px) and (prefers-reduced-motion: reduce) {
+  .header.content .action.nav-toggle .nav-toggle__bar {
+    transition: none;
+  }
+}
+.header.content .logo {
+  order: 2;
+  flex: 1 1 auto;
+}
+
+@media (min-width: 1024px) {
+  /* logo.phtml nav toggle; hide from 1024px alongside .lg:hidden */
+  .header.content .action.nav-toggle {
+    display: none !important;
+  }
+  .header.content .logo {
+    flex: 0 0 auto;
+  }
+}
+/*
+ * Luma sets a wide .minicart-wrapper + floats; inside flex header that can wrap the chip
+ * to its own top row or blow out layout. Keep the trigger in-flow; flyout is positioned
+ * under the chip (see .block-minicart below).
+ */
+.header.content .minicart-wrapper,
+.page-header .minicart-wrapper {
+  order: 3;
+  position: relative;
+  z-index: 1;
+  float: none !important;
+  clear: none !important;
+  width: auto !important;
+  max-width: none;
+  flex: 0 0 auto;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+.header.content .minicart-wrapper.active,
+.page-header .minicart-wrapper.active {
+  z-index: 200;
+}
+
+.header.content .minicart-wrapper .action.showcart,
+.page-header .minicart-wrapper .action.showcart {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 0.375rem;
+  border: 1px solid #e5e7eb;
+  background-color: #fff;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #171717;
+  text-decoration: none;
+}
+
+.header.content .minicart-wrapper .action.showcart:hover,
+.page-header .minicart-wrapper .action.showcart:hover {
+  border-color: #1979c3;
+  color: #1979c3;
+}
+
+/* Icon-only cart trigger: keep chip aligned; SVG uses stroke currentColor */
+.header.content .minicart-wrapper .action.showcart.showcart--icon .showcart__icon,
+.page-header .minicart-wrapper .action.showcart.showcart--icon .showcart__icon {
+  color: inherit;
+}
+
+/*
+ * dropdownDialog wraps the flyout in jQuery UI .ui-dialog.mage-dropdown-dialog.
+ * If that shell stays in normal flow (position: relative), it widens the flex header and shoves search.
+ * Keep it absolutely positioned under .minicart-wrapper (position: relative).
+ */
+.minicart-wrapper > .ui-dialog.mage-dropdown-dialog,
+.page-header .minicart-wrapper > .ui-dialog.mage-dropdown-dialog {
+  position: absolute !important;
+  top: 100%;
+  right: 0;
+  /* jQuery UI often sets width + left; never let the panel extend past the viewport left edge */
+  left: auto !important;
+  inset-inline-start: auto !important;
+  inset-inline-end: 0 !important;
+  /* Right edge of trigger ≈ viewport minus header padding; cap width so (triggerRight - width) >= 0 */
+  width: min(24.375rem, 100vw - 2rem) !important;
+  max-width: min(24.375rem, 100vw - 2rem) !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+  margin: 0.375rem 0 0;
+  padding: 0 !important;
+  z-index: 200;
+  float: none !important;
+  transform: none !important;
+}
+
+.minicart-wrapper > .ui-dialog.mage-dropdown-dialog .ui-dialog-content,
+.page-header .minicart-wrapper > .ui-dialog.mage-dropdown-dialog .ui-dialog-content {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box;
+}
+
+.minicart-wrapper > .ui-dialog.mage-dropdown-dialog .block-minicart,
+.page-header .minicart-wrapper > .ui-dialog.mage-dropdown-dialog .block-minicart {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/*
+ * Mobile: jQuery UI keeps absolute positioning + inline width/left; the flyout is wider than
+ * the space from viewport-left to the cart trigger, so it clips at the left/right. Pin the shell
+ * to the viewport on small screens (desktop uses absolute + page-wrapper overflow visible).
+ */
+@media (max-width: 767px) {
+  .header.content .minicart-wrapper > .ui-dialog.mage-dropdown-dialog,
+  .page-header .minicart-wrapper > .ui-dialog.mage-dropdown-dialog {
+    position: fixed !important;
+    left: 0.5rem !important;
+    right: 0.5rem !important;
+    top: calc(env(safe-area-inset-top, 0px) + 5.75rem) !important;
+    bottom: auto !important;
+    width: auto !important;
+    max-width: none !important;
+    margin: 0 !important;
+    max-height: calc(100vh - env(safe-area-inset-top, 0px) - 6.25rem) !important;
+    max-height: calc(100dvh - env(safe-area-inset-top, 0px) - 6.25rem) !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch;
+    z-index: 10000 !important;
+    transform: none !important;
+  }
+  .header.content .minicart-wrapper > .ui-dialog.mage-dropdown-dialog .block-minicart,
+  .page-header .minicart-wrapper > .ui-dialog.mage-dropdown-dialog .block-minicart {
+    max-height: inherit;
+  }
+}
+/* Before / without dialog upgrade: panel is still a direct child */
+.header.content .minicart-wrapper > .block-minicart,
+.page-header .minicart-wrapper > .block-minicart {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  left: auto;
+  margin-top: 0.375rem;
+  float: none !important;
+}
+
+/* Minicart flyout body (Knockout + Magento_Checkout/web/template/minicart/content.html) */
+.block-minicart .block-content {
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.block-minicart .block-content .subtotal {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.375rem 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 0.875rem;
+  color: #404040;
+}
+
+.block-minicart .block-content .subtotal .label {
+  font-weight: 500;
+  color: #525252;
+}
+
+.block-minicart .minicart-items .product {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+/* Luma can let the photo column grow (flex) while details collapse to a narrow strip */
+.block-minicart .minicart-items .product-item-photo {
+  flex: 0 0 auto;
+  width: auto;
+  max-width: 4.5rem;
+  min-width: 0;
+}
+
+.block-minicart .minicart-items .product-item-photo .product-image-container {
+  max-width: 4.5rem !important;
+  width: auto !important;
+}
+
+.block-minicart .minicart-items .product-item-photo .product-image-photo,
+.block-minicart .minicart-items .product-item-photo img {
+  display: block;
+  max-width: 100%;
+  width: auto;
+  height: auto;
+}
+
+.block-minicart .minicart-items .product-item-details {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+.block-minicart .minicart-items li.item {
+  margin: 0;
+  padding: 0.75rem 1.25rem;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.block-minicart .minicart-items li.item:last-child {
+  border-bottom: none;
+}
+
+.block-minicart .product-item-name {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: #171717;
+}
+
+.block-minicart .product-item-name a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.block-minicart .product-item-name a:hover {
+  color: #1979c3;
+  text-decoration: underline;
+}
+
+.block-minicart .product-item-pricing {
+  margin-top: 0.5rem;
+}
+
+.block-minicart .details-qty.qty {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.block-minicart .details-qty .item-qty {
+  width: 4rem;
+  border-radius: 0.375rem;
+  border: 1px solid #d4d4d4;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.8125rem;
+}
+
+.block-minicart .product.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+  font-size: 0.8125rem;
+}
+
+.block-minicart .product.actions a {
+  font-weight: 500;
+  color: #1979c3;
+  text-decoration: none;
+}
+
+.block-minicart .product.actions a:hover {
+  text-decoration: underline;
+}
+
+/*
+ * Line-item Edit / Remove: global `.primary .action` (below) styles any `.action` inside `.primary`
+ * as a solid blue CTA with white label text. The minicart rule `.block-minicart .product.actions a`
+ * sets link color #1979c3 with higher specificity than `.primary .action`’s white text — result:
+ * blue label on blue button (invisible “Edit”). Reset these to plain links.
+ */
+.block-minicart .product.actions .primary .action.edit,
+.block-minicart .product.actions .secondary .action.delete {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  font-size: 0.8125rem !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+  color: #1979c3 !important;
+  text-decoration: none !important;
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+  transform: none !important;
+}
+
+.block-minicart .product.actions .primary .action.edit span,
+.block-minicart .product.actions .secondary .action.delete span {
+  color: inherit !important;
+}
+
+.block-minicart .product.actions .primary .action.edit:hover,
+.block-minicart .product.actions .secondary .action.delete:hover {
+  background-color: transparent !important;
+  color: #145a95 !important;
+  text-decoration: underline !important;
+  transform: none !important;
+}
+
+.block-minicart .block-content .action.viewcart {
+  display: inline-block;
+}
+
+.block-minicart .action.close {
+  line-height: 1;
+}
+
+.header.content .block-search {
+  order: 4;
+  position: relative;
+  z-index: 0;
+  width: 100%;
+  min-width: 0;
+  flex: 1 1 100%;
+}
+
+@media (min-width: 1024px) {
+  .header.content .block-search {
+    flex: 1 1 16rem;
+    max-width: 28rem;
+  }
+}
+.header.content .compare.wrapper {
+  order: 5;
+  margin: 0;
+  width: 100%;
+  list-style: none;
+  padding: 0;
+}
+
+@media (min-width: 640px) {
+  .header.content .compare.wrapper {
+    width: auto;
+  }
+}
+@media (min-width: 1024px) {
+  .header.content .compare.wrapper {
+    margin-left: auto;
+  }
+}
+/* Tablet: keep search + compare on one row under logo row when space allows */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .header.content .block-search {
+    flex: 1 1 auto;
+    width: auto;
+    min-width: 12rem;
+  }
+}
+@media (max-width: 639px) {
+  .header.content .compare.wrapper {
+    text-align: center;
+  }
+}
+/*
+ * Hide compare strip until the link is actually shown (count &gt; 0).
+ * Core keeps <a> in DOM with .no-display until KO; :has(a) alone matched hidden links and caused a flash.
+ */
+.compare.wrapper:not(:has(a.action.compare:not(.no-display))) {
+  display: none !important;
+}
+
+.compare.wrapper a.header-account-link:hover {
+  text-decoration: none;
+  color: #171717;
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  max-width: min(10rem, 48vw);
+}
+
+.logo img {
+  display: block;
+  height: auto;
+  width: auto;
+  max-height: 2rem;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+@media (min-width: 640px) {
+  .logo {
+    max-width: 11rem;
+  }
+  .logo img {
+    max-height: 2.25rem;
+  }
+}
+/* ——— Search ——— */
+.block-search .block-content {
+  width: 100%;
+  min-width: 0;
+}
+
+.block-search .field.search .label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.block-search .actions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Icon-only submit: sizing fallback if Tailwind utilities are purged */
+.block-search .action.search {
+  box-sizing: border-box;
+  min-width: 2.5rem;
+  min-height: 2.5rem;
+  padding: 0;
+  line-height: 1;
+}
+
+.block-search .action.search:hover {
+  background-color: #166aaf;
+}
+
+.block-search .action.search:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px #1979c3;
+}
+
+.header.links {
+  margin: 0;
+  display: flex;
+  list-style: none;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  padding: 0;
+}
+
+.panel.header .header.links a {
+  color: #262626;
+  text-decoration: none;
+  text-underline-offset: 2px;
+}
+
+.panel.header .header.links a:hover {
+  color: #1979c3;
+  text-decoration: underline;
+}
+
+.panel.header .header.links a.header-account-link:hover {
+  text-decoration: none;
+  color: #171717;
+}
+
+.action.skip.contentarea {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.action.skip.contentarea:focus {
+  position: fixed;
+  left: 1rem;
+  top: 1rem;
+  z-index: 100;
+  width: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  padding: 0.5rem 1rem;
+  clip: auto;
+  white-space: normal;
+  border-radius: 0.375rem;
+  background-color: #1979c3;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #fff;
+  text-decoration: none;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px #1979c3;
+}
+
+/* ---- web/tailwind/modules/layout/layout.scss ---- */
+/*
+ * Shell layout — plain CSS (must not depend on Tailwind utilities in layout XML).
+ * Without this, missing/empty utility rules yield a vertical “broken” header and main column.
+ */
+.page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  /* `clip` was cutting off the minicart / header dropdowns that extend past the column edge */
+  overflow-x: visible;
+}
+
+/* Very narrow phones (~240–320px): trim shell padding so header + main don’t feel cramped / wrap badly */
+@media (max-width: 359px) {
+  .panel.header {
+    column-gap: 0.5rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+  .header.content {
+    gap: 0.5rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+  .column.main {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+}
+.page-main {
+  flex: 1 1 auto;
+}
+
+.columns {
+  box-sizing: border-box;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  max-width: 1280px;
+}
+
+.column.main {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0;
+}
+
+/*
+ * No backdrop-filter here: nav.sections lives inside this header and uses
+ * position:fixed for the mobile drawer; backdrop-filter creates a containing
+ * block so fixed → viewport breaks and the menu never appears.
+ */
+.page-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  border-bottom: 1px solid #e5e7eb;
+  background-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.page-footer {
+  margin-top: auto;
+  border-top: 1px solid #e5e7eb;
+  background-color: #fafafa;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: #525252;
+}
+
+.panel.wrapper {
+  border-bottom: 1px solid #e5e7eb;
+  background-color: #f5f5f5;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: #404040;
+}
+
+.panel.header {
+  position: relative;
+  box-sizing: border-box;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1280px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 1.5rem;
+  row-gap: 0.5rem;
+  padding: 0.5rem 1rem;
+}
+
+@media (min-width: 640px) {
+  .panel.header {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+@media (min-width: 1024px) {
+  .panel.header {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+.header.content {
+  box-sizing: border-box;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1280px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+}
+
+@media (min-width: 640px) {
+  .header.content {
+    gap: 1rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+@media (min-width: 1024px) {
+  .header.content {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+.footer.content {
+  box-sizing: border-box;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1280px;
+  padding: 2.5rem 1rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1.5rem 2rem;
+  align-items: start;
+}
+
+/* Left half: link blocks align to the start (LTR); tighten widget margin vs mb-8 utility */
+.footer.content > .links {
+  grid-column: 1;
+  grid-row: 1;
+  justify-self: start;
+  width: 100%;
+  max-width: 100%;
+  text-align: left;
+}
+
+.footer.content > .links .widget {
+  margin-bottom: 1rem;
+}
+
+.footer.content > ul.footer.links {
+  grid-column: 1;
+  grid-row: 2;
+  justify-self: start;
+  width: 100%;
+  max-width: 100%;
+  text-align: left;
+}
+
+/* Right half: newsletter fills that column (half of footer width) */
+.footer.content > .block.newsletter {
+  grid-column: 2;
+  grid-row: 1/-1;
+  justify-self: stretch;
+  align-self: stretch;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+}
+
+@media (max-width: 639px) {
+  .footer.content {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+  .footer.content > .links {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .footer.content > ul.footer.links {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .footer.content > .block.newsletter {
+    grid-column: 1;
+    grid-row: 3;
+    justify-self: stretch;
+    max-width: none;
+  }
+}
+@media (min-width: 640px) {
+  .footer.content {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+@media (min-width: 1024px) {
+  .footer.content {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+.page.messages {
+  box-sizing: border-box;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1280px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .page.messages {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+@media (min-width: 1024px) {
+  .page.messages {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+/* Category/sidebar layouts when both exist inside .columns */
+@media (min-width: 1024px) {
+  .columns:has(.sidebar) {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    gap: 2rem;
+    padding: 2rem;
+  }
+  .columns:has(.sidebar) .column.main {
+    flex: 1 1 auto;
+    min-width: 0;
+    order: 2;
+    padding: 0;
+  }
+  .columns:has(.sidebar) .sidebar.sidebar-main {
+    order: 1;
+    width: 15rem;
+    flex-shrink: 0;
+  }
+  .columns:has(.sidebar) .sidebar.sidebar-additional {
+    order: 3;
+    width: 15rem;
+    flex-shrink: 0;
+  }
+}
+@media (min-width: 640px) and (max-width: 1023px) {
+  .columns:has(.sidebar) {
+    padding: 1.5rem;
+  }
+}
+/* Sidebar flex gap handles vertical rhythm; no extra margin vs main column. */
+.columns .sidebar {
+  margin-bottom: 0;
+}
+
+.breadcrumbs {
+  box-sizing: border-box;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1280px;
+  min-width: 0;
+  min-height: 2.75rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  /* ~4.5:1 on white (Lighthouse contrast) */
+  color: #525252;
+}
+
+@media (min-width: 640px) {
+  .breadcrumbs {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+@media (min-width: 1024px) {
+  .breadcrumbs {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+.breadcrumbs .items {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.breadcrumbs a {
+  color: #1979c3;
+  text-decoration: none;
+}
+
+.breadcrumbs a:hover {
+  color: #166aaf;
+  text-decoration: underline;
+}
+
+.breadcrumbs a:focus-visible {
+  outline: 2px solid #1979c3;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.breadcrumbs .item:not(:last-child)::after {
+  margin-left: 0.375rem;
+  margin-right: 0.375rem;
+  color: #d4d4d4;
+  content: "/";
+}
+
+.page-title-wrapper {
+  box-sizing: border-box;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1280px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .page-title-wrapper {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+@media (min-width: 1024px) {
+  .page-title-wrapper {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+.page-title-wrapper .page-title,
+.page-title-wrapper h1.page-title {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  color: #171717;
+}
+
+@media (min-width: 640px) {
+  .page-title-wrapper .page-title {
+    font-size: 2rem;
+  }
+}
+@media (min-width: 1024px) {
+  .page-title-wrapper .page-title {
+    font-size: 2.25rem;
+    font-weight: 700;
+  }
+}
+.content-heading {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+@media (min-width: 640px) {
+  .content-heading {
+    text-align: left;
+  }
+}
+.content-heading .title {
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: #171717;
+}
+
+@media (min-width: 640px) {
+  .content-heading .title {
+    font-size: 1.875rem;
+  }
+}
+.content-heading .info {
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  color: #525252;
+}
+
+/* ---- web/tailwind/modules/messages-tables/messages-tables.scss ---- */
+.block-compare,
+.block-wishlist {
+  margin-bottom: 1.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+  background-color: #fff;
+  padding: 1.25rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.06), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
+}
+
+.block-title,
+.block-compare .block-title,
+.block-wishlist .block-title {
+  margin: 0 0 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 0.75rem;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #171717;
+}
+
+table,
+.table-wrapper table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.data.table thead th {
+  border-bottom: 1px solid #e5e7eb;
+  background-color: #fafafa;
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  font-weight: 600;
+  color: #262626;
+}
+
+.data.table tbody td {
+  border-bottom: 1px solid #f5f5f5;
+  padding: 0.75rem;
+  vertical-align: top;
+  color: #404040;
+}
+
+.message {
+  margin-bottom: 1rem;
+  border-radius: 0.375rem;
+  border-width: 1px;
+  border-style: solid;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+}
+
+.message.success {
+  border-color: #bbf7d0;
+  background-color: #f0fdf4;
+  color: #14532d;
+}
+
+.message.error {
+  border-color: #fecaca;
+  background-color: #fef2f2;
+  color: #7f1d1d;
+}
+
+.message.info {
+  border-color: #bae6fd;
+  background-color: #f0f9ff;
+  color: #0c4a6e;
+}
+
+.message.warning {
+  border-color: #fde68a;
+  background-color: #fffbeb;
+  color: #78350f;
+}
+
+/* Pagination */
+.pages {
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.pages .items {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.pages .item {
+  margin: 0;
+}
+
+.pages .item a,
+.pages .item strong {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.5rem;
+  min-height: 2.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.pages .item a {
+  color: #525252;
+  background-color: #fff;
+  border: 1px solid #e5e7eb;
+}
+
+.pages .item a:hover {
+  background-color: #f9fafb;
+  border-color: #d4d4d4;
+  color: #171717;
+}
+
+.pages .item strong.page,
+.pages .item.current strong {
+  color: #fff;
+  background-color: #1979c3;
+  border: 1px solid #1979c3;
+}
+
+.pages .item.pages-item-previous a,
+.pages .item.pages-item-next a {
+  font-weight: 600;
+}
+
+.pages .label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* ---- web/tailwind/modules/modals/modals.scss ---- */
+/**
+ * Magento_Ui modals (confirm, alert): modal.js sets inline z-index via $.fn.zIndex()
+ * on ancestors; with this theme’s sticky header + minicart stacking, that can resolve
+ * to 1 — dialog and overlay sit under the chrome. !important overrides that inline value.
+ * Overlay div is created without layout styles if Magento _modals.less isn’t in the bundle.
+ */
+.modals-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10050 !important;
+  background-color: rgba(15, 23, 42, 0.45);
+}
+
+aside.modal-popup._show,
+aside.modal-slide._show {
+  z-index: 10051 !important;
+}
+
+/* ---- web/tailwind/modules/navigation/navigation.scss ---- */
+/* Navigation look: Tailwind in topmenu.phtml + getHtml() + sections.phtml + web/tailwind/css-safelist.html */
+.navigation ul {
+  margin: 0;
+  list-style: none;
+  padding: 0;
+}
+
+.navigation li.level0,
+.navigation li.level1 {
+  position: relative;
+}
+
+@media (max-width: 1023px) {
+  /* One full-width row per root category (Luma/Topmenu float columns otherwise sit beside expanded submenus) */
+  .navigation .nav-primary {
+    display: flex !important;
+    flex-direction: column !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+  }
+  .navigation .nav-primary > li.level0 {
+    float: none !important;
+    clear: both !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: 0 0 auto;
+    /* Topmenu may reuse link utilities on <li>; row + justify-between would sit <ul> beside <a>. */
+    flex-direction: column !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+  }
+  .navigation .submenu > li.parent {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+  }
+  .navigation li.ui-menu-item {
+    float: none !important;
+    clear: both;
+  }
+  /*
+   * Markup order is [chevron][label]. Nested <a> get [&_a]:block from topmenu.phtml — without
+   * display:flex, flex-direction/order are ignored and the chevron overlaps the first letter.
+   * Row + order (not flex-row-reverse) keeps rows left-aligned in the drawer.
+   * Chevron is a border-only ::before (no text / icon-font content) to avoid â€º mojibake.
+   */
+  .navigation .nav-primary > li.level0 > a.level-top,
+  .navigation .submenu > li > a.ui-menu-item-wrapper {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  /* One chevron only: mage/menu prepends .ui-menu-icon; stray Luma .level-top:after causes doubles/mojibake */
+  .navigation .parent .level-top.ui-menu-item-wrapper:after,
+  .navigation .parent .level-top:after {
+    content: none !important;
+    display: none !important;
+  }
+  .navigation a.level-top .ui-menu-icon:first-child,
+  .navigation a.ui-menu-item-wrapper .ui-menu-icon:first-child {
+    order: 2;
+    margin-inline-start: auto;
+  }
+  .navigation a.level-top > .ui-menu-icon:first-child ~ *,
+  .navigation a.ui-menu-item-wrapper > .ui-menu-icon:first-child ~ * {
+    order: 1;
+  }
+  /* columnsLimit / legacy mega submenu: single column in drawer */
+  .navigation .submenu li {
+    float: none !important;
+    clear: both;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  .navigation .submenu,
+  .navigation .submenu.ui-menu,
+  .navigation li .ui-menu.submenu {
+    position: static !important;
+    left: auto !important;
+    top: auto !important;
+    right: auto !important;
+    transform: none !important;
+    height: auto !important;
+    max-height: none !important;
+  }
+  /*
+   * Visibility must follow jQuery UI Menu (.hide/.show + aria). It never adds .expanded on tap;
+   * :not(.expanded){display:none!important} made .show() ineffective and broke submenu + drawer UX.
+   */
+  .navigation .ui-menu-icon.ui-icon {
+    flex-shrink: 0;
+    text-indent: 0;
+    overflow: visible;
+    background: none;
+    /* No icon font / no Unicode in content — avoids â€º mojibake if charset or cascade is wrong */
+    font-family: inherit;
+    font-size: 0;
+    line-height: 0;
+    speak: none;
+  }
+  .navigation .ui-menu-icon.ui-icon::before {
+    content: "" !important;
+    display: inline-block;
+    box-sizing: border-box;
+    width: 0.35rem;
+    height: 0.35rem;
+    margin-inline-end: 0.125rem;
+    vertical-align: middle;
+    border-style: solid;
+    border-width: 0 2px 2px 0;
+    border-color: #737373;
+    transform: rotate(-45deg);
+  }
+}
+@media (min-width: 1024px) {
+  .navigation .submenu {
+    display: none;
+  }
+  .navigation li.parent:hover > .submenu {
+    display: block;
+  }
+  .navigation .submenu .submenu {
+    left: 100%;
+    top: 0;
+  }
+  /*
+   * Desktop bar: don’t let the level-0 <li> or <a> stretch to the flyout height.
+   * If the first submenu stays in normal flow, hover:bg on .level-top covers a huge area.
+   * Matches topmenu.phtml side flyout (lg:left-full lg:top-0); mobile uses position:static in max-width:1023px rules.
+   */
+  .navigation .nav-primary > li.level0 {
+    align-self: flex-start;
+  }
+  .navigation .nav-primary > li.level0 > a.level-top {
+    height: auto;
+    min-height: 0;
+    flex-grow: 0;
+    align-self: flex-start;
+  }
+  .navigation .nav-primary > li.level0 > ul.submenu {
+    position: absolute !important;
+    left: 100%;
+    top: 0;
+    z-index: 50;
+  }
+  .navigation .ui-menu-icon {
+    display: none;
+  }
+  .navigation .all-category {
+    display: none;
+  }
+}
+/* Open tab (native <details>); replaces .active from mage.tabs */
+.sections.nav-sections .nav-section-detail[open] > summary.section-item-title.nav-sections-item-title {
+  border-bottom-color: transparent !important;
+  background-color: #fff;
+  color: #1979c3;
+  font-weight: 700;
+}
+
+.sections.nav-sections {
+  border-bottom: 1px solid #e5e7eb;
+  background-color: #fff;
+}
+
+/* Inner .section-items: grid of <details name> (exclusive accordion). */
+.sections.nav-sections .nav-sections-nav {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+}
+
+/*
+ * Mobile / tablet off-canvas nav (mage/menu toggles html.nav-open / nav-before-open).
+ * Breakpoint aligned with .nav-toggle visibility (max 1023px).
+ */
+@media (max-width: 1023px) {
+  .header.content .action.nav-toggle {
+    position: relative;
+    z-index: 101;
+  }
+  .sections.nav-sections {
+    position: fixed;
+    top: 0;
+    left: calc(-1 * (100% - 54px));
+    z-index: 90;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    margin: 0;
+    width: calc(100% - 54px);
+    max-width: calc(100vw - 54px);
+    height: 100%;
+    max-height: 100vh;
+    min-height: 0;
+    /* Scroll the whole drawer; avoids row 2 collapsing when 1fr height is indefinite on first open */
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    transition: left 0.3s ease;
+    border-bottom: none;
+    box-shadow: none;
+  }
+  html.nav-before-open {
+    overflow-x: hidden;
+    width: 100%;
+    height: 100%;
+  }
+  html.nav-before-open body {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+  html.nav-before-open .page-wrapper {
+    position: relative;
+    left: 0;
+    height: 100%;
+    overflow: hidden;
+    transition: left 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  html.nav-open .page-wrapper {
+    left: calc(100% - 3.5rem);
+  }
+  html.nav-open .sections.nav-sections {
+    left: 0;
+    box-shadow: 2px 0 16px rgba(0, 0, 0, 0.15);
+    z-index: 99;
+  }
+  html.nav-open::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 85;
+    background-color: rgba(0, 0, 0, 0.3);
+    transition: opacity 0.25s ease;
+  }
+  /* Menu / Account / Settings: CSS Grid — tab row + panel row (content-sized; drawer scrolls) */
+  .sections.nav-sections .section-items.nav-sections-items {
+    box-sizing: border-box;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(var(--nav-sections-tab-count, 3), minmax(0, 1fr));
+    grid-template-rows: auto auto;
+    flex: 1 1 auto;
+    min-height: min-content;
+    align-content: start;
+  }
+  .sections.nav-sections .section-items.nav-sections-items > .nav-section-detail:nth-child(1) > summary {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .sections.nav-sections .section-items.nav-sections-items > .nav-section-detail:nth-child(1) > .section-item-content {
+    grid-column: 1/-1;
+    grid-row: 2;
+  }
+  .sections.nav-sections .section-items.nav-sections-items > .nav-section-detail:nth-child(2) > summary {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .sections.nav-sections .section-items.nav-sections-items > .nav-section-detail:nth-child(2) > .section-item-content {
+    grid-column: 1/-1;
+    grid-row: 2;
+  }
+  .sections.nav-sections .section-items.nav-sections-items > .nav-section-detail:nth-child(3) > summary {
+    grid-column: 3;
+    grid-row: 1;
+  }
+  .sections.nav-sections .section-items.nav-sections-items > .nav-section-detail:nth-child(3) > .section-item-content {
+    grid-column: 1/-1;
+    grid-row: 2;
+  }
+  .sections.nav-sections .section-items.nav-sections-items > .nav-section-detail:nth-child(4) > summary {
+    grid-column: 4;
+    grid-row: 1;
+  }
+  .sections.nav-sections .section-items.nav-sections-items > .nav-section-detail:nth-child(4) > .section-item-content {
+    grid-column: 1/-1;
+    grid-row: 2;
+  }
+  .sections.nav-sections .section-items.nav-sections-items > .nav-section-detail:nth-child(5) > summary {
+    grid-column: 5;
+    grid-row: 1;
+  }
+  .sections.nav-sections .section-items.nav-sections-items > .nav-section-detail:nth-child(5) > .section-item-content {
+    grid-column: 1/-1;
+    grid-row: 2;
+  }
+  .sections.nav-sections .section-items.nav-sections-items > .nav-section-detail:nth-child(6) > summary {
+    grid-column: 6;
+    grid-row: 1;
+  }
+  .sections.nav-sections .section-items.nav-sections-items > .nav-section-detail:nth-child(6) > .section-item-content {
+    grid-column: 1/-1;
+    grid-row: 2;
+  }
+  /* Native <details> hides closed panels; no mage.collapsible display hacks. */
+  .sections.nav-sections .section-item-content.nav-sections-item-content#store\.menu .navigation {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  /*
+   * Account tab: cloned markup uses <details> + absolute dropdown (for the header only).
+   * Scoped to the drawer panel — header .panel.header is unaffected. theme.js sets [open] on the clone.
+   */
+  .sections.nav-sections .section-item-content.nav-sections-item-content[id="store.links"] .authorization-link details > div[role=menu] {
+    position: static;
+    inset: auto;
+    right: auto;
+    top: auto;
+    z-index: auto;
+    margin-top: 0;
+    width: 100%;
+    min-width: 0;
+    border-radius: 0;
+    border: 0;
+    box-shadow: none;
+    background: transparent;
+    padding: 0;
+  }
+  .sections.nav-sections .section-item-content.nav-sections-item-content[id="store.links"] .authorization-link details > div[role=menu] a {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .sections.nav-sections .section-item-content.nav-sections-item-content[id="store.links"] .authorization-link details summary {
+    display: none;
+  }
+}
+@media (max-width: 1023px) {
+  .columns .sidebar.sidebar-main,
+  .columns .sidebar.sidebar-additional {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+@media (max-width: 639px) {
+  .toolbar.toolbar-products {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+    padding-bottom: 1rem;
+  }
+  .toolbar.toolbar-products .toolbar-amount {
+    width: 100%;
+    margin: 0;
+    text-align: center;
+    font-size: 0.875rem;
+  }
+  .toolbar.toolbar-products .modes {
+    display: none;
+  }
+  .toolbar.toolbar-products .toolbar-sorter.sorter {
+    width: 100%;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  .toolbar.toolbar-products .sorter-label {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 0.25rem;
+  }
+  .toolbar.toolbar-products select.sorter-options {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+}
+/* Desktop: drop tab chrome; show catalog menu only (Account/Settings stay in header). */
+@media (min-width: 1024px) {
+  /* sections.phtml: drawer chrome; keep hidden from 1024px (belt-and-suspenders with .lg:hidden). */
+  .sections.nav-sections .nav-drawer-header {
+    display: none !important;
+  }
+  /* Hide tab chrome; show one panel (store.menu when present, else first section). */
+  .sections.nav-sections .section-items > details:not(.nav-section-detail--desktop-visible) {
+    display: none !important;
+  }
+  .sections.nav-sections .nav-section-detail--desktop-visible > summary.section-item-title {
+    display: none !important;
+  }
+  .sections.nav-sections .nav-section-detail--desktop-visible > .section-item-content {
+    display: block !important;
+    padding: 0;
+  }
+  .sections.nav-sections .section-item-content.nav-sections-item-content#store\.menu {
+    display: block !important;
+  }
+  .sections.nav-sections .section-items.nav-sections-items {
+    display: block;
+    grid-template-columns: unset;
+    grid-template-rows: unset;
+    flex: none;
+    min-height: 0;
+    max-width: 1280px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  .sections.nav-sections .section-items.nav-sections-items > .nav-section-detail > summary,
+  .sections.nav-sections .section-items.nav-sections-items > .nav-section-detail > .section-item-content {
+    grid-column: unset;
+    grid-row: unset;
+    min-height: unset;
+    overflow-y: visible;
+  }
+}
+@media (min-width: 1024px) and (min-width: 1280px) {
+  .sections.nav-sections .section-items.nav-sections-items {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+/* Product PDP: exclusive <details name="product-detail-tabs"> — grid row 1 = summaries, row 2 = panel */
+.product.data.items.product-detail-details {
+  display: grid;
+  grid-template-rows: auto auto;
+  align-content: start;
+}
+
+.product.data.items.product-detail-details > .product-detail-tab:nth-child(1) > summary {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.product.data.items.product-detail-details > .product-detail-tab:nth-child(1) > .data.item.content {
+  grid-column: 1/-1;
+  grid-row: 2;
+}
+
+.product.data.items.product-detail-details > .product-detail-tab:nth-child(2) > summary {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.product.data.items.product-detail-details > .product-detail-tab:nth-child(2) > .data.item.content {
+  grid-column: 1/-1;
+  grid-row: 2;
+}
+
+.product.data.items.product-detail-details > .product-detail-tab:nth-child(3) > summary {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+.product.data.items.product-detail-details > .product-detail-tab:nth-child(3) > .data.item.content {
+  grid-column: 1/-1;
+  grid-row: 2;
+}
+
+.product.data.items.product-detail-details > .product-detail-tab:nth-child(4) > summary {
+  grid-column: 4;
+  grid-row: 1;
+}
+
+.product.data.items.product-detail-details > .product-detail-tab:nth-child(4) > .data.item.content {
+  grid-column: 1/-1;
+  grid-row: 2;
+}
+
+.product.data.items.product-detail-details > .product-detail-tab:nth-child(5) > summary {
+  grid-column: 5;
+  grid-row: 1;
+}
+
+.product.data.items.product-detail-details > .product-detail-tab:nth-child(5) > .data.item.content {
+  grid-column: 1/-1;
+  grid-row: 2;
+}
+
+.product.data.items.product-detail-details > .product-detail-tab:nth-child(6) > summary {
+  grid-column: 6;
+  grid-row: 1;
+}
+
+.product.data.items.product-detail-details > .product-detail-tab:nth-child(6) > .data.item.content {
+  grid-column: 1/-1;
+  grid-row: 2;
+}
+
+.product.data.items.product-detail-details > .product-detail-tab[open] > summary.product-detail-tab-summary {
+  border-bottom-color: #1979c3;
+  color: #1979c3;
+}
+
+/* Mini search: submit lives inside .control (see form.mini.phtml) so input + icon button stay one row */
+form#search_mini_form.form.minisearch,
+form.form.minisearch#search_mini_form {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+}
+
+form#search_mini_form.form.minisearch .field.search,
+form.form.minisearch#search_mini_form .field.search {
+  width: 100%;
+  min-width: 0;
+}
+
+form#search_mini_form.form.minisearch .field.search .control .actions,
+form.form.minisearch#search_mini_form .field.search .control .actions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+}
+
+.block-search .field.search .control .search-autocomplete {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  z-index: 20;
+}
+
+.navigation .level0.parent > .level-top {
+  display: flex;
+  align-items: center;
+}
+
+.nav-sections .section-item-title {
+  border-bottom: 1px solid #f5f5f5;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #171717;
+}
+
+.nav-sections .section-item-content {
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+}
+
+.nav-sections-items .item.title a {
+  color: #262626;
+}
+
+.nav-sections-items .item.title a:hover {
+  color: #1979c3;
+}
+
+/* ---- web/tailwind/extensions/_load-order.scss ---- */
+/* Loaded after web/tailwind/modules (see scripts/merge-scss.cjs). Add optional *.scss here. */

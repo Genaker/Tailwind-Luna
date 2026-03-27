@@ -1,0 +1,140 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * @var \Magento\Paypal\Block\Billing\Agreement\View $block
+ */
+$relatedOrders = $block->getRelatedOrders();
+?>
+<div class="mb-8 space-y-6">
+    <div class="flex flex-wrap items-center justify-between gap-3 border-b border-neutral-200 pb-3">
+        <strong class="text-lg font-semibold text-neutral-900">
+            <?= $block->escapeHtml(__('Billing Agreement # ')) ?>
+            <?= $block->escapeHtml($block->getReferenceId()) ?>
+        </strong>
+        <?php if ($block->getCanCancel()) : ?>
+            <button data-mage-init='{"Magento_Paypal/js/in-context/billing-agreement": {
+                        "cancelMessage" : "<?= $block->escapeHtml(__('Are you sure you want to do this?')) ?>",
+                        "cancelUrl" : "<?= $block->escapeUrl($block->getCancelUrl()) ?>"
+                    }}'
+                    type="button" title="<?= $block->escapeHtmlAttr(__('Cancel')) ?>"
+                    class="cancel inline-flex items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-semibold text-neutral-900 transition-colors hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600 disabled:pointer-events-none disabled:opacity-50">
+                <span><?= $block->escapeHtml(__('Cancel')) ?></span>
+            </button>
+        <?php endif; ?>
+    </div>
+
+    <div>
+        <div class="mb-3 text-base font-semibold text-neutral-900">
+            <strong><?= $block->escapeHtml(__('Agreement Information')) ?></strong>
+        </div>
+        <div class="billing-agreements-view overflow-x-auto rounded-lg border border-neutral-200">
+            <table class="table data table-billing-agreements-view w-full border-collapse text-sm">
+                <caption class="sr-only"><?= $block->escapeHtml(__('Agreement Information')) ?></caption>
+                <thead>
+                <tr class="border-b border-neutral-200 bg-neutral-50">
+                    <th scope="col" class="id px-4 py-3 text-left text-sm font-semibold text-neutral-800"><?= $block->escapeHtml(__('Reference ID:')) ?></th>
+                    <th scope="col" class="status px-4 py-3 text-left text-sm font-semibold text-neutral-800"><?= $block->escapeHtml(__('Status:')) ?></th>
+                    <th scope="col" class="created px-4 py-3 text-left text-sm font-semibold text-neutral-800"><?= $block->escapeHtml(__('Created:')) ?></th>
+                    <?php if ($block->getAgreementUpdatedAt()) : ?>
+                        <th scope="col" class="updated px-4 py-3 text-left text-sm font-semibold text-neutral-800"><?= $block->escapeHtml(__('Updated:')) ?></th>
+                    <?php endif; ?>
+                    <th scope="col" class="payment px-4 py-3 text-left text-sm font-semibold text-neutral-800"><?= $block->escapeHtml(__('Payment Method:')) ?></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="border-b border-neutral-200 last:border-b-0">
+                    <td data-th="<?= $block->escapeHtmlAttr(__('Reference ID:')) ?>" class="id px-4 py-3 align-top text-neutral-800">
+                        <?= $block->escapeHtml($block->getReferenceId()) ?>
+                    </td>
+                    <td data-th="<?= $block->escapeHtmlAttr(__('Status:')) ?>" class="status px-4 py-3 align-top text-neutral-700">
+                        <?= $block->escapeHtml($block->getAgreementStatus()) ?>
+                    </td>
+                    <td data-th="<?= $block->escapeHtmlAttr(__('Created:')) ?>" class="created px-4 py-3 align-top text-neutral-700">
+                        <?= $block->escapeHtml($block->getAgreementCreatedAt()) ?>
+                    </td>
+                    <?php if ($block->getAgreementUpdatedAt()) : ?>
+                        <td data-th="<?= $block->escapeHtmlAttr(__('Updated:')) ?>" class="updated px-4 py-3 align-top text-neutral-700">
+                            <?= $block->escapeHtml($block->getAgreementUpdatedAt()) ?>
+                        </td>
+                    <?php endif; ?>
+                    <td data-th="<?= $block->escapeHtmlAttr(__('Payment Method:')) ?>" class="payment px-4 py-3 align-top text-neutral-800">
+                        <?= $block->escapeHtml($block->getPaymentMethodTitle()) ?>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<?php if (count($relatedOrders) > 0) : ?>
+    <div class="mb-8 space-y-4">
+        <?= $block->getChildHtml('pager') ?>
+        <div class="text-base font-semibold text-neutral-900">
+            <span><?= $block->escapeHtml(__('Related Orders')) ?></span>
+        </div>
+        <div class="billing-agreements-related overflow-x-auto rounded-lg border border-neutral-200">
+            <table class="table data table-billing-agreements-related w-full border-collapse text-sm" id="related-orders-table">
+                <caption class="sr-only"><?= $block->escapeHtml(__('Related Orders')) ?></caption>
+                <thead>
+                <tr class="border-b border-neutral-200 bg-neutral-50">
+                    <th scope="col" class="id px-4 py-3 text-left text-sm font-semibold text-neutral-800"><?= $block->escapeHtml(__('Order #')) ?></th>
+                    <th scope="col" class="date px-4 py-3 text-left text-sm font-semibold text-neutral-800"><?= $block->escapeHtml(__('Date')) ?></th>
+                    <th scope="col" class="shipto px-4 py-3 text-left text-sm font-semibold text-neutral-800"><?= $block->escapeHtml(__('Ship To')) ?></th>
+                    <th scope="col" class="total px-4 py-3 text-left text-sm font-semibold text-neutral-800"><?= $block->escapeHtml(__('Order Total')) ?></th>
+                    <th scope="col" class="status px-4 py-3 text-left text-sm font-semibold text-neutral-800"><?= $block->escapeHtml(__('Order Status')) ?></th>
+                    <th scope="col" class="px-4 py-3 text-right text-sm font-semibold text-neutral-800"><?= $block->escapeHtml(__('Action')) ?></th>
+                </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($relatedOrders as $order) : ?>
+                        <tr class="border-b border-neutral-200 last:border-b-0">
+                            <td data-th="<?= $block->escapeHtmlAttr(__('Order #')) ?>" class="id px-4 py-3 align-top text-neutral-800">
+                                <?= $block->escapeHtml($block->getOrderItemValue(
+                                    $order,
+                                    'order_increment_id'
+                                )); ?>
+                            </td>
+                            <td data-th="<?= $block->escapeHtmlAttr(__('Date')) ?>" class="date px-4 py-3 align-top text-neutral-700">
+                                <?= $block->escapeHtml($block->getOrderItemValue($order, 'created_at')) ?>
+                            </td>
+                            <td data-th="<?= $block->escapeHtmlAttr(__('Ship To')) ?>" class="shipto px-4 py-3 align-top text-neutral-700">
+                                <?= $block->escapeHtml($block->getOrderItemValue(
+                                    $order,
+                                    'shipping_address'
+                                )); ?>
+                            </td>
+                            <td data-th="<?= $block->escapeHtmlAttr(__('Order Total')) ?>" class="total px-4 py-3 align-top font-medium text-neutral-900">
+                                <?= /* @noEscape */ $block->getOrderItemValue($order, 'order_total') ?>
+                            </td>
+                            <td data-th="<?= $block->escapeHtmlAttr(__('Order Status')) ?>" class="status px-4 py-3 align-top text-neutral-700">
+                                <?= $block->escapeHtml($block->getOrderItemValue(
+                                    $order,
+                                    'status_label'
+                                )); ?>
+                            </td>
+                            <td data-th="<?= $block->escapeHtmlAttr(__('Action')) ?>" class="px-4 py-3 align-top text-right">
+                                <a href="<?= $block->escapeUrl($block->getOrderItemValue(
+                                    $order,
+                                    'view_url'
+                                )); ?>" class="view inline-flex items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-semibold text-neutral-900 transition-colors hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600">
+                                    <span><?= $block->escapeHtml(__('View Order')) ?></span>
+                                </a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+<?php endif; ?>
+
+<div class="clear-both flex flex-wrap py-4">
+    <a href="<?= $block->escapeUrl($block->getBackUrl()) ?>"
+       class="back inline-flex items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-semibold text-neutral-900 transition-colors hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600">
+        <?= $block->escapeHtml(__('Back to Billing Agreements')) ?>
+    </a>
+</div>

@@ -1,0 +1,32 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * @var $block \Magento\OfflinePayments\Block\Form\Checkmo
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
+?>
+<?php if ($block->getMethod()->getMailingAddress() || $block->getMethod()->getPayableTo()): ?>
+    <?php $_methodCode = $block->escapeHtmlAttr($block->getMethodCode()); ?>
+    <dl class="check payable m-0 list-none space-y-2 p-0 text-sm text-neutral-800" id="payment_form_<?= /* @noEscape */ $_methodCode ?>">
+        <?php if ($block->getMethod()->getPayableTo()) : ?>
+            <dt class="text-base font-semibold text-neutral-900"><?= $block->escapeHtml(__('Make Check payable to:')) ?></dt>
+            <dd class="content text-neutral-700"><?= $block->escapeHtml($block->getMethod()->getPayableTo()) ?></dd>
+        <?php endif; ?>
+        <?php if ($block->getMethod()->getMailingAddress()) : ?>
+            <dt class="text-base font-semibold text-neutral-900"><?= $block->escapeHtml(__('Send Check to:')) ?></dt>
+            <dd class="content text-neutral-700">
+                <address class="checkmo mailing address not-italic">
+                    <?= /* @noEscape */ nl2br($block->escapeHtml($block->getMethod()->getMailingAddress())) ?>
+                </address>
+            </dd>
+        <?php endif; ?>
+    </dl>
+    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+        'display:none',
+        'dl#payment_form_' . /* @noEscape */ $_methodCode
+    ) ?>
+<?php endif; ?>

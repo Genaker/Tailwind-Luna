@@ -1,0 +1,30 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * Custom product Page Builder attributes template
+ *
+ * @var $block \Magento\PageBuilder\Block\Catalog\Block\Product\View\Attributes
+ */
+?>
+<?php
+    $helper = $this->helper(Magento\Catalog\Helper\Output::class);
+    $product = $block->getProduct();
+?>
+<?php if ($additional = $block->getAdditionalData()) : ?>
+    <div class="w-full">
+        <?php foreach ($additional as $data) : ?>
+            <div class="product-full-width-section mb-8 space-y-3 last:mb-0">
+                <div class="w-full">
+                    <h2 class="product-section-title text-lg font-semibold text-neutral-900 border-b border-neutral-200 pb-2"><?= $block->escapeHtml(__($data['label'])) ?></h2>
+                </div>
+                <div class="w-full text-sm leading-relaxed text-neutral-800 [&_a]:text-blue-600 [&_a]:hover:underline">
+                    <?= /* @noEscape */ $helper->productAttribute($product, $data['value'], $data['code']) ?>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+<?php endif;?>

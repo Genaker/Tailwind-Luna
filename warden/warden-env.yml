@@ -1,0 +1,6 @@
+# Tracked copy for Warden (Traefik / varnish routing). Install at: <magento-root>/.warden/warden-env.yml
+# See: docs/WARDEN.md and warden/README.md
+services:
+  varnish:
+    labels:
+      - traefik.http.routers.${WARDEN_ENV_NAME}-varnish.rule=HostRegexp(`{subdomain:.+}.${TRAEFIK_DOMAIN}`) || Host(`${TRAEFIK_DOMAIN}`)

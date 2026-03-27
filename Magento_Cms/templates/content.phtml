@@ -1,0 +1,11 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\Cms\Model\Page $pageData */
+?>
+<div class="cms-content max-w-none leading-relaxed text-neutral-800 [&_a]:text-blue-600 [&_a]:hover:underline [&_img]:max-w-full">
+<?= /* @noEscape */ $pageData->getPageContent() ?>
+</div>

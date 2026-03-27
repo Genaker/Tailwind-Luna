@@ -1,0 +1,62 @@
+<?php
+/**
+ * Toolbar view mode - Grid/List toggle
+ *
+ * @var $block \Magento\Catalog\Block\Product\ProductList\Toolbar
+ */
+?>
+<?php if ($block->isEnabledViewSwitcher()): ?>
+    <div class="modes flex items-center gap-2">
+        <strong class="modes-label mr-1 text-sm font-medium text-neutral-700">
+            <?= $block->escapeHtml(__('View as')) ?>
+        </strong>
+        <?php $_modes = $block->getModes(); ?>
+        <?php if ($_modes && count($_modes) > 1): ?>
+            <?php $_currentMode = $block->getCurrentMode(); ?>
+            <?php foreach ($_modes as $_code => $_label): ?>
+                <?php if ($_code == $_currentMode): ?>
+                    <strong class="modes-mode active inline-flex items-center justify-center w-9 h-9 p-1.5 border border-primary rounded-lg bg-primary text-white transition-all"
+                            title="<?= $block->escapeHtmlAttr($_label) ?>">
+                        <span class="sr-only"><?= $block->escapeHtml($_label) ?></span>
+                        <?php if ($_code == 'grid'): ?>
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <rect x="3" y="3" width="5" height="5"/>
+                                <rect x="12" y="3" width="5" height="5"/>
+                                <rect x="3" y="12" width="5" height="5"/>
+                                <rect x="12" y="12" width="5" height="5"/>
+                            </svg>
+                        <?php else: ?>
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <rect x="3" y="4" width="14" height="2"/>
+                                <rect x="3" y="9" width="14" height="2"/>
+                                <rect x="3" y="14" width="14" height="2"/>
+                            </svg>
+                        <?php endif; ?>
+                    </strong>
+                <?php else: ?>
+                    <a href="<?= $block->escapeUrl($block->getModeUrl($_code)) ?>"
+                       data-role="mode-switcher"
+                       data-value="<?= $block->escapeHtmlAttr(strtolower($_code)) ?>"
+                       class="modes-mode inline-flex items-center justify-center w-9 h-9 p-1.5 border border-neutral-300 rounded-lg bg-white text-neutral-600 hover:border-primary hover:text-primary transition-all"
+                       title="<?= $block->escapeHtmlAttr($_label) ?>">
+                        <span class="sr-only"><?= $block->escapeHtml($_label) ?></span>
+                        <?php if ($_code == 'grid'): ?>
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <rect x="3" y="3" width="5" height="5"/>
+                                <rect x="12" y="3" width="5" height="5"/>
+                                <rect x="3" y="12" width="5" height="5"/>
+                                <rect x="12" y="12" width="5" height="5"/>
+                            </svg>
+                        <?php else: ?>
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <rect x="3" y="4" width="14" height="2"/>
+                                <rect x="3" y="9" width="14" height="2"/>
+                                <rect x="3" y="14" width="14" height="2"/>
+                            </svg>
+                        <?php endif; ?>
+                    </a>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </div>
+<?php endif; ?>

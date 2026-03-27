@@ -1,0 +1,55 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+/** @var \Magento\Sales\Block\Order\Invoice\Items $block */
+$_order = $block->getOrder();
+?>
+<div class="flex flex-wrap items-center justify-between gap-4 py-4 clear-both">
+    <a href="<?= $block->escapeUrl($block->getPrintAllInvoicesUrl($_order)) ?>"
+       class="inline-flex items-center justify-center gap-2 rounded-md text-sm font-semibold border border-neutral-300 px-4 py-2 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600 disabled:opacity-50 disabled:pointer-events-none text-neutral-800 hover:bg-neutral-50 print"
+       target="_blank"
+       rel="noopener noreferrer">
+        <span><?= $block->escapeHtml(__('Print All Invoices')) ?></span>
+    </a>
+</div>
+<?php foreach ($_order->getInvoiceCollection() as $_invoice) : ?>
+    <div class="order-title flex flex-wrap items-center gap-3 mb-4">
+        <strong class="text-base font-semibold text-neutral-900"><?= $block->escapeHtml(__('Invoice #')) ?><?= $block->escapeHtml($_invoice->getIncrementId()) ?></strong>
+        <a href="<?= $block->escapeUrl($block->getPrintInvoiceUrl($_invoice)) ?>"
+           class="inline-flex items-center justify-center gap-2 rounded-md text-sm font-semibold border border-neutral-300 px-4 py-2 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600 disabled:opacity-50 disabled:pointer-events-none text-neutral-800 hover:bg-neutral-50 print"
+           target="_blank"
+           rel="noopener noreferrer">
+            <span><?= $block->escapeHtml(__('Print Invoice')) ?></span>
+        </a>
+    </div>
+    <div class="overflow-x-auto rounded-lg border border-neutral-200 table-order-items invoice mb-8">
+        <table class="table data table-order-items invoice w-full border-collapse text-sm" id="my-invoice-table-<?= (int) $_invoice->getId() ?>">
+            <caption class="sr-only"><?= $block->escapeHtml(__('Items Invoiced')) ?></caption>
+            <thead>
+                <tr class="border-b border-neutral-200 bg-neutral-50">
+                    <th class="name px-4 py-3 text-left text-sm font-semibold text-neutral-800" scope="col"><?= $block->escapeHtml(__('Product Name')) ?></th>
+                    <th class="sku px-4 py-3 text-left text-sm font-semibold text-neutral-800" scope="col"><?= $block->escapeHtml(__('SKU')) ?></th>
+                    <th class="px-4 py-3 text-left text-sm font-semibold text-neutral-800" scope="col"><?= $block->escapeHtml(__('Price')) ?></th>
+                    <th class="px-4 py-3 text-center text-sm font-semibold text-neutral-800" scope="col"><?= $block->escapeHtml(__('Qty Invoiced')) ?></th>
+                    <th class="subtotal px-4 py-3 text-left text-sm font-semibold text-neutral-800" scope="col"><?= $block->escapeHtml(__('Subtotal')) ?></th>
+                </tr>
+            </thead>
+            <?php $_items = $_invoice->getAllItems(); ?>
+            <?php foreach ($_items as $_item) : ?>
+                <?php if (!$_item->getOrderItem()->getParentItem()) : ?>
+                    <tbody>
+                        <?= $block->getItemHtml($_item) ?>
+                    </tbody>
+                <?php endif; ?>
+            <?php endforeach; ?>
+            <tfoot>
+                <?= $block->getInvoiceTotalsHtml($_invoice) ?>
+            </tfoot>
+        </table>
+    </div>
+    <?= $block->getInvoiceCommentsHtml($_invoice) ?>
+<?php endforeach; ?>

@@ -1,0 +1,14 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+/** @var \Magento\Cms\Model\Page $pageData */
+/** @var \Magento\Framework\Escaper $escaper */
+?>
+<?php if ($pageData->getPageMetaKeywords()) : ?>
+    <meta name="keywords" content="<?= $escaper->escapeHtmlAttr((string) $pageData->getPageMetaKeywords()) ?>"/>
+<?php endif; ?>
+<?php if ($pageData->getPageMetaDescription()) : ?>
+    <meta name="description" content="<?= $escaper->escapeHtmlAttr((string) $pageData->getPageMetaDescription()) ?>"/>
+<?php endif; ?>

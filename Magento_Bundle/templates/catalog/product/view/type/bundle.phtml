@@ -1,0 +1,21 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/* @var $block \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle */
+?>
+<?php $_product = $block->getProduct() ?>
+<?php if ($block->displayProductStockStatus()) : ?>
+    <?php if ($_product->isAvailable()) : ?>
+        <p class="mt-1 text-sm text-green-700" title="<?= $block->escapeHtmlAttr(__('Availability:')) ?>">
+            <span><?= $block->escapeHtml(__('In stock')) ?></span>
+        </p>
+    <?php else : ?>
+        <p class="mt-1 text-sm text-red-700" title="<?= $block->escapeHtmlAttr(__('Availability:')) ?>">
+            <span><?= $block->escapeHtml(__('Out of stock')) ?></span>
+        </p>
+    <?php endif; ?>
+<?php endif; ?>
+<?= $block->getChildHtml('bundle_prices') ?>

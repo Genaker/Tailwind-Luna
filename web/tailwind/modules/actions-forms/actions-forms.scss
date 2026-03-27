@@ -1,0 +1,170 @@
+.action.primary,
+button.action.primary,
+.primary .action,
+.action-primary .action.primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  border: 1px solid transparent;
+  background-color: #1979c3;
+  padding: 0.625rem 1.5rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.5;
+  color: #fff;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+.action.primary:hover,
+button.action.primary:hover {
+  background-color: #166aaf;
+  box-shadow: 0 2px 4px 0 rgb(0 0 0 / 0.1);
+  transform: translateY(-1px);
+}
+.action.primary:active,
+button.action.primary:active {
+  background-color: #145a95;
+  transform: translateY(0);
+}
+.action.primary:disabled,
+button.action.primary:disabled {
+  pointer-events: none;
+  opacity: 0.5;
+  transform: none;
+}
+
+.action.secondary,
+button.action.secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.375rem;
+  border: 1px solid #d4d4d4;
+  background-color: #fff;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #262626;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  cursor: pointer;
+  text-decoration: none;
+}
+.action.secondary:hover {
+  background-color: #fafafa;
+}
+
+.action.tocart,
+.action.tocart.primary,
+button.action.tocart.primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  border: 1px solid transparent;
+  background-color: #1979c3;
+  padding: 0.625rem 1.5rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.5;
+  color: #fff;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  text-decoration: none;
+}
+.action.tocart:hover {
+  background-color: #166aaf;
+  box-shadow: 0 2px 4px 0 rgb(0 0 0 / 0.1);
+  transform: translateY(-1px);
+}
+.action.tocart:active {
+  background-color: #145a95;
+  transform: translateY(0);
+}
+
+.action.towishlist,
+.action.tocompare,
+.action.more {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 0.375rem;
+  border: 1px solid #d4d4d4;
+  background-color: #fff;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #262626;
+  text-decoration: none;
+}
+.action.towishlist:hover {
+  border-color: #a3a3a3;
+  background-color: #fafafa;
+}
+
+.input-text,
+input.input-text,
+select,
+textarea {
+  width: 100%;
+  max-width: 100%;
+  border-radius: 0.375rem;
+  border: 1px solid #d4d4d4;
+  background-color: #fff;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  color: #171717;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+.input-text::placeholder {
+  color: #a3a3a3;
+}
+.input-text:focus {
+  border-color: #1979c3;
+  outline: none;
+  box-shadow: 0 0 0 1px #1979c3;
+}
+
+/* PDP qty width/padding: Tailwind on Magento_Catalog/.../addtocart.phtml (.input-text is full-width globally). */
+
+.label {
+  margin-bottom: 0.25rem;
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #404040;
+}
+
+/*
+ * jQuery validation / swatch required (e.g. super_attribute[id]-error) — nodes get class mage-error from JS.
+ * Tailwind-like: soft red panel + clear type (cannot add utilities on injected markup).
+ */
+.mage-error {
+  box-sizing: border-box;
+  display: block;
+  margin-top: 0.375rem;
+  max-width: 100%;
+  font-size: 0.875rem;
+  line-height: 1.375;
+  font-weight: 500;
+  color: #991b1b;
+}
+
+div.mage-error,
+p.mage-error {
+  width: fit-content;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.375rem;
+  border: 1px solid #fecaca;
+  background-color: #fef2f2;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+
+label.mage-error {
+  padding: 0;
+  border: none;
+  background: none;
+  box-shadow: none;
+  font-size: 0.8125rem;
+}

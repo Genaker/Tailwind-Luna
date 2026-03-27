@@ -1,0 +1,83 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var $block \Magento\Checkout\Block\Cart\Sidebar */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/** Shopping-cart SVG (same artwork as tailstore cart-shopping.svg) — base64 mask so color = currentColor */
+$minicartCartIconSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">'
+    . '<path d="M6.29977 5H21L19 12H7.37671M20 16H8L6 3H3M9 20C9 20.5523 8.55228 21 8 21C7.44772 21 7 20.5523 7 20C7 19.4477 7.44772 19 8 19C8.55228 19 9 19.4477 9 20ZM20 20C20 20.5523 19.5523 21 19 21C18.4477 21 18 20.5523 18 20C18 19.4477 18.4477 19 19 19C19.5523 19 20 19.4477 20 20Z" '
+    . 'stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+$minicartCartIconData = 'data:image/svg+xml;base64,' . base64_encode($minicartCartIconSvg);
+$minicartCartIconMaskStyle = '-webkit-mask:url(' . $minicartCartIconData . ') center/contain no-repeat;'
+    . 'mask:url(' . $minicartCartIconData . ') center/contain no-repeat';
+?>
+
+<div data-block="minicart" class="minicart-wrapper relative ml-auto lg:ml-0">
+    <a class="action showcart showcart--icon group"
+       href="<?= $block->escapeUrl($block->getShoppingCartUrl()) ?>"
+       data-bind="scope: 'minicart_content'"
+       title="<?= $block->escapeHtmlAttr(__('My Cart')) ?>"
+       aria-label="<?= $block->escapeHtmlAttr(__('My Cart')) ?>">
+        <span class="sr-only"><?= $block->escapeHtml(__('My Cart')) ?></span>
+        <span class="showcart__icon inline-flex shrink-0 items-center justify-center text-inherit transition-transform duration-200 ease-out group-hover:scale-105" aria-hidden="true">
+            <span class="pointer-events-none inline-block h-6 w-6 shrink-0 bg-current"
+                  style="<?= $block->escapeHtmlAttr($minicartCartIconMaskStyle) ?>"></span>
+        </span>
+        <!-- Qty only in chip (no “item” / “items” label). -->
+        <span class="counter qty empty ml-1 inline-flex max-w-full items-center rounded-full bg-primary px-2 py-0.5 text-xs font-bold text-white [&.empty]:hidden"
+              data-bind="css: { empty: !!getCartParam('summary_count') == false && !isLoading() },
+               blockLoader: isLoading">
+            <span class="counter-number leading-none">
+                <!-- ko if: getCartParam('summary_count') -->
+                <!-- ko text: getCartParam('summary_count').toLocaleString(window.LOCALE) --><!-- /ko -->
+                <!-- /ko -->
+            </span>
+        </span>
+    </a>
+    <?php if ($block->getIsNeedToDisplaySideBar()):?>
+        <div class="block block-minicart box-border w-full min-w-0 max-w-full overflow-hidden rounded-lg border border-neutral-200 bg-white p-0 shadow-xl"
+             data-role="dropdownDialog"
+             data-mage-init='{"dropdownDialog":{
+                "appendTo":"[data-block=minicart]",
+                "triggerTarget":".showcart",
+                "timeout": "2000",
+                "closeOnMouseLeave": false,
+                "closeOnEscape": true,
+                "triggerClass":"active",
+                "parentClass":"active",
+                "dialogClass":"!m-0 !box-border !max-w-full !w-full !min-w-0 !border-0 !bg-transparent !p-0 !shadow-none",
+                "buttons":[]}}'>
+            <div id="minicart-content-wrapper" data-bind="scope: 'minicart_content'">
+                <!-- ko template: getTemplate() --><!-- /ko -->
+            </div>
+            <?= $block->getChildHtml('minicart.addons') ?>
+        </div>
+    <?php else: ?>
+        <?php $scriptString = <<<script
+            require(['jquery'], function ($) {
+                $('a.action.showcart').on('click', function() {
+                    $(document.body).trigger('processStart');
+                });
+            });
+script;
+        ?>
+        <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false); ?>
+    <?php endif ?>
+    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], 'window.checkout = ' .
+     /* @noEscape */ $block->getSerializedConfig(), false); ?>
+    <script type="text/x-magento-init">
+    {
+        "[data-block='minicart']": {
+            "Magento_Ui/js/core/app": <?= /* @noEscape */ $block->getJsLayout() ?>
+        },
+        "*": {
+            "Magento_Ui/js/block-loader": "<?= $block->escapeJs(
+                $block->escapeUrl($block->getViewFileUrl('images/loader-1.gif'))
+            ) ?>"
+        }
+    }
+    </script>
+</div>
