@@ -41,7 +41,7 @@
         <!-- PDP gallery stage: child block (see gallery.phtml) — not raw include -->
         <referenceBlock name="product.info.media.image">
             <arguments>
-                <argument name="gallery_image_service" xsi:type="object">Genaker\ThemeTileWindLuna\Service\ProductGalleryImageService</argument>
+                <argument name="gallery_image_service" xsi:type="object">Genaker\ThemeTailwindLuna\Service\ProductGalleryImageService</argument>
             </arguments>
             <block class="Magento\Framework\View\Element\Template"
                    name="product.gallery.stage"

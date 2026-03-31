@@ -5,6 +5,6 @@ use Magento\Framework\Component\ComponentRegistrar;
 
 ComponentRegistrar::register(
     ComponentRegistrar::MODULE,
-    'Genaker_ThemeTileWindLuna',
+    'Genaker_ThemeTailwindLuna',
     __DIR__
 );

@@ -2,7 +2,7 @@
 <!--
 /**
  * Tailwind-only storefront: drop Blank/Luma responsive + print bundles (use @media print in tailwind input).
- * Global CSS: Genaker_ThemeTileWindLuna Block\ResolveCss prefers css/tailwind.min.css when present.
+ * Global CSS: Genaker_ThemeTailwindLuna Block\ResolveCss prefers css/tailwind.min.css when present.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">

@@ -94,7 +94,7 @@ Source: `scripts/maintainer-sync-templates.cjs` — treat as a **maintainer** to
 
 | Asset | Role |
 |--------|------|
-| **`web/css/tailwind.css`** / **`tailwind.min.css`** | **Generated** by Node: Tailwind CLI (no **`--minify`**) → expanded CSS; **`emit-tailwind-min-alias.cjs`** runs **cssnano** once and writes **both** files (same bytes). **Genaker\ThemeTileWindLuna\Block\ResolveCss** prefers **`tailwind.min.css`** when readable, else **`tailwind.css`**. |
+| **`web/css/tailwind.css`** / **`tailwind.min.css`** | **Generated** by Node: Tailwind CLI (no **`--minify`**) → expanded CSS; **`emit-tailwind-min-alias.cjs`** runs **cssnano** once and writes **both** files (same bytes). **Genaker\ThemeTailwindLuna\Block\ResolveCss** prefers **`tailwind.min.css`** when readable, else **`tailwind.css`**. |
 | **`web/css/checkout.css`** / **`checkout.min.css`** | **Hand-written** checkout rules; **`minify-checkout.cjs`** emits **`checkout.min.css`**. **ResolveCss** prefers **`.min.css`** when readable, else the source file. |
 
 ---
@@ -168,7 +168,7 @@ bin/magento cache:flush
 | Shopping cart | `Magento_Checkout/layout/checkout_cart_index.xml` |
 | One-page checkout | `Magento_Checkout/layout/checkout_index_index.xml` |
 
-**ResolveCss** (companion module **`Genaker_ThemeTileWindLuna`**, PHP under **`Module/ThemeModule/`** in this theme package — Composer autoloads it with the theme) reads the **`css_path`** argument, resolves **`{path}.min.css`** first if the file exists on disk, otherwise **`{path}.css`**. **Magento’s** own **Minify CSS** (Stores → Advanced → Developer) can still minify deployed static files in production.
+**ResolveCss** (companion module **`Genaker_ThemeTailwindLuna`**, PHP under **`Module/ThemeModule/`** in this theme package — Composer autoloads it with the theme) reads the **`css_path`** argument, resolves **`{path}.min.css`** first if the file exists on disk, otherwise **`{path}.css`**. **Magento’s** own **Minify CSS** (Stores → Advanced → Developer) can still minify deployed static files in production.
 
 **Why separate:** keeps cart/checkout layout rules out of the global Tailwind bundle.
 

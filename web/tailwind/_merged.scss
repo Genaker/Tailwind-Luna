@@ -206,6 +206,42 @@ label.mage-error {
   border-width: 0;
 }
 
+/*
+ * Currency / language / store switcher: panel keeps [hidden] in markup; core dropdowns.js
+ * may leave it set while toggling .active / aria. Author display:block !important when open
+ * overrides [hidden] and positions the panel (no JS changes required).
+ */
+.switcher .switcher-options {
+  position: relative;
+}
+
+/*
+ * Mobile header: .header.content .action.nav-toggle uses z-index:101 so the hamburger stays
+ * tappable above the drawer. The switcher subtree must stack above it when open, or the
+ * dropdown list paints under the icon (child z-index:500 does not beat sibling 101).
+ */
+.switcher-options.active {
+  z-index: 110;
+}
+
+.switcher-options.active .switcher-dropdown[data-target='dropdown'] {
+  display: block !important;
+  position: absolute;
+  left: 0;
+  top: 100%;
+  z-index: 500;
+  margin-top: 0.25rem;
+  min-width: min(100%, 18rem);
+  list-style: none;
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
+  background-color: #fff;
+  padding: 0.25rem 0;
+  box-shadow:
+    0 10px 15px -3px rgb(0 0 0 / 0.08),
+    0 4px 6px -4px rgb(0 0 0 / 0.08);
+}
+
 .switcher-dropdown a {
   display: block;
   border-radius: 0.25rem;
@@ -773,7 +809,7 @@ li.product [data-role='add-to-links'] a.tocompare > span,
 /* ---- web/tailwind/modules/catalog/30-plp-toolbar.scss ---- */
 .toolbar.toolbar-products {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
@@ -783,8 +819,8 @@ li.product [data-role='add-to-links'] a.tocompare > span,
 }
 
 .toolbar.toolbar-products .toolbar-amount {
-  flex: 1 1 auto;
-  min-width: 10rem;
+  flex: none;
+  white-space: nowrap;
   font-weight: 500;
   color: #404040;
 }
@@ -800,9 +836,6 @@ li.product [data-role='add-to-links'] a.tocompare > span,
   color: #404040;
 }
 
-.toolbar.toolbar-products select.sorter-options {
-  min-width: 7rem;
-}
 
 /* View modes (grid/list toggle) */
 .modes {
@@ -1187,7 +1220,10 @@ li.product [data-role='add-to-links'] a.tocompare > span,
   box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
 }
 
+/* z-index:115 > nav-toggle(101) so the top bar and its open dropdowns stack above the hamburger button. */
 .panel.wrapper {
+  position: relative;
+  z-index: 115;
   border-bottom: 1px solid #e5e7eb;
   background-color: #f5f5f5;
   font-size: 0.875rem;
@@ -2737,46 +2773,6 @@ aside.modal-slide._show {
   }
 }
 
-@media (max-width: 639px) {
-  .toolbar.toolbar-products {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 1rem;
-    padding-bottom: 1rem;
-  }
-
-  .toolbar.toolbar-products .toolbar-amount {
-    width: 100%;
-    margin: 0;
-    text-align: center;
-    font-size: 0.875rem;
-  }
-
-  .toolbar.toolbar-products .modes {
-    display: none;
-  }
-
-  .toolbar.toolbar-products .toolbar-sorter.sorter {
-    width: 100%;
-    margin: 0;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-  }
-
-  .toolbar.toolbar-products .sorter-label {
-    width: 100%;
-    text-align: center;
-    margin-bottom: 0.25rem;
-  }
-
-  .toolbar.toolbar-products select.sorter-options {
-    flex: 1 1 auto;
-    min-width: 0;
-  }
-}
 
 /* Desktop: drop tab chrome; show catalog menu only (Account/Settings stay in header). */
 @media (min-width: 1024px) {
@@ -2832,29 +2828,7 @@ aside.modal-slide._show {
   }
 }
 
-/* Product PDP: exclusive <details name="product-detail-tabs"> — grid row 1 = summaries, row 2 = panel */
-.product.data.items.product-detail-details {
-  display: grid;
-  grid-template-rows: auto auto;
-  align-content: start;
-}
 
-@for $i from 1 through 6 {
-  .product.data.items.product-detail-details > .product-detail-tab:nth-child(#{$i}) > summary {
-    grid-column: #{$i};
-    grid-row: 1;
-  }
-
-  .product.data.items.product-detail-details > .product-detail-tab:nth-child(#{$i}) > .data.item.content {
-    grid-column: 1 / -1;
-    grid-row: 2;
-  }
-}
-
-.product.data.items.product-detail-details > .product-detail-tab[open] > summary.product-detail-tab-summary {
-  border-bottom-color: #1979c3;
-  color: #1979c3;
-}
 
 /* Mini search: submit lives inside .control (see form.mini.phtml) so input + icon button stay one row */
 form#search_mini_form.form.minisearch,
@@ -2890,24 +2864,6 @@ form.form.minisearch#search_mini_form .field.search .control .actions {
   align-items: center;
 }
 
-.nav-sections .section-item-title {
-  border-bottom: 1px solid #f5f5f5;
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: #171717;
-}
-
-.nav-sections .section-item-content {
-  padding: 0.75rem 1rem;
-  font-size: 0.875rem;
-}
-
-.nav-sections-items .item.title a {
-  color: #262626;
-}
-.nav-sections-items .item.title a:hover {
-  color: #1979c3;
-}
 
 /* ---- web/tailwind/extensions/_load-order.scss ---- */
 /* Loaded after web/tailwind/modules (see scripts/merge-scss.cjs). Add optional *.scss here. */

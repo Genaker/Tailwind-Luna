@@ -9,6 +9,8 @@
  *   --source-map     Emit _merged.css.map and sourceMappingURL in _merged.css.
  *   --minify, -m     Emit compressed CSS (smaller _merged.css).
  *   --help, -h       Show usage.
+ * Environment:
+ *   MAGENTO_THEME_ROOT  Absolute path to the theme package when merge-scss runs from another package.
  *
  * Config (layered): web/tailwind/scss.config.json (theme), then each module
  * …/view/frontend/web/tailwind/scss.config.json — see web/tailwind/scss-config.cjs
@@ -22,9 +24,13 @@ const fs = require("fs");
 const path = require("path");
 const { pathToFileURL } = require("url");
 const { globSync } = require("glob");
-const { loadMergedScssConfig } = require(path.join(__dirname, "..", "web", "tailwind", "scss-config.cjs"));
 
-const themeRoot = path.resolve(__dirname, "..");
+/** When the script lives outside the theme (or is symlinked), set to the theme package root. */
+const themeRoot = process.env.MAGENTO_THEME_ROOT
+  ? path.resolve(process.env.MAGENTO_THEME_ROOT)
+  : path.resolve(__dirname, "..");
+
+const { loadMergedScssConfig } = require(path.join(themeRoot, "web", "tailwind", "scss-config.cjs"));
 const argv = process.argv.slice(2);
 const list = argv.includes("--list") || argv.includes("-l");
 const verbose = argv.includes("--verbose") || argv.includes("-v");
@@ -42,6 +48,9 @@ Options:
   --source-map     Emit web/tailwind/_merged.css.map (DevTools map to original .scss files).
   --minify, -m     Compressed CSS for _merged.css (default: expanded).
   --help, -h       Show this help.
+
+Environment:
+  MAGENTO_THEME_ROOT  Absolute path to the theme package (when this script is not under that tree).
 `);
   process.exit(0);
 }
@@ -224,8 +233,12 @@ let sass;
 try {
   sass = require("sass");
 } catch {
-  console.error("[merge-scss] The `sass` package is required. Install: npm install sass --save-dev");
-  process.exit(1);
+  try {
+    sass = require(path.join(themeRoot, "node_modules", "sass"));
+  } catch {
+    console.error("[merge-scss] The `sass` package is required. Install: npm install sass --save-dev");
+    process.exit(1);
+  }
 }
 
 const sassOpts = {

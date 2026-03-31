@@ -7,7 +7,10 @@
   box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
 }
 
+/* z-index:115 > nav-toggle(101) so the top bar and its open dropdowns stack above the hamburger button. */
 .panel.wrapper {
+  position: relative;
+  z-index: 115;
   border-bottom: 1px solid #e5e7eb;
   background-color: #f5f5f5;
   font-size: 0.875rem;

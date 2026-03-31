@@ -19,7 +19,8 @@
             "Module/ThemeModule/registration.php"
         ],
         "psr-4": {
-            "Genaker\\ThemeTileWindLuna\\": "Module/ThemeModule/"
+            "Genaker\\ThemeTailwindLuna\\": "Module/ThemeModule/",
+            "Genaker\\ThemeTileWindLuna\\": "Module/ThemeModule/ThemeTileWindAlias/"
         }
     }
 }

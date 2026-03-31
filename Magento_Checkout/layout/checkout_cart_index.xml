@@ -3,13 +3,13 @@
 /**
  * Cart + checkout flow CSS (web/css/checkout.css) and flex utilities on cart-container
  * so the summary is row 2 (same visual order as desktop: form first, summary second).
- * Checkout CSS: Genaker_ThemeTileWindLuna Block\ResolveCss prefers css/checkout.min.css when present.
+ * Checkout CSS: Genaker_ThemeTailwindLuna Block\ResolveCss prefers css/checkout.min.css when present.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="head.additional">
-            <block class="Genaker\ThemeTileWindLuna\Block\ResolveCss" name="genaker.resolve_css.checkout.cart" after="-">
+            <block class="Genaker\ThemeTailwindLuna\Block\ResolveCss" name="genaker.resolve_css.checkout.cart" after="-">
                 <arguments>
                     <argument name="css_path" xsi:type="string">css/checkout.css</argument>
                 </arguments>

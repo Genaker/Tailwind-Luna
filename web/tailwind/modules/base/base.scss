@@ -26,6 +26,42 @@
   border-width: 0;
 }
 
+/*
+ * Currency / language / store switcher: panel keeps [hidden] in markup; core dropdowns.js
+ * may leave it set while toggling .active / aria. Author display:block !important when open
+ * overrides [hidden] and positions the panel (no JS changes required).
+ */
+.switcher .switcher-options {
+  position: relative;
+}
+
+/*
+ * Mobile header: .header.content .action.nav-toggle uses z-index:101 so the hamburger stays
+ * tappable above the drawer. The switcher subtree must stack above it when open, or the
+ * dropdown list paints under the icon (child z-index:500 does not beat sibling 101).
+ */
+.switcher-options.active {
+  z-index: 110;
+}
+
+.switcher-options.active .switcher-dropdown[data-target='dropdown'] {
+  display: block !important;
+  position: absolute;
+  left: 0;
+  top: 100%;
+  z-index: 500;
+  margin-top: 0.25rem;
+  min-width: min(100%, 18rem);
+  list-style: none;
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
+  background-color: #fff;
+  padding: 0.25rem 0;
+  box-shadow:
+    0 10px 15px -3px rgb(0 0 0 / 0.08),
+    0 4px 6px -4px rgb(0 0 0 / 0.08);
+}
+
 .switcher-dropdown a {
   display: block;
   border-radius: 0.25rem;

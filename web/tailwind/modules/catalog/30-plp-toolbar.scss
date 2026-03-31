@@ -1,6 +1,6 @@
 .toolbar.toolbar-products {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
@@ -10,8 +10,8 @@
 }
 
 .toolbar.toolbar-products .toolbar-amount {
-  flex: 1 1 auto;
-  min-width: 10rem;
+  flex: none;
+  white-space: nowrap;
   font-weight: 500;
   color: #404040;
 }
@@ -27,9 +27,6 @@
   color: #404040;
 }
 
-.toolbar.toolbar-products select.sorter-options {
-  min-width: 7rem;
-}
 
 /* View modes (grid/list toggle) */
 .modes {

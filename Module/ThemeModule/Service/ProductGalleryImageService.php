@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Genaker\ThemeTileWindLuna\Service;
+namespace Genaker\ThemeTailwindLuna\Service;
 
 use Magento\Catalog\Block\Product\View\Gallery;
 use Magento\Catalog\Helper\Image as ImageHelper;

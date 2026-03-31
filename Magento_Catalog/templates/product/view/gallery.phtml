@@ -26,12 +26,12 @@ $css = [
 /* ── Data ────────────────────────────────────────────────────────────────── */
 $product = $block->getProduct();
 
-/** @var \Genaker\ThemeTileWindLuna\Service\ProductGalleryImageService $galleryImageService */
+/** @var \Genaker\ThemeTailwindLuna\Service\ProductGalleryImageService $galleryImageService */
 $galleryImageService = $block->getData('gallery_image_service');
-if (!$galleryImageService instanceof \Genaker\ThemeTileWindLuna\Service\ProductGalleryImageService) {
+if (!$galleryImageService instanceof \Genaker\ThemeTailwindLuna\Service\ProductGalleryImageService) {
     /* Layout merge (e.g. Genaker_FastProductGallery) may not pass this argument; service is stateless. */
     $galleryImageService = \Magento\Framework\App\ObjectManager::getInstance()->get(
-        \Genaker\ThemeTileWindLuna\Service\ProductGalleryImageService::class
+        \Genaker\ThemeTailwindLuna\Service\ProductGalleryImageService::class
     );
 }
 $g = $galleryImageService->build($block);

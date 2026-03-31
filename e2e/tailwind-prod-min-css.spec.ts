@@ -1,6 +1,6 @@
 /**
  * Production / deployment check: global Tailwind must load as **tailwind.min.css**
- * (Genaker_ThemeTileWindLuna ResolveCss prefers css/tailwind.min.css when the file exists
+ * (Genaker_ThemeTailwindLuna ResolveCss prefers css/tailwind.min.css when the file exists
  * in pub/static — see emit-tailwind-min-alias.cjs (cssnano) + copy-tailwind-to-pub.cjs).
  *
  * Run after: `npm run build:tailwind` or `npm run build:tailwind:prod` so

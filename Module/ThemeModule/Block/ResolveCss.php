@@ -6,11 +6,19 @@
  */
 declare(strict_types=1);
 
-namespace Genaker\ThemeTileWindLuna\Block;
+namespace Genaker\ThemeTailwindLuna\Block;
 
 use Magento\Framework\View\Asset\Repository;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Template\Context;
+
+/**
+ * If this file is included twice under two path strings (e.g. vendor symlink vs packages mount),
+ * PHP would fatal on the second `class` declaration. Skip redefinition when the class already exists.
+ */
+if (\class_exists(\Genaker\ThemeTailwindLuna\Block\ResolveCss::class, false)) {
+    return;
+}
 
 class ResolveCss extends AbstractBlock
 {

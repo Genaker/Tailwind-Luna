@@ -59,6 +59,50 @@ TypeScript constants for the sample-data email/password (same as CSV above).
 | `SKIP_E2E_MAGENTO_USER` | `1` = skip PHP; defaults Playwright to **`roni_cost@example.com`** if no `E2E_USER_*` set. |
 | `E2E_DELETE_USER` | `1` = delete resolved user after tests (not sample-demo). |
 
+### Admin URL from `app/etc/env.php` (`e2e/admin-backend-env.spec.ts`)
+
+Reads **`backend.frontName`** from **`MAGENTO_ROOT/app/etc/env.php`** (e.g. `backend` → opens **`/backend`** under `PLAYWRIGHT_BASE_URL`). Asserts **no console errors** (via the shared fixture) and **no PHP/Exception text** in the page body.
+
+| Variable | Purpose |
+|----------|---------|
+| `MAGENTO_ROOT` | Magento root (parent of `app/`). Default: four levels above `e2e/lib` (project root when the theme lives at `packages/theme-frontend-win-luna`). |
+| `MAGENTO_BACKEND_FRONTNAME` | Optional override if you do not want to read `env.php` (e.g. `backend`). |
+
+```bash
+cd packages/theme-frontend-win-luna
+npm run test:e2e:admin-backend
+```
+
+### Admin (`e2e/admin-tailwind.spec.ts`)
+
+Same admin path resolution as above: unless **`PLAYWRIGHT_ADMIN_URL`** or **`PLAYWRIGHT_ADMIN_PATH`** is set, the path comes from **`env.php`** `backend.frontName` (fallback **`/admin`** if `env.php` is missing). Optionally logs in and asserts **`css/tailwind.css`** is linked (Genaker adminhtml Tailwind theme).
+
+| Variable | Purpose |
+|----------|---------|
+| `PLAYWRIGHT_ADMIN_PATH` | Path relative to `PLAYWRIGHT_BASE_URL` (overrides `env.php` when set). |
+| `PLAYWRIGHT_ADMIN_URL` | Full URL override for the admin entry (e.g. custom host/port); wins over `PLAYWRIGHT_ADMIN_PATH`. |
+| `E2E_ADMIN_USER` / `E2E_ADMIN_PASSWORD` | Admin credentials. If **both** are set, the second test signs in and expects a Tailwind stylesheet in `<head>`. If unset, that test is **skipped**. |
+
+```bash
+cd packages/theme-frontend-win-luna
+npm run test:e2e:admin
+```
+
+With login + Tailwind assertion:
+
+```bash
+E2E_ADMIN_USER=admin E2E_ADMIN_PASSWORD='YourPass' npm run test:e2e:admin
+```
+
+### PHP: `Cannot redeclare class Genaker\ThemeTailwindLuna\Block\ResolveCss`
+
+That fatal means PHP loaded [`Module/ThemeModule/Block/ResolveCss.php`](../Module/ThemeModule/Block/ResolveCss.php) twice in one request. There is only **one** class file in this repo; the cause is usually environment/autoload hygiene:
+
+1. From the Magento project root: **`composer dump-autoload -o`**
+2. Remove **`generated/code`**, **`generated/metadata`**, **`var/cache`**, then redeploy static if needed.
+3. Ensure **one** install of the theme package: path repository should **symlink** `vendor/genaker/theme-frontend-tailwind-luna` → `packages/theme-frontend-win-luna`, not a duplicate unpacked copy alongside `packages/`.
+4. Restart **PHP-FPM** or clear **OPcache** if the error persists after deploy.
+
 ### Docker / CI without Magento
 
 `npm run test:e2e` runs Playwright only. `test:e2e:docker` sets `SKIP_E2E_MAGENTO_USER=1`.

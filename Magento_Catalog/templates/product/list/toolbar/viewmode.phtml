@@ -7,7 +7,7 @@
 ?>
 <?php if ($block->isEnabledViewSwitcher()): ?>
     <div class="modes flex items-center gap-2">
-        <strong class="modes-label mr-1 text-sm font-medium text-neutral-700">
+        <strong class="modes-label mr-1 hidden text-sm font-medium text-neutral-700 sm:inline">
             <?= $block->escapeHtml(__('View as')) ?>
         </strong>
         <?php $_modes = $block->getModes(); ?>
