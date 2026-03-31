@@ -3,7 +3,7 @@
   GLOBAL Tailwind JIT safelist — not deployed to customers; only scanned at build time.
 
   WHY: tailwind.config.js strips all <?php ?> from .phtml before scanning. Utilities that
-  appear only in PHP strings, JSON options (e.g. dialogClass), or legacy layout experiments
+  appear only in PHP strings, JSON options, or legacy layout experiments
   must be listed here so `npm run build:tailwind` emits them into web/css/tailwind.css.
 
   HOW TO USE:
@@ -37,9 +37,6 @@
       aria-hidden="true"
       class="hidden grid w-full min-w-0 grid-cols-1 gap-6 lg:grid-cols-2 lg:items-start lg:flex lg:flex-col lg:items-center"
     ></div>
-
-    <!-- ========== Magento_Checkout minicart dropdownDialog dialogClass (not in class= on storefront) ========== -->
-    <div aria-hidden="true" class="!m-0 !box-border !max-w-full !w-full !min-w-0 !border-0 !bg-transparent !p-0 !shadow-none"></div>
 
     <!-- ========== Topmenu::getHtml() — mirror Magento_Theme/templates/html/topmenu.phtml variables ========== -->
     <div aria-hidden="true" class="hidden level-top relative flex w-full max-w-full items-center justify-between gap-2 border-0 bg-transparent px-4 py-3.5 text-left text-sm font-semibold tracking-tight text-neutral-900 no-underline outline-none transition-colors duration-150 hover:bg-neutral-100 hover:text-primary active:bg-neutral-200/50 lg:inline-flex lg:h-auto lg:w-auto lg:flex-row lg:justify-center lg:rounded-lg lg:px-3.5 lg:py-2.5 lg:text-sm lg:font-medium lg:text-neutral-800 lg:hover:text-primary"></div>

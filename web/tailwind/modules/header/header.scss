@@ -2,6 +2,7 @@
   position: sticky;
   top: 0;
   z-index: 40;
+  overflow: visible;
   border-bottom: 1px solid #e5e7eb;
   background-color: rgba(255, 255, 255, 0.95);
   box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -57,6 +58,7 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 1rem;
+  overflow: visible;
 }
 
 @media (min-width: 640px) {
@@ -124,14 +126,10 @@
   }
 }
 
-/*
- * Luma sets a wide .minicart-wrapper + floats; inside flex header that can wrap the chip
- * to its own top row or blow out layout. Keep the trigger in-flow; flyout is positioned
- * under the chip (see .block-minicart below).
- */
+/* Minicart: order 6 (after search 4; compare 7 below 1024px). Flyout: .ui-dialog rules below. */
 .header.content .minicart-wrapper,
 .page-header .minicart-wrapper {
-  order: 3;
+  order: 6;
   position: relative;
   z-index: 1;
   float: none !important;
@@ -139,7 +137,6 @@
   width: auto !important;
   max-width: none;
   flex: 0 0 auto;
-  flex-shrink: 0;
   align-self: center;
 }
 
@@ -176,30 +173,50 @@
   color: inherit;
 }
 
-/*
- * dropdownDialog wraps the flyout in jQuery UI .ui-dialog.mage-dropdown-dialog.
- * If that shell stays in normal flow (position: relative), it widens the flex header and shoves search.
- * Keep it absolutely positioned under .minicart-wrapper (position: relative).
- */
+/* dropdownDialog: do not enable autoPosition (jQuery .position() breaks overlay). Shell + placement: */
+
 .minicart-wrapper > .ui-dialog.mage-dropdown-dialog,
 .page-header .minicart-wrapper > .ui-dialog.mage-dropdown-dialog {
-  position: absolute !important;
-  top: 100%;
-  right: 0;
-  /* jQuery UI often sets width + left; never let the panel extend past the viewport left edge */
-  left: auto !important;
-  inset-inline-start: auto !important;
-  inset-inline-end: 0 !important;
-  /* Right edge of trigger ≈ viewport minus header padding; cap width so (triggerRight - width) >= 0 */
-  width: min(24.375rem, calc(100vw - 2rem)) !important;
-  max-width: min(24.375rem, calc(100vw - 2rem)) !important;
-  min-width: 0 !important;
-  box-sizing: border-box !important;
-  margin: 0.375rem 0 0;
+  box-sizing: border-box;
+  margin: 0 !important;
   padding: 0 !important;
-  z-index: 200;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
   float: none !important;
   transform: none !important;
+}
+
+@media (min-width: 768px) {
+  .minicart-wrapper > .ui-dialog.mage-dropdown-dialog,
+  .page-header .minicart-wrapper > .ui-dialog.mage-dropdown-dialog {
+    position: absolute !important;
+    left: auto !important;
+    right: 0 !important;
+    top: 100% !important;
+    bottom: auto !important;
+    margin-top: 0.375rem !important;
+    z-index: 200;
+    width: min(24.375rem, calc(100vw - 2rem)) !important;
+    max-width: min(24.375rem, calc(100vw - 2rem)) !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .minicart-wrapper > .ui-dialog.mage-dropdown-dialog,
+  .page-header .minicart-wrapper > .ui-dialog.mage-dropdown-dialog {
+    position: fixed !important;
+    left: 0.5rem !important;
+    right: 0.5rem !important;
+    top: calc(env(safe-area-inset-top, 0px) + 5.75rem) !important;
+    bottom: auto !important;
+    width: auto !important;
+    max-width: none !important;
+    max-height: calc(100dvh - 6.25rem) !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    z-index: 10000 !important;
+  }
 }
 
 .minicart-wrapper > .ui-dialog.mage-dropdown-dialog .ui-dialog-content,
@@ -213,37 +230,6 @@
 .page-header .minicart-wrapper > .ui-dialog.mage-dropdown-dialog .block-minicart {
   width: 100% !important;
   max-width: 100% !important;
-}
-
-/*
- * Mobile: jQuery UI keeps absolute positioning + inline width/left; the flyout is wider than
- * the space from viewport-left to the cart trigger, so it clips at the left/right. Pin the shell
- * to the viewport on small screens (desktop uses absolute + page-wrapper overflow visible).
- */
-@media (max-width: 767px) {
-  .header.content .minicart-wrapper > .ui-dialog.mage-dropdown-dialog,
-  .page-header .minicart-wrapper > .ui-dialog.mage-dropdown-dialog {
-    position: fixed !important;
-    left: 0.5rem !important;
-    right: 0.5rem !important;
-    top: calc(env(safe-area-inset-top, 0px) + 5.75rem) !important;
-    bottom: auto !important;
-    width: auto !important;
-    max-width: none !important;
-    margin: 0 !important;
-    max-height: calc(100vh - env(safe-area-inset-top, 0px) - 6.25rem) !important;
-    max-height: calc(100dvh - env(safe-area-inset-top, 0px) - 6.25rem) !important;
-    overflow-y: auto !important;
-    overflow-x: hidden !important;
-    -webkit-overflow-scrolling: touch;
-    z-index: 10000 !important;
-    transform: none !important;
-  }
-
-  .header.content .minicart-wrapper > .ui-dialog.mage-dropdown-dialog .block-minicart,
-  .page-header .minicart-wrapper > .ui-dialog.mage-dropdown-dialog .block-minicart {
-    max-height: inherit;
-  }
 }
 
 /* Before / without dialog upgrade: panel is still a direct child */
@@ -442,6 +428,20 @@
   flex: 1 1 100%;
 }
 
+@media (max-width: 1023px) {
+  .header.content .block-search {
+    flex: 1 1 auto;
+    width: auto;
+    min-width: 0;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  .header.content .block-search {
+    min-width: 12rem;
+  }
+}
+
 @media (min-width: 1024px) {
   .header.content .block-search {
     flex: 1 1 16rem;
@@ -469,12 +469,10 @@
   }
 }
 
-/* Tablet: keep search + compare on one row under logo row when space allows */
-@media (min-width: 640px) and (max-width: 1023px) {
-  .header.content .block-search {
-    flex: 1 1 auto;
-    width: auto;
-    min-width: 12rem;
+/* <1024px: compare after minicart so cart can sit next to search */
+@media (max-width: 1023px) {
+  .header.content .compare.wrapper {
+    order: 7;
   }
 }
 

@@ -13,9 +13,22 @@ $minicartCartIconSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 
 $minicartCartIconData = 'data:image/svg+xml;base64,' . base64_encode($minicartCartIconSvg);
 $minicartCartIconMaskStyle = '-webkit-mask:url(' . $minicartCartIconData . ') center/contain no-repeat;'
     . 'mask:url(' . $minicartCartIconData . ') center/contain no-repeat';
+
+$dropdownDialogJson = json_encode([
+    'dropdownDialog' => [
+        'appendTo' => '[data-block=minicart]',
+        'triggerTarget' => '.showcart',
+        'timeout' => '2000',
+        'closeOnMouseLeave' => false,
+        'closeOnEscape' => true,
+        'triggerClass' => 'active',
+        'parentClass' => 'active',
+        'buttons' => [],
+    ],
+]);
 ?>
 
-<div data-block="minicart" class="minicart-wrapper relative ml-auto lg:ml-0">
+<div data-block="minicart" class="minicart-wrapper relative z-[1] ml-auto shrink-0">
     <a class="action showcart showcart--icon group"
        href="<?= $block->escapeUrl($block->getShoppingCartUrl()) ?>"
        data-bind="scope: 'minicart_content'"
@@ -40,16 +53,7 @@ $minicartCartIconMaskStyle = '-webkit-mask:url(' . $minicartCartIconData . ') ce
     <?php if ($block->getIsNeedToDisplaySideBar()):?>
         <div class="block block-minicart box-border w-full min-w-0 max-w-full overflow-hidden rounded-lg border border-neutral-200 bg-white p-0 shadow-xl"
              data-role="dropdownDialog"
-             data-mage-init='{"dropdownDialog":{
-                "appendTo":"[data-block=minicart]",
-                "triggerTarget":".showcart",
-                "timeout": "2000",
-                "closeOnMouseLeave": false,
-                "closeOnEscape": true,
-                "triggerClass":"active",
-                "parentClass":"active",
-                "dialogClass":"!m-0 !box-border !max-w-full !w-full !min-w-0 !border-0 !bg-transparent !p-0 !shadow-none",
-                "buttons":[]}}'>
+             data-mage-init="<?= $block->escapeHtmlAttr($dropdownDialogJson) ?>">
             <div id="minicart-content-wrapper" data-bind="scope: 'minicart_content'">
                 <!-- ko template: getTemplate() --><!-- /ko -->
             </div>
