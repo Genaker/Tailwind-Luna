@@ -1,7 +1,8 @@
 var config = {
     map: {
         '*': {
-            'mage/dropdowns': 'Magento_Theme/js/dropdowns'
+            'mage/dropdowns': 'Magento_Theme/js/dropdowns',
+            'mage/apply/main': 'Magento_Theme/js/mage-apply-main-perf'
         }
     },
     config: {

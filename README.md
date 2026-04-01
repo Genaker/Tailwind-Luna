@@ -6,7 +6,7 @@ Composer-installable **Magento 2** theme: **`Genaker/tailwind_luna`** (`genaker/
 
 ### Story
 
-**Tailwind Luna** is from the creators of [**React Luma**](https://github.com/Genaker/Luma-React-PWA-Magento-Theme) — a storefront theme built around speed. This project is the **Tailwind** take on **Magento Luma**: same **Open Source** foundation and **child-of-Luma** inheritance, **no Hyvä**, **no Alpine.js**, and **no magento compliance issue OSL 3.0 license with preservied magento copiryght** on top of Magento — just **Tailwind CSS** (plus smalllegacy  CSS like `checkout.css`) on top of Magento’s own templates and **Knockout / RequireJS** where the core still relies on them. You can also disable Adobe JS by using React Luma module and use it with any JS.
+**Tailwind Luna** is from the creators of [**React Luma**](https://github.com/Genaker/Luma-React-PWA-Magento-Theme) — a storefront theme built around speed. This project is the **Tailwind** take on **Magento Luma**: same **Open Source** foundation and **child-of-Luma** inheritance, **no Hyvä**, **no Alpine.js**, and **no magento compliance issue OSL 3.0 license with preservied magento copiryght** on top of Magento — just **Tailwind CSS** (plus small legacy  CSS like `checkout.css` adn some native styles) on top of Magento’s own templates and **Knockout / RequireJS** where the core still relies on them. You can also disable Adobe JS by using React Luma module and use it with any JS.
 
 The goal is **Luma-level comaptability** with a **much leaner CSS payload** and a fast path to a modern utility-first stylesheet — performance you can measure on *your* stack (hosting, FPC, and deploy all matter).
 
@@ -94,7 +94,7 @@ Source: `scripts/maintainer-sync-templates.cjs` — treat as a **maintainer** to
 
 | Asset | Role |
 |--------|------|
-| **`web/css/tailwind.css`** / **`tailwind.min.css`** | **Generated** by Node: Tailwind CLI (no **`--minify`**) → expanded CSS; **`emit-tailwind-min-alias.cjs`** runs **cssnano** once and writes **both** files (same bytes). **Genaker\ThemeTailwindLuna\Block\ResolveCss** prefers **`tailwind.min.css`** when readable, else **`tailwind.css`**. |
+| **`web/css/tailwind.css`** / **`tailwind.min.css`** | **Generated** by Node: Tailwind CLI (no **`--minify`**) → expanded CSS; **`emit-tailwind-min-alias.cjs`** runs **cssnano** once and writes **both** files (same bytes). **Genaker\ThemeTileWindLuna\Block\ResolveCss** prefers **`tailwind.min.css`** when readable, else **`tailwind.css`**. |
 | **`web/css/checkout.css`** / **`checkout.min.css`** | **Hand-written** checkout rules; **`minify-checkout.cjs`** emits **`checkout.min.css`**. **ResolveCss** prefers **`.min.css`** when readable, else the source file. |
 
 ---
@@ -168,7 +168,7 @@ bin/magento cache:flush
 | Shopping cart | `Magento_Checkout/layout/checkout_cart_index.xml` |
 | One-page checkout | `Magento_Checkout/layout/checkout_index_index.xml` |
 
-**ResolveCss** (companion module **`Genaker_ThemeTailwindLuna`**, PHP under **`Module/ThemeModule/`** in this theme package — Composer autoloads it with the theme) reads the **`css_path`** argument, resolves **`{path}.min.css`** first if the file exists on disk, otherwise **`{path}.css`**. **Magento’s** own **Minify CSS** (Stores → Advanced → Developer) can still minify deployed static files in production.
+**ResolveCss** (companion module **`Genaker_ThemeTileWindLuna`**, PHP under **`Module/ThemeModule/`** in this theme package — Composer autoloads it with the theme) reads the **`css_path`** argument, resolves **`{path}.min.css`** first if the file exists on disk, otherwise **`{path}.css`**. **Magento’s** own **Minify CSS** (Stores → Advanced → Developer) can still minify deployed static files in production.
 
 **Why separate:** keeps cart/checkout layout rules out of the global Tailwind bundle.
 
@@ -223,7 +223,7 @@ For predictable RequireJS order, easier debugging, and sane front-end behavior, 
 |------|-----------------|-------------|-----|
 | Load scripts late (no global `defer` toggle in core) | **Move JS code to the bottom of the page** = **Yes** | `dev/js/move_script_to_bottom` | **Yes** — moves inline/linked scripts before `</body>` (`JsFooterPlugin`). |
 | No merged mega-files | **Merge JavaScript Files** = **No** | `dev/js/merge_files` | **No** |
-| No RequireJS bundles | **Enable JavaScript Bundling** = **No** | `dev/js/enable_js_bundling` | **No** |
+| No RequireJS bundles | **Enable JavaScript Bundling** = **No** | `dev/js/enable_js_bundling` | **No** — enabling bundling was tested and caused **Total Blocking Time to spike to ~940 ms** (Lighthouse red) on a PDP; the built-in bundler creates large synchronous RequireJS bundles that block the main thread. Keep off. |
 | Minify core JS (not Tailwind) | **Minify JavaScript Files** = **Yes** (prod) | `dev/js/minify_files` | **Yes** in production; skipped in **developer** mode |
 | No merged CSS | **Merge CSS Files** = **No** | `dev/css/merge_css_files` | **No** |
 | Minify core CSS (not Tailwind) | **Minify CSS Files** = **Yes** (prod) | `dev/css/minify_files` | **Yes** in production; skipped in **developer** mode |

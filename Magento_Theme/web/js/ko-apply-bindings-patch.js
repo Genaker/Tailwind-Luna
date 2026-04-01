@@ -24,9 +24,15 @@ define(['ko'], function (ko) {
             return original.call(ko, viewModelOrBindingContext, rootNode);
         }
 
-        setTimeout(function () {
+        var fn = function () {
             original.call(ko, viewModelOrBindingContext, rootNode);
-        }, 0);
+        };
+
+        if (typeof requestIdleCallback !== 'undefined') {
+            requestIdleCallback(fn, { timeout: 2000 });
+        } else {
+            setTimeout(fn, 0);
+        }
     };
 
     return ko;
