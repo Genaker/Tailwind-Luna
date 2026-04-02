@@ -139,10 +139,15 @@
             }
         });
 
-        /* Pre-selected defaults (e.g. size+color) — sync gallery once RequireJS/swatches apply. */
-        setTimeout(function () {
+        /* Pre-selected defaults (e.g. size+color) — sync gallery once RequireJS/swatches apply.
+         * Use requestIdleCallback so this doesn't contend with the RequireJS/KO init storm;
+         * 500ms hard deadline ensures it still runs on slow devices. */
+        var scheduleInit = typeof requestIdleCallback !== 'undefined'
+            ? function (fn) { requestIdleCallback(fn, { timeout: 500 }); }
+            : function (fn) { setTimeout(fn, 150); };
+        scheduleInit(function () {
             applyGalleryForSelection(confGallery, index, stageEl);
-        }, 150);
+        });
     }
 
     if (document.readyState === 'loading') {

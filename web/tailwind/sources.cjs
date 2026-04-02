@@ -23,6 +23,22 @@ const scssConfigGlobs = [
   "../../src/**/view/frontend/web/tailwind/scss.config.json",
 ];
 
+/**
+ * styles.yaml discovery — placed at module/theme root (not inside web/tailwind/).
+ * Inspired by OroInc frontend architecture: https://doc.oroinc.com/frontend/storefront/css/
+ * Format: inputs (list of SCSS paths relative to the yaml file), tier (0-2), exclude (list).
+ */
+const stylesYamlGlobs = [
+  "styles.yaml",
+  "styles.yml",
+  "../../vendor/magento/module-*/styles.yaml",
+  "../../vendor/magento/module-*/styles.yml",
+  "../../app/code/*/*/styles.yaml",
+  "../../app/code/*/*/styles.yml",
+  "../../src/**/styles.yaml",
+  "../../src/**/styles.yml",
+];
+
 /** @type {string[]} */
 const contentFiles = [
   "./Magento_*/**/*.phtml",
@@ -58,6 +74,7 @@ module.exports = {
   themeRoot,
   scssRootGlobs,
   scssConfigGlobs,
+  stylesYamlGlobs,
   contentFiles,
   defaultPubStaticPath,
   defaultPubStaticPaths,

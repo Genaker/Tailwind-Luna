@@ -13,6 +13,7 @@ flowchart LR
     A[app/code]
     S[src]
     C[scss.config.json layers + mergeRoots]
+    Y[styles.yaml inputs — any module root]
   end
   subgraph merge["Merge + Sass"]
     MS[_merged.scss]
@@ -44,7 +45,7 @@ flowchart LR
 |--------|------|
 | **`web/tailwind/sources.cjs`** | Single place for **SCSS merge globs** (`scssRootGlobs`) and **Tailwind content globs** (`contentFiles`). `tailwind.config.js` imports `contentFiles` and merges optional `_content-roots.json`. |
 | **`scripts/merge-scss.cjs`** | Collects all matching `*.scss`, sorts by **tier** + path (see [CSS_MERGE.md](./CSS_MERGE.md)), concatenates into **`web/tailwind/_merged.scss`**, compiles with **Sass** into **`web/tailwind/_merged.css`**, writes **`web/tailwind/_content-roots.json`**. Flags: **`--minify`**, **`--list`**, **`--verbose`**, **`--source-map`**. |
-| **`web/tailwind/scss-config.cjs`** | Loads layered **`scss.config.json`** (theme + each module `…/web/tailwind/`), merges **`mergeRoots`**, **`exclude`**, **`contentFiles`**, **`tier`**, **`pubStaticPath(s)`**. Unknown keys warn. |
+| **`web/tailwind/scss-config.cjs`** | Loads layered **`scss.config.json`** (theme + each module `…/web/tailwind/`), merges **`mergeRoots`**, **`exclude`**, **`contentFiles`**, **`tier`**, **`pubStaticPath(s)`**. Also discovers and loads all **`styles.yaml`** files (see below). Unknown keys warn. |
 | **`web/tailwind/input.css`** | Tailwind entry: **`@import "./_merged.css"` must come first** (before `@tailwind`), then `@tailwind base/components/utilities`. See [CSS_MERGE.md](./CSS_MERGE.md). |
 | **`postcss.config.cjs`** | **`postcss-import`** (with **`postcss-scss`**) inlines **`_merged.css`**; **tailwindcss** + **autoprefixer** process the result. **cssnano** does **not** run here — **`scripts/emit-tailwind-min-alias.cjs`** minifies once (avoids stacking Tailwind `--minify` + PostCSS cssnano for negligible gain). |
 | **`.browserslistrc`** | Theme-root **Browserslist** queries for **Autoprefixer** (and other tooling). Excludes legacy IE / Opera Mini by default; edit to widen or narrow support. |
@@ -83,8 +84,17 @@ Use **`build:tailwind`** for day-to-day work. **`cssnano`** is required in **`pa
 ## Where CSS is authored
 
 1. **Theme package** — `web/tailwind/modules/*.scss`, `web/tailwind/extensions/*.scss` (and optional roots in `scss.config.json`).
-2. **Magento modules** — same relative path inside any module: `view/frontend/web/tailwind/**/*.scss` under `vendor/magento/module-*`, `app/code/*/*`, or `src/**` (see `scssRootGlobs` in `sources.cjs`).
-3. **Utilities** — Tailwind classes in `.phtml`, layout XML `htmlClass`, etc.; scanned per `contentFiles`.
+2. **Magento modules (web/tailwind path)** — `view/frontend/web/tailwind/**/*.scss` inside any module under `vendor/magento/module-*`, `app/code/*/*`, or `src/**` (auto-discovered by `scssRootGlobs` in `sources.cjs`).
+3. **Magento modules (any path via `styles.yaml`)** — drop a `styles.yaml` at **any module root** and list SCSS files under `inputs`; paths are relative to the yaml file so CSS can live anywhere in the module (e.g. `view/frontend/web/css/`). Discovered automatically via `stylesYamlGlobs`. Supports `tier` (0–2) and `exclude`. Inspired by [OroInc frontend architecture](https://doc.oroinc.com/frontend/storefront/css/).
+4. **Utilities** — Tailwind classes in `.phtml`, layout XML `htmlClass`, etc.; scanned per `contentFiles`.
+
+### Choosing the right extension point
+
+| SCSS location | Discovery method |
+|---------------|-----------------|
+| `…/view/frontend/web/tailwind/**/*.scss` | Automatic — `scssRootGlobs` |
+| Anywhere else in the module | **`styles.yaml`** at the module root (list under `inputs`) |
+| Need extra `contentFiles` or `pubStaticPath` | `scss.config.json` inside `…/view/frontend/web/tailwind/` |
 
 ## What Magento still does
 
@@ -93,6 +103,6 @@ Use **`build:tailwind`** for day-to-day work. **`cssnano`** is required in **`pa
 
 ## Related
 
-- [CSS_MERGE.md](./CSS_MERGE.md) — merge order, tiers, globs, Sass flags, layered **`scss.config.json`**, **`--list` / `--verbose` / `--source-map`**.
+- [CSS_MERGE.md](./CSS_MERGE.md) — merge order, tiers, globs, Sass flags, layered **`scss.config.json`**, **`styles.yaml`** module root config, **`--list` / `--verbose` / `--source-map`**.
 - [TAILWIND_EXTENSION_DEVELOPMENT.md](./TAILWIND_EXTENSION_DEVELOPMENT.md) — extensions: utilities, module SCSS, migration, raw CSS / layout / inline.
 - [TAILWIND_CSS_SAFELIST.md](./TAILWIND_CSS_SAFELIST.md) — classes not visible to the scanner.

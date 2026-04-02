@@ -211,7 +211,9 @@ console.log("\n[test] 9 — numeric prefix ordering: 10- 11- 12- 20- in merge ou
   const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "scss-order-test-"));
   try {
     for (const name of ["20-last.scss", "10-first.scss", "12-third.scss", "11-second.scss"]) {
-      fs.writeFileSync(path.join(tmpDir, name), `.${name.replace(".scss", "")} { color: red; }\n`);
+      // Use a comment containing the filename so the string is findable in the merged output
+      // without generating an invalid CSS class starting with a digit.
+      fs.writeFileSync(path.join(tmpDir, name), `/* ${name.replace(".scss", "")} */ .x { color: red; }\n`);
     }
     withConfig({ mergeRoots: [tmpDir] }, () => {
       runMerge();

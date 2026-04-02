@@ -1,7 +1,10 @@
 .action.primary,
 button.action.primary,
 .primary .action,
-.action-primary .action.primary {
+.action-primary .action.primary,
+.action.tocart,
+.action.tocart.primary,
+button.action.tocart.primary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -13,19 +16,24 @@ button.action.primary,
   font-weight: 600;
   line-height: 1.5;
   color: #fff;
-  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   cursor: pointer;
   transition: all 0.2s ease;
   text-decoration: none;
 }
+.action.primary,
+button.action.primary {
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
 .action.primary:hover,
-button.action.primary:hover {
+button.action.primary:hover,
+.action.tocart:hover {
   background-color: #166aaf;
   box-shadow: 0 2px 4px 0 rgb(0 0 0 / 0.1);
   transform: translateY(-1px);
 }
 .action.primary:active,
-button.action.primary:active {
+button.action.primary:active,
+.action.tocart:active {
   background-color: #145a95;
   transform: translateY(0);
 }
@@ -56,33 +64,6 @@ button.action.secondary {
   background-color: #fafafa;
 }
 
-.action.tocart,
-.action.tocart.primary,
-button.action.tocart.primary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 0.5rem;
-  border: 1px solid transparent;
-  background-color: #1979c3;
-  padding: 0.625rem 1.5rem;
-  font-size: 0.9375rem;
-  font-weight: 600;
-  line-height: 1.5;
-  color: #fff;
-  transition: all 0.2s ease;
-  cursor: pointer;
-  text-decoration: none;
-}
-.action.tocart:hover {
-  background-color: #166aaf;
-  box-shadow: 0 2px 4px 0 rgb(0 0 0 / 0.1);
-  transform: translateY(-1px);
-}
-.action.tocart:active {
-  background-color: #145a95;
-  transform: translateY(0);
-}
 
 .action.towishlist,
 .action.tocompare,

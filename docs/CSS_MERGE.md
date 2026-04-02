@@ -77,6 +77,63 @@ Theme template: **`web/tailwind/scss.config.example.json`**.
 
 Invalid JSON in a file logs a warning and that file is skipped.
 
+## Module root config: `styles.yaml`
+
+Inspired by [OroInc’s frontend storefront CSS architecture](https://doc.oroinc.com/frontend/storefront/css/), a **`styles.yaml`** (or **`styles.yml`**) file placed at **any Magento module root** (not inside `web/tailwind/`) is automatically discovered and its `inputs` are added to the SCSS merge — no need to touch `web/tailwind/scss.config.json` or the theme’s internal directories.
+
+### Format
+
+```yaml
+inputs:
+  - view/frontend/web/css/my-component.scss
+  - view/frontend/web/css/my-other.scss
+tier: 2          # 0 = base, 1 = extensions, 2 = custom (default)
+exclude:
+  - view/frontend/web/css/legacy.scss
+output: css/output.css   # informational only — not used by the build
+```
+
+| Key | Required | Description |
+|-----|----------|-------------|
+| **`inputs`** | no | List of SCSS/CSS file paths **relative to this yaml file** to add to the build. |
+| **`tier`** | no | **0–2** (default **2**). Controls merge order — same semantics as `tier` in `scss.config.json`. |
+| **`exclude`** | no | Glob patterns **relative to the yaml file** to remove from the build (same as `scss.config.json` `exclude`). |
+| **`output`** | no | Informational string only — not processed by the build system. |
+
+Unknown keys log **`[scss-config] unknown key "…" (ignored)`**.
+
+### Discovery globs (`stylesYamlGlobs` in `sources.cjs`)
+
+| Glob | Scope |
+|------|-------|
+| `styles.yaml` / `styles.yml` | **Theme package root** itself |
+| `../../vendor/magento/module-*/styles.yaml(.yml)` | Composer vendor modules |
+| `../../app/code/*/*/styles.yaml(.yml)` | Project `app/code` modules |
+| `../../src/**/styles.yaml(.yml)` | Monorepo `src` trees |
+
+Files inside `node_modules` are always ignored.
+
+### When to use `styles.yaml` vs `scss.config.json`
+
+| Situation | Use |
+|-----------|-----|
+| SCSS lives at `view/frontend/web/tailwind/` inside the module | Auto-discovered by **`scssRootGlobs`** — no config needed. |
+| SCSS lives anywhere else in the module (e.g. `view/frontend/web/css/`) | **`styles.yaml`** at the module root — just list the files under `inputs`. |
+| Need to add Tailwind `contentFiles` or set `pubStaticPath` | **`scss.config.json`** inside `view/frontend/web/tailwind/`. |
+| Need to remove (exclude) specific files from the merged bundle | Either config supports `exclude`; `styles.yaml` is simpler for module-level excludes. |
+
+### Example — standalone Magento 2 module
+
+Place a `styles.yaml` at `app/code/Vendor/MyModule/styles.yaml`:
+
+```yaml
+inputs:
+  - view/frontend/web/css/my-module.scss
+tier: 2
+```
+
+The file `view/frontend/web/css/my-module.scss` is then compiled into `_merged.css` and picked up by the Tailwind build — **no theme edits required**.
+
 ## Merge output format
 
 **`_merged.scss`** starts with an auto-generated header comment listing **all source files** and their count. Each file is emitted as:

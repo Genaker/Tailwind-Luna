@@ -9,7 +9,10 @@
 .action.primary,
 button.action.primary,
 .primary .action,
-.action-primary .action.primary {
+.action-primary .action.primary,
+.action.tocart,
+.action.tocart.primary,
+button.action.tocart.primary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -21,19 +24,24 @@ button.action.primary,
   font-weight: 600;
   line-height: 1.5;
   color: #fff;
-  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   cursor: pointer;
   transition: all 0.2s ease;
   text-decoration: none;
 }
+.action.primary,
+button.action.primary {
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
 .action.primary:hover,
-button.action.primary:hover {
+button.action.primary:hover,
+.action.tocart:hover {
   background-color: #166aaf;
   box-shadow: 0 2px 4px 0 rgb(0 0 0 / 0.1);
   transform: translateY(-1px);
 }
 .action.primary:active,
-button.action.primary:active {
+button.action.primary:active,
+.action.tocart:active {
   background-color: #145a95;
   transform: translateY(0);
 }
@@ -64,33 +72,6 @@ button.action.secondary {
   background-color: #fafafa;
 }
 
-.action.tocart,
-.action.tocart.primary,
-button.action.tocart.primary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 0.5rem;
-  border: 1px solid transparent;
-  background-color: #1979c3;
-  padding: 0.625rem 1.5rem;
-  font-size: 0.9375rem;
-  font-weight: 600;
-  line-height: 1.5;
-  color: #fff;
-  transition: all 0.2s ease;
-  cursor: pointer;
-  text-decoration: none;
-}
-.action.tocart:hover {
-  background-color: #166aaf;
-  box-shadow: 0 2px 4px 0 rgb(0 0 0 / 0.1);
-  transform: translateY(-1px);
-}
-.action.tocart:active {
-  background-color: #145a95;
-  transform: translateY(0);
-}
 
 .action.towishlist,
 .action.tocompare,
@@ -1080,100 +1061,7 @@ li.product [data-role='add-to-links'] a.tocompare > span,
 }
 
 /* ---- web/tailwind/modules/footer/footer.scss ---- */
-.page-footer {
-  margin-top: auto;
-  border-top: 1px solid #e5e7eb;
-  background-color: #fafafa;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  color: #525252;
-}
-
-.footer.content {
-  box-sizing: border-box;
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 1280px;
-  padding: 2.5rem 1rem;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 1.5rem 2rem;
-  align-items: start;
-}
-
-/* Left half: link blocks align to the start (LTR); tighten widget margin vs mb-8 utility */
-.footer.content > .links {
-  grid-column: 1;
-  grid-row: 1;
-  justify-self: start;
-  width: 100%;
-  max-width: 100%;
-  text-align: left;
-}
-
-.footer.content > .links .widget {
-  margin-bottom: 1rem;
-}
-
-.footer.content > ul.footer.links {
-  grid-column: 1;
-  grid-row: 2;
-  justify-self: start;
-  width: 100%;
-  max-width: 100%;
-  text-align: left;
-}
-
-/* Right half: newsletter fills that column (half of footer width) */
-.footer.content > .block.newsletter {
-  grid-column: 2;
-  grid-row: 1 / -1;
-  justify-self: stretch;
-  align-self: stretch;
-  width: 100%;
-  max-width: none;
-  min-width: 0;
-}
-
-@media (max-width: 639px) {
-  .footer.content {
-    grid-template-columns: 1fr;
-    gap: 1.25rem;
-  }
-
-  .footer.content > .links {
-    grid-column: 1;
-    grid-row: 1;
-  }
-
-  .footer.content > ul.footer.links {
-    grid-column: 1;
-    grid-row: 2;
-  }
-
-  .footer.content > .block.newsletter {
-    grid-column: 1;
-    grid-row: 3;
-    justify-self: stretch;
-    max-width: none;
-  }
-}
-
-@media (min-width: 640px) {
-  .footer.content {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .footer.content {
-    padding-left: 2rem;
-    padding-right: 2rem;
-  }
-}
-
-/* Footer inner blocks (outer .footer.content from layout XML) */
+/* Footer inner blocks (outer .footer.content layout is in layout.scss) */
 .footer.content ul {
   margin: 0;
   list-style: none;
@@ -1211,85 +1099,8 @@ li.product [data-role='add-to-links'] a.tocompare > span,
 }
 
 /* ---- web/tailwind/modules/header/header.scss ---- */
-.page-header {
-  position: sticky;
-  top: 0;
-  z-index: 40;
-  overflow: visible;
-  border-bottom: 1px solid #e5e7eb;
-  background-color: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-}
-
-/* z-index:115 > nav-toggle(101) so the top bar and its open dropdowns stack above the hamburger button. */
-.panel.wrapper {
-  position: relative;
-  z-index: 115;
-  border-bottom: 1px solid #e5e7eb;
-  background-color: #f5f5f5;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  color: #404040;
-}
-
-.panel.header {
-  position: relative;
-  box-sizing: border-box;
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 1280px;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  column-gap: 1.5rem;
-  row-gap: 0.5rem;
-  padding: 0.5rem 1rem;
-}
-
-@media (min-width: 640px) {
-  .panel.header {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .panel.header {
-    padding-left: 2rem;
-    padding-right: 2rem;
-  }
-}
-
-.header.content {
-  box-sizing: border-box;
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 1280px;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem 1rem;
-  overflow: visible;
-}
-
-@media (min-width: 640px) {
-  .header.content {
-    gap: 1rem;
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .header.content {
-    padding-left: 2rem;
-    padding-right: 2rem;
-  }
-}
-
 /* ——— Layout child hooks (header row order, search, nav) ——— */
+/* Shell layout (.page-header, .panel.wrapper, .panel.header, .header.content) is in layout.scss */
 .header.content .action.nav-toggle {
   order: 1;
 }
@@ -1896,6 +1707,7 @@ li.product [data-role='add-to-links'] a.tocompare > span,
   position: sticky;
   top: 0;
   z-index: 40;
+  overflow: visible;
   border-bottom: 1px solid #e5e7eb;
   background-color: rgba(255, 255, 255, 0.95);
   box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -1910,7 +1722,10 @@ li.product [data-role='add-to-links'] a.tocompare > span,
   color: #525252;
 }
 
+/* z-index:115 > nav-toggle(101) so the top bar and its open dropdowns stack above the hamburger button. */
 .panel.wrapper {
+  position: relative;
+  z-index: 115;
   border-bottom: 1px solid #e5e7eb;
   background-color: #f5f5f5;
   font-size: 0.875rem;
@@ -1957,6 +1772,7 @@ li.product [data-role='add-to-links'] a.tocompare > span,
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 1rem;
+  overflow: visible;
 }
 
 @media (min-width: 640px) {

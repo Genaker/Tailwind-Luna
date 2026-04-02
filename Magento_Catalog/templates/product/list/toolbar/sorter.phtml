@@ -7,7 +7,7 @@
 ?>
 <?php if ($block->isEnabledViewSwitcher()): ?>
     <div class="toolbar-sorter sorter flex items-center gap-2">
-        <label class="sorter-label text-xs font-medium text-neutral-700 sm:text-sm" for="sorter">
+        <label class="sorter-label sr-only text-xs font-medium text-neutral-700 sm:not-sr-only sm:inline sm:text-sm" for="sorter">
             <span><?= $block->escapeHtml(__('Sort By')) ?></span>
         </label>
         <select id="sorter" 

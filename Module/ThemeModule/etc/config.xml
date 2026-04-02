@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <genaker_theme_tailwind_luna>
+            <js>
+                <defer_js>1</defer_js>
+                <defer_non_critical>0</defer_non_critical>
+            </js>
+        </genaker_theme_tailwind_luna>
+    </default>
+</config>

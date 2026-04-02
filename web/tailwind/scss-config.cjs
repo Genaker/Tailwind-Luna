@@ -26,6 +26,68 @@ const KNOWN_KEYS = new Set([
   "tier",
 ]);
 
+const KNOWN_YAML_KEYS = new Set(["inputs", "exclude", "tier", "output"]);
+
+/**
+ * Minimal YAML parser for styles.yaml.
+ * Supports: top-level scalar keys, sequence values (- item), inline comments (#).
+ * Does NOT support nested maps, multi-document, anchors, or flow sequences.
+ *
+ * Format (all keys optional):
+ *   inputs:
+ *     - view/frontend/web/css/custom.scss
+ *   tier: 2
+ *   exclude:
+ *     - view/frontend/web/css/old.scss
+ *   output: css/output.css   # informational only, not used by merge-scss
+ */
+function parseStylesYaml(text) {
+  const result = {};
+  let currentKey = null;
+  let currentList = null;
+
+  for (const rawLine of text.split(/\r?\n/)) {
+    const line = rawLine.replace(/#.*$/, "").trimEnd(); // strip inline comments
+    if (!line.trim()) continue;
+
+    // Sequence item: "  - value"
+    const listItem = line.match(/^[ \t]+-[ \t]+(.+)$/);
+    if (listItem) {
+      if (currentList !== null) {
+        currentList.push(listItem[1].trim().replace(/^['"]|['"]$/g, ""));
+      }
+      continue;
+    }
+
+    // Key: value (scalar)  OR  key: (list follows)
+    const kvMatch = line.match(/^(\w[\w.-]*)[ \t]*:[ \t]*(.*)$/);
+    if (kvMatch) {
+      currentKey = kvMatch[1].trim();
+      const val = kvMatch[2].trim().replace(/^['"]|['"]$/g, "");
+      if (val === "" || val === null) {
+        // Value is a list on next lines
+        currentList = [];
+        result[currentKey] = currentList;
+      } else {
+        currentList = null;
+        result[currentKey] = val;
+      }
+    }
+  }
+
+  return result;
+}
+
+function warnUnknownYamlKeys(parsed, yamlPath, themeRoot) {
+  for (const k of Object.keys(parsed)) {
+    if (!KNOWN_YAML_KEYS.has(k)) {
+      console.warn(
+        `[scss-config] unknown key "${k}" in ${path.relative(themeRoot, yamlPath)} (ignored)`,
+      );
+    }
+  }
+}
+
 const CONFIG_DEFAULTS = {
   mergeRoots: [],
   contentFiles: [],
@@ -69,6 +131,27 @@ function collectScssConfigPaths(themeRoot) {
   const seen = new Set(paths);
   for (const g of scssConfigGlobs) {
     const matches = globSync(g, { cwd: themeRoot, absolute: true, nodir: true });
+    for (const p of matches.sort((a, b) => a.localeCompare(b))) {
+      if (!seen.has(p)) {
+        seen.add(p);
+        paths.push(p);
+      }
+    }
+  }
+  return paths;
+}
+
+function collectStylesYamlPaths(themeRoot) {
+  const { stylesYamlGlobs } = require("./sources.cjs");
+  const seen = new Set();
+  const paths = [];
+  for (const g of stylesYamlGlobs) {
+    const matches = globSync(g, {
+      cwd: themeRoot,
+      absolute: true,
+      nodir: true,
+      ignore: ["**/node_modules/**"],
+    });
     for (const p of matches.sort((a, b) => a.localeCompare(b))) {
       if (!seen.has(p)) {
         seen.add(p);
@@ -158,6 +241,55 @@ function loadMergedScssConfig(themeRoot, options) {
     }
   });
 
+  // ── styles.yaml ──────────────────────────────────────────────────────────────
+  // Discovered at module/theme roots (not inside web/tailwind/).
+  // Each file declares `inputs` (SCSS files relative to the yaml) and optional `tier`.
+  const yamlPaths = collectStylesYamlPaths(themeRoot);
+  yamlPaths.forEach((yamlPath, index) => {
+    let parsed;
+    try {
+      parsed = parseStylesYaml(fs.readFileSync(yamlPath, "utf8"));
+    } catch (e) {
+      console.warn(`[scss-config] invalid ${path.relative(themeRoot, yamlPath)}:`, e.message);
+      return;
+    }
+
+    warnUnknownYamlKeys(parsed, yamlPath, themeRoot);
+
+    const baseDir = path.dirname(yamlPath);
+    const tier = clampTier(parsed.tier !== undefined ? parsed.tier : 2);
+
+    if (verbose) {
+      const rel = path.relative(themeRoot, yamlPath);
+      const inputs = Array.isArray(parsed.inputs) ? parsed.inputs : [];
+      console.log(
+        `[merge-scss] styles.yaml ${index + 1}/${yamlPaths.length}: ${rel} (tier=${tier}, inputs=${inputs.length})`,
+      );
+    }
+
+    const inputs = Array.isArray(parsed.inputs) ? parsed.inputs : [];
+    for (const input of inputs) {
+      if (!input || typeof input !== "string") continue;
+      const abs = path.isAbsolute(input) ? path.normalize(input) : path.resolve(baseDir, input);
+      if (!merged.mergeRoots.includes(abs)) {
+        merged.mergeRoots.push(abs);
+        merged.tierPrefixes.push({ prefix: normalizeMergeRootPrefix(abs), tier });
+      }
+    }
+
+    // Register module dir so all its web/tailwind scss inherits the tier
+    merged.tierPrefixes.push({ prefix: path.normalize(baseDir), tier });
+
+    const excludes = Array.isArray(parsed.exclude) ? parsed.exclude : [];
+    if (excludes.length > 0) {
+      merged.excludeBatches.push({
+        cwd: baseDir,
+        patterns: excludes.filter((x) => x && typeof x === "string"),
+      });
+    }
+  });
+  // ─────────────────────────────────────────────────────────────────────────────
+
   const byPrefix = new Map();
   for (const { prefix, tier } of merged.tierPrefixes) {
     byPrefix.set(path.normalize(prefix), tier);
@@ -172,5 +304,7 @@ module.exports = {
   CONFIG_DEFAULTS,
   THEME_CONFIG_REL,
   KNOWN_KEYS,
+  KNOWN_YAML_KEYS,
   clampTier,
+  parseStylesYaml,
 };

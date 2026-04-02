@@ -59,7 +59,7 @@ Today, much front-end code is **assisted or generated** (IDEs, LLMs). Whether a 
 | Doc | Topic |
 |-----|--------|
 | **[docs/CSS_BUILD_ARCHITECTURE.md](docs/CSS_BUILD_ARCHITECTURE.md)** | End-to-end CSS pipeline: merge → Sass → **`_merged.css`** → Tailwind → PostCSS (Autoprefixer + **Browserslist**, optional **cssnano**) → `pub/static`, scripts, prod vs dev builds. |
-| **[docs/CSS_MERGE.md](docs/CSS_MERGE.md)** | SCSS merge: globs, layered **`scss.config.json`**, tiers, **`--minify` / `--list` / `--verbose` / `--source-map`**, `input.css` import order, content vs merge. |
+| **[docs/CSS_MERGE.md](docs/CSS_MERGE.md)** | SCSS merge: globs, layered **`scss.config.json`**, **`styles.yaml`** module-root config (OroInc-inspired), tiers, **`--minify` / `--list` / `--verbose` / `--source-map`**, `input.css` import order, content vs merge. |
 | **[docs/WARDEN.md](docs/WARDEN.md)** | **Warden (Docker):** `.env` / `.warden` at Magento root, tracked templates in **`warden/`**, `warden shell`, storefront URL, Tailwind + E2E; optional **[WardenGUI](https://github.com/Genaker/WardenGUI)** (`pip install wardengui`). |
 | **[docs/TAILWIND_EXTENSION_DEVELOPMENT.md](docs/TAILWIND_EXTENSION_DEVELOPMENT.md)** | **Extensions:** new vs legacy modules, migration phases, utilities + module SCSS, raw CSS via layout, inline escape hatches. |
 | **[docs/TAILWIND_CSS_SAFELIST.md](docs/TAILWIND_CSS_SAFELIST.md)** | Safelist for classes the JIT scanner cannot see. |
@@ -109,8 +109,9 @@ Source: `scripts/maintainer-sync-templates.cjs` — treat as a **maintainer** to
 |------|--------|
 | **`web/tailwind/input.css`** | Entry: **`@import "./_merged.css"` must be first**, then `@tailwind` layers (see merge doc). |
 | **`web/tailwind/modules/*.scss`**, **`web/tailwind/extensions/*.scss`** | Theme partials; concatenated then compiled to **`_merged.css`** (see merge doc). Optional **`web/tailwind/scss.config.json`** plus per-module **`…/view/frontend/web/tailwind/scss.config.json`** for **`mergeRoots`**, **`exclude`**, **`tier`**, Tailwind **`contentFiles`**, pub paths. |
-| **Magento modules** — **`view/frontend/web/tailwind/**/*.scss`** | SCSS next to the module; merged from **`vendor/magento/module-*`**, **`app/code/*/*`**, **`src/**`** per **`scssRootGlobs`** in **`web/tailwind/sources.cjs`**. |
-| **`web/tailwind/sources.cjs`** | **`scssRootGlobs`** (merge) + **`contentFiles`** (Tailwind JIT scan). |
+| **Magento modules** — **`view/frontend/web/tailwind/**/*.scss`** | SCSS next to the module; auto-merged from **`vendor/magento/module-*`**, **`app/code/*/*`**, **`src/**`** per **`scssRootGlobs`** in **`web/tailwind/sources.cjs`**. |
+| **`styles.yaml`** (or **`styles.yml`**) at any **module root** | Inspired by [OroInc frontend architecture](https://doc.oroinc.com/frontend/storefront/css/). Drop this file at `app/code/Vendor/Module/styles.yaml` to add SCSS from **any path** inside the module (not just `web/tailwind/`). Supports `inputs` (list of SCSS paths relative to the yaml), `tier` (0–2), and `exclude`. No theme edits required. See **[docs/CSS_MERGE.md](docs/CSS_MERGE.md)**. |
+| **`web/tailwind/sources.cjs`** | **`scssRootGlobs`** (merge) + **`stylesYamlGlobs`** (styles.yaml discovery) + **`contentFiles`** (Tailwind JIT scan). |
 | **`tailwind.config.js`** | Theme tokens; **`content.files`** from **`sources.cjs`** + **`_content-roots.json`**. |
 | **`web/tailwind/css-safelist.html`** | Optional safelist — **[docs/TAILWIND_CSS_SAFELIST.md](docs/TAILWIND_CSS_SAFELIST.md)**. |
 

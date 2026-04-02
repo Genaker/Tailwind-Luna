@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="genaker_theme_tailwind_luna" translate="label" type="text" sortOrder="920"
+                 showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Theme Tailwind Luna (JS)</label>
+            <tab>advanced</tab>
+            <resource>Genaker_ThemeTailwindLuna::config</resource>
+            <group id="js" translate="label" type="text" sortOrder="10"
+                   showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>JavaScript</label>
+                <field id="defer_js" translate="label comment" type="select" sortOrder="10"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Defer JavaScript (move scripts to bottom)</label>
+                    <comment><![CDATA[Moves only external &lt;script src&gt; tags (not inline) to the end, except RequireJS/bootstrap URLs. Inline scripts stay in place so require.config() keeps working. GET ?defer-js=true|false. Empty config defaults to Yes.]]></comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="defer_non_critical" translate="label comment" type="select" sortOrder="20"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Defer non-critical external scripts (defer attribute)</label>
+                    <comment><![CDATA[Adds HTML defer on external scripts that are not RequireJS/bootstrap. Keep off unless you need it; Magento bootstrap URLs are always excluded.]]></comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

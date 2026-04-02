@@ -63,7 +63,7 @@ foreach ($sectionEntries as $e) {
                     <summary class="section-item-title nav-sections-item-title box-border flex min-h-[3.5rem] cursor-pointer list-none items-center justify-center border border-solid border-neutral-200 border-l-0 border-t-0 bg-neutral-100 px-1 py-2 text-center text-xs font-semibold uppercase tracking-wide text-neutral-600 transition-colors first:border-l-0 marker:content-[''] hover:bg-neutral-50 active:bg-neutral-100 sm:px-2 sm:text-sm [&::-webkit-details-marker]:hidden">
                         <?= $block->escapeHtml($entry['label']) ?>
                     </summary>
-                    <div class="section-item-content nav-sections-item-content box-border w-full bg-white px-3 pb-8 pt-3 sm:px-4"
+                    <div class="section-item-content nav-sections-item-content box-border w-[200%] bg-white px-3 pb-8 pt-3 sm:px-4"
                          id="<?= $block->escapeHtmlAttr($alias) ?>"
                          tabindex="-1">
                         <?= /* @noEscape */ $entry['html'] ?>
