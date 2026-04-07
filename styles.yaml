@@ -1,7 +1,5 @@
 # styles.yaml — Tailwind Luna theme SCSS entry point
 #
-# Inspired by OroInc frontend architecture: https://doc.oroinc.com/frontend/storefront/css/
-#
 # Drop a styles.yaml at ANY Magento module root (app/code/Vendor/Module/styles.yaml,
 # src/my-module/styles.yaml, etc.) to add your SCSS to the build without touching
 # the theme's internal web/tailwind/ directory.

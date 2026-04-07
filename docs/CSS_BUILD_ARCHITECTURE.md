@@ -85,7 +85,7 @@ Use **`build:tailwind`** for day-to-day work. **`cssnano`** is required in **`pa
 
 1. **Theme package** — `web/tailwind/modules/*.scss`, `web/tailwind/extensions/*.scss` (and optional roots in `scss.config.json`).
 2. **Magento modules (web/tailwind path)** — `view/frontend/web/tailwind/**/*.scss` inside any module under `vendor/magento/module-*`, `app/code/*/*`, or `src/**` (auto-discovered by `scssRootGlobs` in `sources.cjs`).
-3. **Magento modules (any path via `styles.yaml`)** — drop a `styles.yaml` at **any module root** and list SCSS files under `inputs`; paths are relative to the yaml file so CSS can live anywhere in the module (e.g. `view/frontend/web/css/`). Discovered automatically via `stylesYamlGlobs`. Supports `tier` (0–2) and `exclude`. Inspired by [OroInc frontend architecture](https://doc.oroinc.com/frontend/storefront/css/).
+3. **Magento modules (any path via `styles.yaml`)** — drop a `styles.yaml` at **any module root** and list SCSS files under `inputs`; paths are relative to the yaml file so CSS can live anywhere in the module (e.g. `view/frontend/web/css/`). Discovered automatically via `stylesYamlGlobs`. Supports `tier` (0–2) and `exclude`.
 4. **Utilities** — Tailwind classes in `.phtml`, layout XML `htmlClass`, etc.; scanned per `contentFiles`.
 
 ### Choosing the right extension point

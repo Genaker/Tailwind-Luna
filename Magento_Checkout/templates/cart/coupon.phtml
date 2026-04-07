@@ -47,7 +47,7 @@ $hasCouponCode = $block->getCouponCode() !== null && strlen($block->getCouponCod
                     </label>
                     <div class="control">
                         <input type="text"
-                               class="input-text"
+                               class="input-text w-full rounded-md border border-neutral-300 px-3 py-2 text-sm text-neutral-900 placeholder-neutral-400 shadow-sm transition focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:bg-neutral-100 disabled:text-neutral-400"
                                id="coupon_code"
                                name="coupon_code"
                                value="<?= $block->escapeHtmlAttr($block->getCouponCode()) ?>"
@@ -61,15 +61,17 @@ $hasCouponCode = $block->getCouponCode() !== null && strlen($block->getCouponCod
                 <div class="actions-toolbar">
                     <?php if (!$hasCouponCode): ?>
                     <div class="primary">
-                        <button class="action apply primary" type="button"
+                        <button class="action apply primary inline-flex items-center justify-center rounded-md border border-transparent bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-primary-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1"
+                                type="button"
                                 value="<?= $block->escapeHtmlAttr(__('Apply Discount')) ?>">
                             <span><?= $block->escapeHtml(__('Apply Discount')) ?></span>
                         </button>
                     </div>
                     <?php else: ?>
                         <div class="primary">
-                            <button  type="button" class="action cancel primary"
-                                     value="<?= $block->escapeHtmlAttr(__('Cancel Coupon')) ?>">
+                            <button type="button"
+                                    class="action cancel primary inline-flex items-center justify-center rounded-md border border-red-200 bg-white px-4 py-2 text-sm font-semibold text-red-700 shadow-sm transition-colors hover:border-red-300 hover:bg-red-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-1"
+                                    value="<?= $block->escapeHtmlAttr(__('Cancel Coupon')) ?>">
                                 <span><?= $block->escapeHtml(__('Cancel Coupon')) ?></span>
                             </button>
                         </div>

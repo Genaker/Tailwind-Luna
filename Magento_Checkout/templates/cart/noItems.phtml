@@ -6,17 +6,30 @@
 
 /**  @var $block \Magento\Checkout\Block\Cart */
 ?>
-<div class="cart-empty">
+<div class="cart-empty flex flex-col items-center gap-5 px-4 py-16 text-center">
     <?= $block->getChildHtml('checkout_cart_empty_widget') ?>
-    <p><?= $block->escapeHtml(__('You have no items in your shopping cart.')) ?></p>
-    <p><?= $block->escapeHtml(
-        __(
-            'Click <a href="%1">here</a> to continue shopping.',
-            $block->escapeUrl($block->getContinueShoppingUrl())
-        ),
-        ['a']
-    ) ?>
-    </p>
+
+    <div class="flex h-16 w-16 items-center justify-center rounded-full bg-neutral-100 text-neutral-400" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6.29977 5H21L19 12H7.37671M20 16H8L6 3H3M9 20a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm11 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z" />
+        </svg>
+    </div>
+
+    <div class="max-w-xs space-y-2">
+        <p class="text-lg font-semibold text-neutral-900"><?= $block->escapeHtml(__('Your cart is empty')) ?></p>
+        <p class="text-sm leading-relaxed text-neutral-500">
+            <?= $block->escapeHtml(
+                __('Click <a href="%1">here</a> to continue shopping.', $block->escapeUrl($block->getContinueShoppingUrl())),
+                ['a']
+            ) ?>
+        </p>
+    </div>
+
+    <a class="inline-flex items-center justify-center rounded-lg border border-transparent bg-primary px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-primary-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+       href="<?= $block->escapeUrl($block->getContinueShoppingUrl()) ?>">
+        <?= $block->escapeHtml(__('Continue Shopping')) ?>
+    </a>
+
     <?= $block->getChildHtml('shopping.cart.table.after') ?>
 </div>
 <script type="text/x-magento-init">
