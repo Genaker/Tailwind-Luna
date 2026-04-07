@@ -60,7 +60,10 @@ define(['jquery'], function ($) {
                         }
 
                         if (!target.hasClass('level-top') || !target.has('.ui-menu').length) {
-                            window.location.href = target.find('> a').attr('href');
+                            /* Caret is inside the same <a> as the label — expand only, do not follow category URL */
+                            if (!$(event.target).closest('.ui-menu-icon').length) {
+                                window.location.href = target.find('> a').attr('href');
+                            }
                         }
                     }
                 });

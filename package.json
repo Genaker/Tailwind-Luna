@@ -1,6 +1,10 @@
 {
   "name": "genaker-theme-tailwind-luna",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Genaker/Tailwind-Luna.git"
+  },
   "scripts": {
     "diff:core": "npx tsx scripts/diff-core-vs-theme.ts",
     "maintainer:sync": "node scripts/maintainer-sync-templates.cjs",

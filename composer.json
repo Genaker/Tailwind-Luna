@@ -1,6 +1,7 @@
 {
     "name": "genaker/theme-frontend-tailwind-luna",
     "description": "Tailwind Luna — Genaker frontend child theme of Magento Luma (Composer-installable)",
+    "homepage": "https://github.com/Genaker/Tailwind-Luna",
     "type": "magento2-theme",
     "license": ["OSL-3.0", "AFL-3.0"],
     "version": "1.0.0",

@@ -249,7 +249,7 @@ If you are starting a new store: Hyvä is worth considering. If you have a runni
 
 The Win Luna / Tailwind Luna theme packages all of these fixes — `mage-apply-main-perf`, the KO bindings patch, `DeferJsObserver`, the CSS removal, and the Tailwind build pipeline — into a single Magento 2 Composer theme that installs on top of Blank without replacing your existing checkout or extension templates.
 
-Repository: [Genaker/Taillwind-Luna](https://github.com/Genaker/Taillwind-Luna)
+Repository: [Genaker/Tailwind-Luna](https://github.com/Genaker/Tailwind-Luna)
 
 ---
 
@@ -264,3 +264,10 @@ Repository: [Genaker/Taillwind-Luna](https://github.com/Genaker/Taillwind-Luna)
 - [ ] Enable JS minification (`minify_files = 1`)
 - [ ] Verify Content-Type guard on DeferJs observer (skip AJAX responses)
 - [ ] Check Lighthouse accessibility: `sr-only` on visually-hidden labels, not `hidden`
+
+---
+
+## See also
+
+- **[MICROFRONTEND_REACT_LUMA.md](MICROFRONTEND_REACT_LUMA.md)** — microfrontend architecture, **[React Luma](https://github.com/Genaker/reactmagento2)**, and **gogento / nodegento / pygento** patterns for fast backends beside Magento.
+- **[CLOUDFLARE_FPC_WORKER.md](CLOUDFLARE_FPC_WORKER.md)** — **[Cloudflare Worker FPC](https://github.com/Genaker/CloudFlare_FPC_Worker)** edge cache; pairs with Luma + this theme for CDN-side HTML offload.

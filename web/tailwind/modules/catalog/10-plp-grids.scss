@@ -160,25 +160,114 @@ div[class*='products-'][class*='grid'] .product-item-photo {
   padding: 0;
 }
 
+/* Reset Luma table layout (.product-item display:table / .product-item-info table-row) — use flex row */
+.products-list .product-item {
+  display: block;
+  width: 100%;
+}
+
 .products-list .product-item-info {
+  display: flex;
   flex-direction: row;
   align-items: flex-start;
   gap: 1.5rem;
+  height: auto;
+  min-height: 0;
 }
 
 .products-list .product-item-photo {
+  display: block;
   flex-shrink: 0;
   width: 12rem;
   margin-bottom: 0;
 }
 
+/* Mobile: tiny thumb + details column — title lines up with top of image */
 @media (max-width: 639px) {
+  .products-list .product-items {
+    gap: 0.75rem;
+  }
+
+  .products-list .product-item-info {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0.625rem 0.75rem;
+  }
+
   .products-list .product-item-photo {
-    width: 8rem;
+    width: 3rem;
+    max-width: 3rem;
+    flex-shrink: 0;
+    margin: 0;
+  }
+
+  .products-list .product-item-name {
+    line-height: 1.25;
+  }
+
+  .products-list .product-item-description {
+    display: none;
+  }
+
+  .products-list .product-item-actions {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+  }
+
+  /* Smaller configurable swatches than global max-md 48px touch targets */
+  .products-list .swatch-opt {
+    gap: 0.5rem;
+  }
+
+  .products-list .swatch-opt .swatch-attribute-options {
+    gap: 0.25rem;
+  }
+
+  .products-list .swatch-opt .swatch-option.color,
+  .products-list .swatch-opt .swatch-option.image {
+    width: 1.375rem;
+    height: 1.375rem;
+    min-width: 1.375rem;
+    min-height: 1.375rem;
+    border-width: 1px;
+    border-radius: 0.25rem;
+  }
+
+  .products-list .swatch-opt .swatch-option.text {
+    min-height: 0;
+    min-width: 0;
+    height: auto;
+    width: auto;
+    padding: 0.0625rem 0.3125rem;
+    font-size: 0.625rem;
+    font-weight: 600;
+    line-height: 1.15;
+    border-width: 1px;
+    border-radius: 0.25rem;
+  }
+
+  .products-list .swatch-opt .swatch-option.color.selected,
+  .products-list .swatch-opt .swatch-option.image.selected,
+  .products-list .swatch-opt .swatch-option.text.selected {
+    box-shadow:
+      0 0 0 1px #fff,
+      0 0 0 2px rgb(25 121 195 / 0.85);
+  }
+}
+
+/* Touch / coarse pointer: no hover lift on list rows (avoids stuck “raised” state) */
+@media (hover: none) {
+  .products-list .product-item-info:hover {
+    transform: none;
   }
 }
 
 .products-list .product-item-details {
+  display: flex;
+  flex-direction: column;
   flex: 1 1 auto;
   min-width: 0;
 }

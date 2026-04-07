@@ -2,7 +2,7 @@
 
 ![LUMA powered by Tilewind CSS](docs/tilewind-luma-banner.png)
 
-Composer-installable **Magento 2** theme: **`Genaker/tailwind_luna`** (`genaker/theme-frontend-tailwind-luna`), child of **`Magento/luma`**.
+Composer-installable **Magento 2** theme: **`Genaker/tailwind_luna`** (`genaker/theme-frontend-tailwind-luna`), child of **`Magento/luma`**. **Source / issues:** [github.com/Genaker/Tailwind-Luna](https://github.com/Genaker/Tailwind-Luna).
 
 ### Story
 
@@ -10,9 +10,7 @@ Composer-installable **Magento 2** theme: **`Genaker/tailwind_luna`** (`genaker/
 
 The goal is **Luma-level comaptability** with a **much leaner CSS payload** and a fast path to a modern utility-first stylesheet — performance you can measure on *your* stack (hosting, FPC, and deploy all matter).
 
-Example **mobile** Lighthouse / PageSpeed Insights run on a PDP (scores vary by hosting, CDN, and cache):
-
-![Lighthouse: Performance 100 — LUNA storefront (sample)](docs/lighthouse-performance.png)
+Sample **mobile** Lighthouse screenshots (**Tailwind Luna** vs **Hyvä**) are in **[Lighthouse: sample PDP](#lighthouse-tailwind-luna-vs-hyva-sample)** below (scores vary by hosting, CDN, and cache).
 
 <a id="tailwind-luna-vs-hyva"></a>
 
@@ -36,6 +34,30 @@ Example **mobile** Lighthouse / PageSpeed Insights run on a PDP (scores vary by 
 | **Vendor / stack lock-in** | **Magento + Luma + Tailwind** — boring, **portable** skills; swap Tailwind build or child theme without buying a storefront platform. | **Trapped in the stack**: hard to **exit** Hyvä without **another** expensive migration; frontend decisions **orbit** the vendor. |
 | **Fit for Luma shops** | **Incremental wins**: lean CSS, same extension model, **no** mandate to replace the whole theme vendor. | **All-in bet**: pay for theme, checkout story, modules — **ill-suited** if you only wanted **better CSS** on Luma. |
 
+<a id="lighthouse-tailwind-luna-vs-hyva-sample"></a>
+
+#### Lighthouse: sample PDP (Tailwind Luna vs Hyvä)
+
+Mobile emulation, **Radiant Tee** product page — same product for a like-for-like check. **Tailwind Luna** screenshots are from **our** storefront stack; **Hyvä** screenshots are from the public demo **[demo.hyva.io](https://demo.hyva.io/default/radiant-tee.html)**. 
+
+**Tailwind Luna** (this theme):
+
+![Lighthouse: Tailwind Luna — summary scores (mobile PDP sample)](docs/lighthouse-tailwind-luna-pdp-mobile-scores.png)
+
+![Lighthouse: Tailwind Luna — metrics (mobile PDP sample)](docs/lighthouse-tailwind-luna-pdp-mobile-metrics.png)
+
+**Hyvä** (official demo, same PDP URL path):
+
+![Lighthouse: Hyvä demo — summary scores (mobile PDP sample)](docs/lighthouse-hyva-demo-pdp-mobile-scores.png)
+
+![Lighthouse: Hyvä demo — metrics (mobile PDP sample)](docs/lighthouse-hyva-demo-pdp-mobile-metrics.png)
+
+**How to read these runs**
+
+- **Tailwind Luna (sample):** **Performance 100** with strong paint timing in this capture (e.g. sub‑~1.5s LCP band in the metrics panel — exact numbers are on the screenshot). That lines up with the theme’s goal: **lean CSS on Luma** without a full storefront rewrite.
+- **Hyvä demo (sample):** **Performance 95**; **Accessibility / Best Practices / SEO** at **100** in this run. The detailed metrics show **FCP and LCP around ~2.4s** on mobile here, with Lighthouse flagging **FCP** as the main drag toward a perfect Performance score — **TBT** stays low and **CLS** is excellent (**0** in this capture), so the gap is mostly **early paint / perceived speed**, not JS blocking time.
+- **Takeaway:** Both stacks can score **well**. In these samples, **Tailwind Luna** is **about twice as fast** on **FCP/LCP** as the **Hyvä demo** (exact figures are on the screenshots). **Tailwind Luna** still has **headroom**: you stay on **Luma + extensions** and add customization **incrementally** — every module shifts Lighthouse, but you avoid a **full theme replatform** just to ship styling. **Hyvä** are **already tuned to the edge**; in real projects, **extra customization, Alpine-heavy templates, and Hyvä-specific modules** often **pile on** until performance **drops hard** — the demo is **not** where most merchants end up. 
+
 #### Note on Magento license, OSL, and Hyvä
 
 **Tailwind Luna** is built as a **child of Magento Luma** and is intended to align with the **same kind of OSL 3.0 / Magento ecosystem** expectations as other community themes that **extend** Magento Open Source **without** replacing it.
@@ -47,6 +69,10 @@ Example **mobile** Lighthouse / PageSpeed Insights run on a PDP (scores vary by 
 A common **oversimplified** story is that “Magento’s JavaScript is the main performance villain.” In practice, **CSS weight, blocking assets, and layout work** usually dominate what shoppers feel on classic Luma — **not** a universal law that **RequireJS / Knockout** are inherently slower than every alternative. Hyvä’s stack leans on **Alpine.js** with a lot of **behavior inlined next to markup**; that is a **different** tradeoff (and one we find **harder to reuse, test, and evolve**) than Magento’s **module-bound JS** patterns — not an automatic upgrade for every team.
 
 **Tailwind Luna** attacks the problem where this theme believes it matters most: **modern CSS** (Tailwind + merged SCSS) while **staying compatible with Magento’s extension and layout model**. You can still add **JS-side** improvements separately — for example **[React-Luma (`reactmagento2`)](https://github.com/Genaker/reactmagento2)**, a Composer module that optimizes the existing storefront **without** forcing a Hyvä-style theme migration: optional React/Vue, deferral, CSS tooling, and a path to **reduce reliance on default Magento JS** if that is your goal — **without** throwing away Luma compatibility for CSS.
+
+For **microfrontend-style** boundaries (incremental React/Vue islands, when legacy Knockout can stay, and fast optional backends **gogento** / **nodegento** / **pygento** beside Magento APIs), see **[docs/MICROFRONTEND_REACT_LUMA.md](docs/MICROFRONTEND_REACT_LUMA.md)**.
+
+For **CDN edge full-page cache** on Cloudflare (Worker + KV, high hit rates without replacing Luma), see **[docs/CLOUDFLARE_FPC_WORKER.md](docs/CLOUDFLARE_FPC_WORKER.md)** and the upstream repo **[CloudFlare_FPC_Worker](https://github.com/Genaker/CloudFlare_FPC_Worker)** — a complementary **frontend performance** path that does **not** require a Hyvä-style theme migration.
 
 Today, much front-end code is **assisted or generated** (IDEs, LLMs). Whether a snippet is **RequireJS** or **Alpine** matters less for “who types it by hand” than for **architecture**: **separation of concerns**, reuse across templates, and how easily **extensions** can hook in — areas where **Tailwind Luna + classic Magento** stay closer to **stock Magento** than an **Alpine-everywhere-in-phtml** style.
 
@@ -64,6 +90,8 @@ Today, much front-end code is **assisted or generated** (IDEs, LLMs). Whether a 
 | **[docs/TAILWIND_EXTENSION_DEVELOPMENT.md](docs/TAILWIND_EXTENSION_DEVELOPMENT.md)** | **Extensions:** new vs legacy modules, migration phases, utilities + module SCSS, raw CSS via layout, inline escape hatches. |
 | **[docs/TAILWIND_CSS_SAFELIST.md](docs/TAILWIND_CSS_SAFELIST.md)** | Safelist for classes the JIT scanner cannot see. |
 | **[docs/TEMPLATE_REWRITE_STATUS.md](docs/TEMPLATE_REWRITE_STATUS.md)** | Template rewrite tracking (maintainer tooling). |
+| **[docs/MICROFRONTEND_REACT_LUMA.md](docs/MICROFRONTEND_REACT_LUMA.md)** | Microfrontend-style storefront with **[React Luma](https://github.com/Genaker/reactmagento2)**; incremental JS strategy; **gogento** (Go), **nodegento** (Node), **pygento** (Python) patterns for fast backends next to Magento. |
+| **[docs/CLOUDFLARE_FPC_WORKER.md](docs/CLOUDFLARE_FPC_WORKER.md)** | **[Cloudflare Worker FPC](https://github.com/Genaker/CloudFlare_FPC_Worker)** — edge CDN full-page cache for Magento; pairs with Tailwind Luna + origin FPC; avoids Hyvä-only migration for global TTFB gains. |
 
 
 **E2E (Playwright):** `npm run test:e2e` — shopping + account specs. **`npm run test:e2e:with-user`** runs **`e2e/scripts/ensure-e2e-user.php`**: uses **`E2E_USER_*`** if set, else **`roni_cost@example.com`** when sample data is installed, else creates **`e2e_playwright@example.test`**. **`npm run e2e:create-user`** prints the resolved JSON. Details: **`e2e/README.md`**. Set `PLAYWRIGHT_BASE_URL` if not using `https://app.luma.test`; use `SKIP_E2E_MAGENTO_USER=1` when PHP/Magento is unavailable.
