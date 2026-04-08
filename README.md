@@ -62,7 +62,7 @@ Mobile emulation, **Radiant Tee** product page — same product for a like-for-l
 
 **Tailwind Luna** is built as a **child of Magento Luma** and is intended to align with the **same kind of OSL 3.0 / Magento ecosystem** expectations as other community themes that **extend** Magento Open Source **without** replacing it.
 
-**Hyvä** is a **commercial, proprietary** storefront stack. **We maintain** (our opinion only) that it **does not** occupy the **same license-compliance posture** as shipping a **Luma-derived** theme under Magento’s established open-source model — and that **historically**, **closed** commercial offerings tied to this space have been **sold** that are **not** equivalent to **distributing** or **forking** **Magento Open Source** under its **OSL** terms. **Adobe**, **Hyvä**, and **your counsel** should be consulted before you rely on any third-party stack for **trademark**, **copyright**, or **license** decisions.
+**Hyvä** is a historically **commercial, proprietary** storefront stack. **We maintain** (our opinion only) that it **does not** occupy the **same license-compliance posture** as shipping a **Luma-derived** theme under Magento’s established open-source model — and that **historically**, **closed** commercial offerings tied to this space have been **sold** that are **not** equivalent to **distributing** or **forking** **Magento Open Source** under its **OSL** terms. **Adobe**, **Hyvä**, and **your counsel** should be consulted before you rely on any third-party stack for **trademark**, **copyright**, or **license** decisions.
 
 #### Magento JS vs CSS 
 
