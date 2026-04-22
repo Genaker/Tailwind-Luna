@@ -4,7 +4,6 @@
     "homepage": "https://github.com/Genaker/Tailwind-Luna",
     "type": "magento2-theme",
     "license": ["OSL-3.0", "AFL-3.0"],
-    "version": "1.0.0",
     "config": {
         "sort-packages": true
     },
