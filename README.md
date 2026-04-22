@@ -14,6 +14,52 @@ Sample **mobile** Lighthouse screenshots (**Tailwind Luna** vs **Hyvä**) are in
 
 <a id="tailwind-luna-vs-hyva"></a>
 
+### Install Tailwind Luma Theme For Existing Magento Installation:
+
+If you already have Magento 2.4.x running with demo data or not:
+
+```bash
+# 1. Install Tailwind Luna theme via Composer
+composer require genaker/theme-frontend-tailwind-luna --ignore-platform-reqs
+
+# 2. Enable the theme module
+bin/magento module:enable Genaker_ThemeTailwindLuna
+
+# 3. Run setup upgrade to register the theme
+bin/magento setup:upgrade --no-interaction
+
+# 4. Set as default theme (choose one method)
+
+**First, find the Tailwind Luna theme ID:**
+```bash
+# List all available themes and their IDs
+bin/magento theme:list
+```
+
+**Example output:**
+```
+Themes:
+Magento/blank - ID: 2
+Magento/luma - ID: 1
+Genaker/tailwind_luna - ID: 4  ← Use this ID
+```
+
+**Now set Tailwind Luma as default:**
+```bash
+# Method A: CLI (recommended) - replace 4 with your theme ID if different
+bin/magento config:set design/theme/theme_id 4
+
+# Method B: Direct database - replace 4 with your theme ID
+mysql -umagento -pmagento123 magento -e \
+  "INSERT INTO core_config_data (scope, scope_id, path, value) VALUES ('default', 0, 'design/theme/theme_id', 4) ON DUPLICATE KEY UPDATE value=4;"
+
+# 5. Deploy static content
+bin/magento setup:static-content:deploy -f n_US
+
+# 6. Clear caches
+bin/magento cache:flush
+```
+
 ### Tailwind Luna vs Hyvä
 
 

@@ -16,7 +16,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libzip-dev \
     libcurl4-openssl-dev \
     libonig-dev \
-    libicu-dev && \
+    libicu-dev \
+    ca-certificates \
+    curl && \
     docker-php-ext-configure gd \
         --with-freetype \
         --with-jpeg \
@@ -51,5 +53,9 @@ WORKDIR /var/www/html
 RUN composer config -g disable-tls true && \
     composer config -g secure-http false
 
+
+# Configure PHP to use curl with proper certificate handling
+RUN echo 'openssl.cafile=/etc/ssl/certs/ca-certificates.crt' >> /usr/local/etc/php/conf.d/ssl.ini && \
+    echo 'curl.cainfo=/etc/ssl/certs/ca-certificates.crt' >> /usr/local/etc/php/conf.d/ssl.ini
 
 EXPOSE 9000

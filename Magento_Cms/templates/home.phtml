@@ -6,13 +6,27 @@
  * extra widgets and the Hot Sellers block from layout (cms_home_hot_products).
  */
 /** @var \Magento\Framework\View\Element\Template $block */
-$base = rtrim($block->getUrl(''), '/');
-$media = $base . '/media/wysiwyg/home/';
+// web/seo/use_rewrites must be 1 so getUrl('') returns clean base without index.php
+$baseUrl = rtrim($block->getUrl(''), '/');
+$mediaBase = $baseUrl . '/media/wysiwyg/';
+
+// Map home banner images to actual sample data locations
+$media = [
+    'home-main.jpg' => $mediaBase . 'mens/mens-main.jpg',
+    'home-pants.jpg' => $mediaBase . 'womens/womens-pants.jpg',
+    'home-t-shirts.png' => $mediaBase . 'womens/womens-t-shirts.png',
+    'home-erin.jpg' => $mediaBase . 'womens/womens-erin.jpg',
+    'home-performance.jpg' => $mediaBase . 'new/new-performance.jpg',
+    'home-eco.jpg' => $mediaBase . 'new/new-eco.jpg',
+];
+$getMedia = static function (string $filename) use ($media): string {
+    return $media[$filename] ?? $filename;
+};
 /** @var callable $cat Category URL by url_key (default suffix .html; override via layout data category_url_suffix). */
 $suffix = $block->getData('category_url_suffix');
 $suffix = $suffix !== null && $suffix !== '' ? (string) $suffix : '.html';
-$cat = static function (string $urlKey) use ($block, $base, $suffix): string {
-    return $block->escapeUrl($base . '/' . $urlKey . $suffix);
+$cat = static function (string $urlKey) use ($block, $baseUrl, $suffix): string {
+    return $block->escapeUrl($baseUrl . '/' . $urlKey . $suffix);
 };
 ?>
 <div class="cms-content cms-home home-page w-full" data-appearance="home-shell">
@@ -20,7 +34,7 @@ $cat = static function (string $urlKey) use ($block, $base, $suffix): string {
         <!-- Hero -->
         <a href="<?= $cat('yoga-new') ?>"
            class="group block-promo home-main relative block min-h-[280px] overflow-hidden rounded-lg text-inherit no-underline sm:min-h-[360px] md:min-h-[450px]">
-            <img src="<?= $block->escapeUrl($media . 'home-main.jpg') ?>"
+            <img src="<?= $block->escapeUrl($getMedia('home-main.jpg')) ?>"
                  alt=""
                  class="absolute inset-0 z-0 h-full w-full object-cover"
                  loading="eager"
@@ -36,7 +50,7 @@ $cat = static function (string $urlKey) use ($block, $base, $suffix): string {
         <div class="grid grid-cols-1 gap-4 md:grid-cols-3 md:grid-rows-2">
             <a href="<?= $cat('pants-all') ?>"
                class="group block-promo home-pants relative block min-h-[280px] overflow-hidden rounded-lg text-inherit no-underline md:col-start-1 md:row-span-2 md:row-start-1 md:min-h-0">
-                <img src="<?= $block->escapeUrl($media . 'home-pants.jpg') ?>"
+                <img src="<?= $block->escapeUrl($getMedia('home-pants.jpg')) ?>"
                      alt=""
                      class="absolute inset-0 z-0 h-full w-full object-cover"
                      loading="lazy"/>
@@ -50,7 +64,7 @@ $cat = static function (string $urlKey) use ($block, $base, $suffix): string {
             <a href="<?= $cat('tees-all') ?>"
                class="group block-promo home-t-shirts relative flex min-h-[200px] flex-col overflow-hidden rounded-lg bg-[#ffdd16] text-inherit no-underline sm:min-h-[240px] sm:flex-row md:col-span-2 md:col-start-2 md:row-start-1 md:min-h-[276px]">
                 <span class="image flex flex-1 items-center justify-center p-4 sm:p-5">
-                    <img src="<?= $block->escapeUrl($media . 'home-t-shirts.png') ?>"
+                    <img src="<?= $block->escapeUrl($getMedia('home-t-shirts.png')) ?>"
                          alt=""
                          class="max-h-full max-w-full object-contain"
                          loading="lazy"/>
@@ -64,7 +78,7 @@ $cat = static function (string $urlKey) use ($block, $base, $suffix): string {
 
             <a href="<?= $cat('erin-recommends') ?>"
                class="group block-promo home-erin relative block min-h-[220px] overflow-hidden rounded-lg text-inherit no-underline md:col-start-2 md:row-start-2 md:min-h-[373px]">
-                <img src="<?= $block->escapeUrl($media . 'home-erin.jpg') ?>"
+                <img src="<?= $block->escapeUrl($getMedia('home-erin.jpg')) ?>"
                      alt=""
                      class="absolute inset-0 z-0 h-full w-full object-cover"
                      loading="lazy"/>
@@ -77,7 +91,7 @@ $cat = static function (string $urlKey) use ($block, $base, $suffix): string {
 
             <a href="<?= $cat('performance-fabrics') ?>"
                class="group block-promo home-performance relative block min-h-[300px] overflow-hidden rounded-lg text-inherit no-underline md:col-start-3 md:row-start-2 md:min-h-[380px]">
-                <img src="<?= $block->escapeUrl($media . 'home-performance.jpg') ?>"
+                <img src="<?= $block->escapeUrl($getMedia('home-performance.jpg')) ?>"
                      alt=""
                      class="absolute inset-0 z-0 h-full w-full object-cover"
                      loading="lazy"/>
@@ -92,7 +106,7 @@ $cat = static function (string $urlKey) use ($block, $base, $suffix): string {
         <!-- Eco band -->
         <a href="<?= $cat('eco-friendly') ?>"
            class="group block-promo home-eco relative block min-h-[200px] overflow-hidden rounded-lg text-inherit no-underline md:min-h-[274px]">
-            <img src="<?= $block->escapeUrl($media . 'home-eco.jpg') ?>"
+            <img src="<?= $block->escapeUrl($getMedia('home-eco.jpg')) ?>"
                  alt=""
                  class="absolute inset-0 z-0 h-full w-full object-cover"
                  loading="lazy"/>
