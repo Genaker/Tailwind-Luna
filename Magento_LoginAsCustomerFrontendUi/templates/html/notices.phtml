@@ -8,7 +8,7 @@
  * @var \Magento\Framework\View\Element\Template $block
  * @var \Magento\Framework\Escaper $escaper
  */
-if ($block->getConfig()->isB2bEnabled()) {
+if (@$block->getConfig()->isB2bEnabled()) {
     $adobeFileUrl = $block->getViewFileUrl('Magento_LoginAsCustomerFrontendUi::images/adobe-icon.svg');
 } else {
     $adobeFileUrl = $block->getViewFileUrl('Magento_LoginAsCustomerFrontendUi::images/magento-icon.svg');
