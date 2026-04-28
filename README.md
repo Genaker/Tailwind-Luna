@@ -304,6 +304,18 @@ For predictable RequireJS order, easier debugging, and sane front-end behavior, 
 | Minify core CSS (not Tailwind) | **Minify CSS Files** = **Yes** (prod) | `dev/css/minify_files` | **Yes** in production; skipped in **developer** mode |
 | Cache-busted static URLs | **Sign Static Files** = **Yes** | `dev/static/sign` | **Yes** (recommended with `setup:static-content:deploy`) |
 
+You can use this one command for applying all recommended settings:
+
+```
+bin/magento config:set dev/js/move_script_to_bottom 1 &&\
+bin/magento config:set dev/js/merge_files 0 &&\
+bin/magento config:set dev/js/enable_js_bundling 0 &&\
+bin/magento config:set dev/js/minify_files 1 &&\
+bin/magento config:set dev/css/merge_css_files 0 &&\
+bin/magento config:set dev/css/minify_files 1 &&\
+bin/magento config:set dev/static/sign 1
+```
+
 Magento does **not** offer a single “add `defer` to every script” switch; **move JS to bottom** is the supported way to avoid parser-blocking scripts in `<head>` for typical storefront output.
 
 After changing config: `bin/magento cache:flush` (and `app:config:import` if you rely on `config.php` pipeline config).
